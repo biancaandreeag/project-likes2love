@@ -1,12 +1,11 @@
 from database.schemas import list_serial, individual_serial
 from database.database import posts_collection
 from fastapi import APIRouter, HTTPException 
-from kafka import send_to_preprocessor
+from kafka_producer import send_to_preprocessor
 from database.posts import Post
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from logger_config import log
 
 #salvare rezultate dupa modul AI in db
@@ -33,7 +32,6 @@ async def add_post(post: Post):
         log.error(f"[ SERVER API ][ Error adding post: {str(e)} ]")
         return {"status": "error", "message": str(e)}
        
-
 @router.get("/get-history/{uuid}")
 async def get_history(uuid: str):
     try:
@@ -95,39 +93,28 @@ async def get_analysis(uuid: str, post_link: str, model: str):
     try:
         log.info(f"[ SERVER API ][ Received analysis request: uuid={uuid}, link={post_link}, model={model} ]")
 
-        post = posts_collection.find_one({"post_link": post_link})
+        post = posts_collection.find_one({"uuid": uuid, "post_link": post_link})
+        if not post:
+            log.error(f"[ SERVER API ][ Post with uuid={uuid} and link={post_link} not found in database ]")
+            raise HTTPException(status_code=404, detail="Post not found")
 
-        if post:
-            for analysis in post.get("analyses", []):
-                if analysis["model"] == model:
-                    log.info(f"[ SERVER API ][ Post {post_link} already analyzed with model: {model} ]")
-                    return {"status": "exists", "message": "Post already analyzed with this model"}
+        for analysis in post.get("analyses", []):
+            if analysis["model"] == model:
+                log.info(f"[ SERVER API ][ Post {post_link} already analyzed with model: {model} ]")
+                return {"status": "exists", "message": "Post already analyzed with this model"}
 
-            log.info(f"[ SERVER API ][ Post exists, sending data to Preprocessor for model: {model} ]")
-            preproc_payload = {
-                "uuid": uuid,
-                "post_link": post_link,
-                "model": model,
-                "comments": post.get("comments", [])
-            }
-            log.info(f"[ SERVER API ][ Preprocessing Payload: {preproc_payload} ]")
+        log.info(f"[ SERVER API ][ Post found, returning data for model: {model} ]")
+        
+        payload = {
+            "_id": str(post["_id"]),
+            "uuid": post["uuid"],
+            "post_link": post["post_link"],
+            "comments": post.get("comments", []) 
+        }
 
-            send_to_preprocessor('to_preprocessing', preproc_payload)
-
-            return {"status": "processing", "message": "Sent to preprocessor"}
-
-        else:
-            log.info("[ SERVER API ][ Post not found, sending to Scraper for scraping ]")
-            scraper_payload = {
-                "uuid": uuid,
-                "post_link": post_link,
-                "model": model
-            }
-            log.info(f"[ SERVER API ][ Preprocessing Payload: {scraper_payload} ]")
-
-            #send_topic('to_scraper', scraper_payload)
-            
-            return {"status": "scraping", "message": "Sent to scraper"}
+        log.info(f"[ SERVER API ][ Returning Payload: {payload} ]")
+        send_to_preprocessor(payload)
+        return payload
 
     except Exception as e:
         log.error(f"Error in get-analysis: {e}")
