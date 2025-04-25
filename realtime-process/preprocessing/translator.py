@@ -1,11 +1,8 @@
 from langdetect import detect, DetectorFactory
 from shared_utils.logger_config import log
 from dotenv import load_dotenv
-from tqdm import tqdm
 import deepl
 import time
-import json
-import csv
 import re
 import os
 

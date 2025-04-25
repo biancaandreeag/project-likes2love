@@ -7,6 +7,7 @@ def main():
     for message in consumer.listen():
         consumer.consume_and_send(message)
 
+
     log.info(f"[KAFKA CONSUMER][ Finished preprocessing the messages.]")
 if __name__ == "__main__":
     main()

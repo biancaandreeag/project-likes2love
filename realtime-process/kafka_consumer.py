@@ -1,6 +1,7 @@
 from kafka import KafkaConsumer
 from shared_utils.kafka_producer import send_to_analysis
 from preprocessing.translator import TextTranslator
+from preprocessing.preprocess import PreprocessData
 import json
 import os
 import time
@@ -15,6 +16,7 @@ class KafkaConsumerClient:
         self.consumer = None
         self.init_consumer()
         self.translator = TextTranslator()
+        self.preprocess_tool = PreprocessData()
 
     def init_consumer(self):
         retries = 5
@@ -59,16 +61,19 @@ class KafkaConsumerClient:
         if message_type=="metadata":
             send_to_analysis(data, message.key)
             self.translator.set_post_id(message.key) 
+            
             model=data.get("model")
+            self.preprocess_tool.configuration(message.key,model)
 
         if message_type=="comments_batch":
             id=data.get("_id")
             comments_list=data.get("comments",[])
-            translated = self.translator.translate_comments(comments_list)
+            #translated = self.translator.translate_comments(comments_list)
+            preprocessed_comments = self.preprocess_tool.preprocess_text(comments_list)
             batch = {
                 "type":"comments_batch",
                 "_id": id, 
-                "comments": translated
+                "comments": preprocessed_comments
             }
             log.info(f"[ TRANSLATE ][ Recieved and translated batch with {len(comments_list)} comments. ]")
 

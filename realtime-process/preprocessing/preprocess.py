@@ -1,73 +1,67 @@
-from emoticons import EMOTICONS, UNICODE_EMO
+from preprocessing.emoticons import EMOTICONS, UNICODE_EMO
 from shared_utils.logger_config import log
-from tqdm import tqdm
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
 import pandas as pd
+import unicodedata
+import warnings
+import nltk
 import re
-import os
 
-tqdm.pandas()
+warnings.simplefilter("ignore", category=SyntaxWarning)
 
-
-class PreprocessData:
-    @staticmethod
-    def get_unique_filename(base_filename):
-        directory = "FinalData"
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+class PreprocessData:    
+    def __init__(self):
+        self.post_id = None
+        self.post_model = None
+        self.lemmatizer = None
+        self.stop_words = None
         
-        base_file_path = os.path.join(directory, f"{base_filename}.csv")
+
+    def configuration(self, post_id, model):
+        self.post_id = post_id
+        self.post_model = model
+        if self.post_model == 'classifier':
+            nltk.download('stopwords')
+            nltk.download('wordnet')
+            nltk.download('punkt')
+            log.info(nltk.data.path)
+            self.stop_words = set(stopwords.words('english'))
+            self.lemmatizer = WordNetLemmatizer()
         
-        if not os.path.exists(base_file_path):
-            return base_filename  
+    def remove_urls(self, text):
+        return re.sub(r'http[s]?://\S+', '', text)
 
-        i = 1
-        while os.path.exists(os.path.join(directory, f"{base_filename}({i}).csv")):
-            i += 1
-        
-        return f"{base_filename}({i})"
-    
-    def __init__(self,file_path,post_id):
-        self.file_path=file_path
-        self.post_id=post_id
-
-        output_name=post_id+"_preprocessed"
-        output_name=self.get_unique_filename(f"{output_name}")
-
-        if not os.path.exists('FinalData'):
-            os.makedirs('FinalData')
-            log.info(f"[ PREPROCESS ][ Directory 'FinalData' created ]")
-        
-        self.output_file = os.path.join('FinalData/', output_name + '.csv')
-
-        self.df=pd.read_csv(self.file_path)
-        self.df.dropna(subset=['translated_comment'], inplace=True) 
-
-    def remove_urls(self,text):
-     return re.sub(r'http[s]?://\S+', '', text)
-
-    def remove_user_mentions(self,text):
+    def remove_user_mentions(self, text):
         return re.sub(r'@[A-Za-z0-9_.]+', '', text)
 
-    def remove_hashtags(self,text):
+    def remove_hashtags(self, text):
         return re.sub(r'#+(\S+)', r'\1', text)
 
-    def remove_spaces(self,text):
-        clean_text=" ".join(text.split())
+    def remove_spaces(self, text):
+        clean_text = " ".join(text.split())
         return clean_text
+    
+    def remove_digits(self, text):
+        return re.sub(r'\d+', '', text)
 
-    def remove_repetition(self,text):
-        sequencePattern   = r"(.)\1\1+"
+    def remove_accented_chars(self, text):
+        return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8', 'ignore')
+
+    def remove_repetition(self, text):
+        sequencePattern = r"(.)\1\1+"
         seqReplacePattern = r"\1\1"
         return re.sub(sequencePattern, seqReplacePattern, text)
     
-    def convert_emoticons(self,text):
+    def convert_emoticons(self, text):
         for emot in EMOTICONS:
-            text = re.sub(u'('+emot+')', "  ".join(EMOTICONS[emot].replace(",","").split()), text)
+            text = re.sub(u'(' + emot + ')', "  ".join(EMOTICONS[emot].replace(",", "").split()), text)
         return text
 
-    def convert_emojis(self,text):
+    def convert_emojis(self, text):
         for emot in UNICODE_EMO:
-            text = re.sub(r'('+emot+')', "  ".join(UNICODE_EMO[emot].replace(",","").replace(":","").split()), text)
+            text = re.sub(r'(' + emot + ')', "  ".join(UNICODE_EMO[emot].replace(",", "").replace(":", "").split()), text)
         return text
     
     def remove_unknown_emojis(self, text):
@@ -94,38 +88,49 @@ class PreprocessData:
         text = re.sub(r'[^\x00-\x7F]+', '', text) 
         return text
     
+    def remove_punctuation(self, text):
+        return re.sub(r'[^\w\s]', '', text)
+
+    def lemmatize_text(self, text):
+        tokens = word_tokenize(text)
+        lemmatized = [self.lemmatizer.lemmatize(token) for token in tokens]
+        return " ".join(lemmatized)
+
     def remove_invalid_characters(self, text):
         return re.sub(r'[^a-zA-Z0-9\s\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F1E0-\U0001F1FF]+',' ', text)
 
+    def remove_stopwords(self, text):
+        tokens = word_tokenize(text)
+        filtered_text = [word for word in tokens if word.lower() not in self.stop_words]
+        return " ".join(filtered_text)
     
-    def preprocessing(self,text):
+    def preprocessing_classifiers(self, text):
         text = self.remove_urls(text)
         text = self.remove_user_mentions(text)
         text = self.remove_hashtags(text)
-        text = self.remove_spaces(text)
         text = self.remove_repetition(text)
-        text = self.convert_emojis(text)
         text = self.convert_emoticons(text)
+        text = self.convert_emojis(text)
         text = self.remove_unknown_emojis(text)
-        text = self.remove_symbols_and_special_chars(text)
-        text = self.remove_invalid_characters(text)
-
+        text = self.remove_accented_chars(text)
+        text = self.remove_digits(text)
+        text = self.remove_punctuation(text)
+        text = self.remove_spaces(text)
+        text = text.lower()
+        text = self.lemmatize_text(text)
+        text = self.remove_stopwords(text)
         return text
     
-    def preprocess_text(self):
-        tqdm.pandas()
+    def preprocess_text(self, comments):
+        df_comments = pd.DataFrame(comments, columns=['text'])
         
-        self.df['translated_comment'] = [self.preprocessing(comment) for comment in tqdm(self.df['translated_comment'], desc="Preprocessing comments")]
+        if self.post_model == "classifier":
+            log.info(f"[ PREPROCESS - {self.post_id} ][ Start preprocessing for classifier model. ]")
+            df_comments['preprocessed_text'] = df_comments['text'].apply(self.preprocessing_classifiers)
+        
+        preprocessed_comments = df_comments['preprocessed_text'].tolist()
+        
         log.info(f"[ PREPROCESS - {self.post_id} ][ Preprocessing finished. ]")
-
-        self.df.dropna(subset=['translated_comment'], inplace=True)
-        self.df = self.df[~self.df['translated_comment'].str.strip().isin(['', '""'])]
-
-        self.df = self.df.rename(columns={'translated_comment': 'comment'})
-
-        self.df['comment'] = self.df['comment'].apply(lambda x: f"'{x}'" if isinstance(x, str) and not (x.startswith("'") and x.endswith("'")) else x)
-
-        self.df.to_csv(self.output_file, index=False)
-        log.info(f"[ PREPROCESS - {self.post_id} ][ Final data ready & saved in: {self.output_file} ]")
-
-
+        
+        del df_comments
+        return preprocessed_comments
