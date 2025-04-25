@@ -36,6 +36,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+      - ./backup:/backup              
+      - ./backup:/data/dump  
     networks:
       - kafka-net
     healthcheck:
