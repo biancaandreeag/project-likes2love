@@ -1,4 +1,5 @@
 from kafka import KafkaConsumer
+from initialize import run
 from shared_utils.kafka_producer import send_to_analysis
 import json
 import os
@@ -33,21 +34,29 @@ class KafkaConsumerClient:
                 )
                 break
             except Exception as e:
-                log.error(f"[KAFKA CONSUMER - '{self.topic}' ][ Connection error: {str(e)} ]")
+                log.error(f"[ KAFKA CONSUMER - '{self.topic}' ][ Connection error: {str(e)} ]")
                 retries -= 1
                 if retries > 0:
                     time.sleep(5)
                 else:
-                    log.error(f"[KAFKA CONSUMER - '{self.topic}' ][ Failed to connect after several retries. ]")
+                    log.error(f"[ KAFKA CONSUMER - '{self.topic}' ][ Failed to connect after several retries. ]")
 
     def listen(self):
         if self.consumer:
-            log.info(f"[KAFKA CONSUMER - '{self.topic}' ][ Listening on topic '{self.topic}'... ]")
+            log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ Listening on topic '{self.topic}'... ]")
             for message in self.consumer:
                 yield message
         else:
             log.error(f"[ KAFKA CONSUMER - '{self.topic}' ][ Not initialized. ]")
 
     def consume(self, message):
-        log.info(f"[KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
         data=message.value
+        message_type=data.get("type")
+        uuid=data.get("uuid")
+        
+        if message_type=="metadata":
+            log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
+            post_link=data.get("post_link")
+            platform=run(post_link,uuid)
+            
+        

@@ -95,7 +95,7 @@ async def get_analysis(uuid: str, post_link: str, model: str):
             log.info(f"[ SERVER API ][ Post with uuid={uuid} and link={post_link} not found in database ]")
             payload = {
             "type": "metadata",
-            "uuid": model,
+            "uuid": uuid,
             "post_link": post_link,
             "model" : model 
             }
