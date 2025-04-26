@@ -18,7 +18,7 @@ class KafkaConsumerClient:
         retries = 5
         while retries > 0:
             try:
-                log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ Connected on topic '{self.topic}'... ]")
+                log.info(f"[ KAFKA CONSUMER '{self.topic}' ][ Connected on topic '{self.topic}'... ]")
                 self.consumer = KafkaConsumer(
                     self.topic,
                     bootstrap_servers=self.kafka_server,
@@ -51,8 +51,3 @@ class KafkaConsumerClient:
     def consume(self, message):
         log.info(f"[KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
         data=message.value
-        message_type=data.get("type")
-
-        if message_type=="end":
-            log.info(f"[ KAFKA CONSUMER - '{self.topic}'  ][ All messages with key: {message.key} are ready for analysis. ]")
-            

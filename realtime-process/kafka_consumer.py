@@ -22,7 +22,7 @@ class KafkaConsumerClient:
         retries = 5
         while retries > 0:
             try:
-                log.info(f"[ KAFKA CONSUMER ][ Connected and listening on topic '{self.topic}'... ]")
+                log.info(f"[ KAFKA CONSUMER '{self.topic}' ][ Connected on topic '{self.topic}'... ]")
                 self.consumer = KafkaConsumer(
                     self.topic,
                     bootstrap_servers=self.kafka_server,

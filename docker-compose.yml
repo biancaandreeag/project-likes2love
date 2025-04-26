@@ -78,6 +78,20 @@ services:
       - kafka-net
     restart: always
 
+  scraper:
+    build: ./scrapers
+    depends_on:
+      broker:
+        condition: service_healthy
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: broker:29092
+    volumes:
+      - ./shared_logs:/shared_logs
+      - ./shared_utils:/app/shared_utils
+    networks:
+      - kafka-net
+    restart: always
+
   module-ai:
     build: ./AI-module
     depends_on:

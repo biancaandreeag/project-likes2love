@@ -1,7 +1,7 @@
 from database.schemas import list_serial, individual_serial
 from database.database import posts_collection
 from fastapi import APIRouter, HTTPException 
-from shared_utils.kafka_producer import send_to_preprocessor
+from shared_utils.kafka_producer import send_to_preprocessor,send_to_scraper
 from database.posts import Post
 from  shared_utils.logger_config import log
 
@@ -92,9 +92,15 @@ async def get_analysis(uuid: str, post_link: str, model: str):
 
         post = posts_collection.find_one({"uuid": uuid, "post_link": post_link})
         if not post:
-            log.error(f"[ SERVER API ][ Post with uuid={uuid} and link={post_link} not found in database ]")
-            #scraper 
-            return { "message": "This needs to go to the scraper-service"}
+            log.info(f"[ SERVER API ][ Post with uuid={uuid} and link={post_link} not found in database ]")
+            payload = {
+            "type": "metadata",
+            "uuid": model,
+            "post_link": post_link,
+            "model" : model 
+            }
+            send_to_scraper(payload,uuid) 
+            return {"status": "success", "message": "Payload sent to Scraping Service."}
 
         for analysis in post.get("analyses", []):
             if analysis["model"] == model:

@@ -1,1 +1,0 @@
--> de facut si trimiterea la baza de date a modulelor raw (nu uita !!)
