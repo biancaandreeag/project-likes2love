@@ -2,10 +2,12 @@ from preprocessing.emoticons import EMOTICONS, UNICODE_EMO
 from shared_utils.logger_config import log
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+from spellchecker import SpellChecker
 from nltk.corpus import stopwords
 import pandas as pd
 import unicodedata
 import warnings
+import time
 import nltk
 import re
 
@@ -19,6 +21,7 @@ class PreprocessData:
         self.post_model = None
         self.lemmatizer = None
         self.stop_words = None
+        self.spell = SpellChecker()
         
 
     def configuration(self, post_id, model):
@@ -68,20 +71,34 @@ class PreprocessData:
         text = self.remove_accented_chars(text)
         return text
  
- 
-    def remove_stopwords_and_lemmatize(self,text):
+    def remove_stopwords_and_lemmatize(self, text):
         if not isinstance(text, str):
             return ""
+
         tokens = word_tokenize(text)
-        filtered = [self.lemmatizer.lemmatize(word) for word in tokens if word not in self.stop_words]
-        
-        return " ".join(filtered)
+        corrected_and_lemmatized_tokens = []
+
+        for word in tokens:
+            if word in self.stop_words:
+                continue 
+
+            corrected = word
+            if self.spell.unknown([word]):
+                possible_correction = self.spell.correction(word)
+                if possible_correction is not None:
+                    corrected = possible_correction 
+
+            lemmatized = self.lemmatizer.lemmatize(corrected)
+            corrected_and_lemmatized_tokens.append(lemmatized)
+
+        return " ".join(corrected_and_lemmatized_tokens)
     
     def preprocess_text(self, comments):
         df_comments = pd.DataFrame(comments, columns=['text'])
         
         if self.post_model == "classifier":
-            log.info(f"[ PREPROCESS - {self.post_id} ][ Start preprocessing for classifier model. ]")
+            log.info(f"[ PREPROCESS - {self.post_id} ][ Starting preprocess for classifier model... ]")
+            start_time = time.time()
             df_comments['text']=df_comments['text'].str.replace(r"http\S+", "", regex=True) #remove URLs
             df_comments['text']=df_comments['text'].str.replace(r'@[A-Za-z0-9_.]+', '', regex=True) #remove user mentions
             df_comments['text']=df_comments['text'].str.replace(r'#+(\S+)', r'\1', regex=True) #remove hashtags
@@ -91,14 +108,16 @@ class PreprocessData:
             df_comments['text']=df_comments['text'].str.replace(r'\d+', '', regex=True) #remove digits
             df_comments['text']=df_comments['text'].str.replace(r'[^\w\s]', '', regex=True) #remove punctuation
             df_comments['text']=df_comments['text'].str.replace(r'\s+', ' ', regex=True) #remove spaces
-            df_comments['text']=df_comments['text'].str.replace(r'[^\x00-\x7F]+', '', regex=True) #everything that is not in standard ASCII
+            df_comments['text']=df_comments['text'].str.replace(r'[^a-zA-Z\s]', '', regex=True) #nothing but words
+            df_comments['text']=df_comments['text'].str.replace(r'\s+', ' ', regex=True).str.strip()
             df_comments['text']=df_comments['text'].str.lower()
             df_comments['text']=df_comments['text'].apply(lambda x: self.remove_stopwords_and_lemmatize(x))
 
-
+        df_comments = df_comments[df_comments['text'].notna() & (df_comments['text'].str.strip() != "")]
         preprocessed_comments = df_comments['text'].tolist()
-        
-        log.info(f"[ PREPROCESS - {self.post_id} ][ Preprocessing finished. ]")
+        end_time = time.time()
+        elapsed_time = end_time - start_time  
+        log.info(f"[ PREPROCESS - {self.post_id} ][ Preprocessing completed in {elapsed_time:.2f} seconds. ]")
         
         del df_comments
         return preprocessed_comments

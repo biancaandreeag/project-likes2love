@@ -18,7 +18,7 @@ class KafkaConsumerClient:
         retries = 5
         while retries > 0:
             try:
-                log.info(f"[KAFKA CONSUMER] Connected and listening on topic '{self.topic}'...")
+                log.info(f"[ KAFKA CONSUMER ] Connected and listening on topic '{self.topic}'...")
                 self.consumer = KafkaConsumer(
                     self.topic,
                     bootstrap_servers=self.kafka_server,
@@ -42,11 +42,11 @@ class KafkaConsumerClient:
 
     def listen(self):
         if self.consumer:
-            log.info(f"[KAFKA CONSUMER ][ Listening on topic '{self.topic}'... ]")
+            log.info(f"[KAFKA CONSUMER - '{self.topic}' ][ Listening on topic '{self.topic}'... ]")
             for message in self.consumer:
                 yield message
         else:
-            log.error(f"[KAFKA CONSUMER ][ Not initialized. ]")
+            log.error(f"[ KAFKA CONSUMER - '{self.topic}' ][ Not initialized. ]")
 
     def consume(self, message):
         log.info(f"[KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")

@@ -22,7 +22,7 @@ class KafkaConsumerClient:
         retries = 5
         while retries > 0:
             try:
-                log.info(f"[KAFKA CONSUMER][ Connected and listening on topic '{self.topic}'... ]")
+                log.info(f"[ KAFKA CONSUMER ][ Connected and listening on topic '{self.topic}'... ]")
                 self.consumer = KafkaConsumer(
                     self.topic,
                     bootstrap_servers=self.kafka_server,
@@ -37,20 +37,20 @@ class KafkaConsumerClient:
                 )
                 break
             except Exception as e:
-                log.error(f"[KAFKA CONSUMER][ Connection error: {str(e)} ]")
+                log.error(f"[ KAFKA CONSUMER '{self.topic}' ][ Connection error: {str(e)} ]")
                 retries -= 1
                 if retries > 0:
                     time.sleep(5)
                 else:
-                    log.error("[KAFKA CONSUMER - '{self.topic}' ][ Failed to connect after several retries. ]")
+                    log.error(f"[ KAFKA CONSUMER - '{self.topic}' ][ Failed to connect after several retries. ]")
 
     def listen(self):
         if self.consumer:
-            log.info(f"[KAFKA CONSUMER][ Listening on topic '{self.topic}'... ]")
+            log.info(f"[ KAFKA CONSUMER ][ Listening on topic '{self.topic}'... ]")
             for message in self.consumer:
                 yield message
         else:
-            log.error("[KAFKA CONSUMER][ Not initialized. ]")
+            log.error("[ KAFKA CONSUMER ][ Not initialized. ]")
 
     def consume_and_send(self, message):
         #log.info(f"[KAFKA CONSUMER] [ New message received. Key: {message.key} | Value: {message.value} ]")
@@ -60,6 +60,7 @@ class KafkaConsumerClient:
 
         if message_type=="metadata":
             send_to_analysis(data, message.key)
+            log.info(f"[ KAFKA PRODUCER - 'to_analysis' ][ Metadata with key: {message.key} sent to analysis. ]")
             self.translator.set_post_id(message.key) 
             
             model=data.get("model")
@@ -77,13 +78,14 @@ class KafkaConsumerClient:
             }
             log.info(f"[ KAKFA CONSUMER - '{self.topic}' ][ Recieved and translated batch with {len(comments_list)} comments. ]")
             send_to_analysis(batch, message.key)
+            log.info(f"[ KAFKA PRODUCER - 'to_analysis' ][  Batch with key: {message.key} sent to analysis. ]")
 
         if message_type=="end":
             end_message = {
                 "type":"comments_batch"
             }
             send_to_analysis(end_message, message.key)
-            log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ All messages with key: {message.key} sent to analysis. ]")
+            log.info(f"[ KAFKA PRODUCER - 'to_analysis' ][ All messages with key: {message.key} sent to analysis. ]")
 
             
 
