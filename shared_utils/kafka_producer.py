@@ -46,10 +46,6 @@ def create_topic(topic_name, kafka_server='broker:29092', partitions=5, replicat
         if topic_name not in existing_topics:
             topic = NewTopic(name=topic_name, num_partitions=partitions, replication_factor=replication_factor)
             admin_client.create_topics([topic])
-            log.info(f"[KAFKA ADMIN] Created topic '{topic_name}' with {partitions} partitions.")
-        else:
-            log.info(f"[KAFKA ADMIN] Topic '{topic_name}' already exists.")
-    except TopicAlreadyExistsError:
-        log.warning(f"[KAFKA ADMIN] Topic '{topic_name}' already exists.")
+            log.info(f"[KAFKA ADMIN][ Created topic '{topic_name}' with {partitions} partitions. ]")
     except Exception as e:
-        log.error(f"[KAFKA ADMIN] Failed to create topic: {e}")
+        log.error(f"[KAFKA ADMIN][ Failed to create topic: {e} ]")

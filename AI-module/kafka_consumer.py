@@ -33,21 +33,26 @@ class KafkaConsumerClient:
                 )
                 break
             except Exception as e:
-                log.error(f"[KAFKA CONSUMER] Connection error: {str(e)}")
+                log.error(f"[KAFKA CONSUMER - '{self.topic}' ][ Connection error: {str(e)} ]")
                 retries -= 1
                 if retries > 0:
                     time.sleep(5)
                 else:
-                    log.error("[KAFKA CONSUMER] Failed to connect after several retries.")
+                    log.error(f"[KAFKA CONSUMER - '{self.topic}' ][ Failed to connect after several retries. ]")
 
     def listen(self):
         if self.consumer:
-            log.info(f"[KAFKA CONSUMER] Listening on topic '{self.topic}'...")
+            log.info(f"[KAFKA CONSUMER ][ Listening on topic '{self.topic}'... ]")
             for message in self.consumer:
                 yield message
         else:
-            log.error("[KAFKA CONSUMER] Not initialized.")
+            log.error(f"[KAFKA CONSUMER ][ Not initialized. ]")
 
     def consume(self, message):
-        log.info(f"[KAFKA CONSUMER] New message received. Key: {message.key} | Value: {message.value}")
+        log.info(f"[KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
+        data=message.value
+        message_type=data.get("type")
+
+        if message_type=="end":
+            log.info(f"[ KAFKA CONSUMER - '{self.topic}'  ][ All messages with key: {message.key} are ready for analysis. ]")
             
