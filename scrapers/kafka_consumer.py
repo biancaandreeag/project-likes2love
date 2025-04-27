@@ -1,6 +1,5 @@
 from kafka import KafkaConsumer
-from initialize import run
-from shared_utils.kafka_producer import send_to_analysis
+from initialize import go_to_scraper
 import json
 import os
 import time
@@ -19,7 +18,7 @@ class KafkaConsumerClient:
         retries = 5
         while retries > 0:
             try:
-                log.info(f"[ KAFKA CONSUMER '{self.topic}' ][ Connected on topic '{self.topic}'... ]")
+                log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ Connected on topic '{self.topic}'... ]")
                 self.consumer = KafkaConsumer(
                     self.topic,
                     bootstrap_servers=self.kafka_server,
@@ -57,6 +56,6 @@ class KafkaConsumerClient:
         if message_type=="metadata":
             log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
             post_link=data.get("post_link")
-            platform=run(post_link,uuid)
+            go_to_scraper(post_link,uuid)
             
         
