@@ -66,13 +66,11 @@ class KafkaConsumerClient:
             self.preprocess_tool.configuration(message.key,model)
 
         if message_type=="comments_batch":
-            id=data.get("_id")
             comments_list=data.get("comments",[])
             translated = self.translator.translate_comments(comments_list)
             preprocessed_comments = self.preprocess_tool.preprocess_text(translated)
             batch = {
-                "type":"comments_batch",
-                "_id": id, 
+                "type":"comments_batch", 
                 "comments": preprocessed_comments
             }
             log.info(f"[ KAKFA CONSUMER - '{self.topic}' ][ Recieved and translated batch with {len(comments_list)} comments. ]")

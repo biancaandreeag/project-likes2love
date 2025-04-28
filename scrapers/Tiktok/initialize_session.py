@@ -34,7 +34,6 @@ class InitializeSession:
         chrome_options.add_argument("--disable-dev-shm-usage")
         
         try:
-            api_key = "7c9f4270b60de76b5fef6a9b397efa7d" 
             driver = make_undetected_chromedriver_solver(api_key=api_key, options=chrome_options)
             driver.set_window_size(400, 800) 
 
@@ -49,7 +48,7 @@ class InitializeSession:
         cookies = self.driver.get_cookies()
         with open(COOKIES_FILE, "wb") as f:
             pickle.dump(cookies, f)
-        log.info(f"[ TIKTOK SESSION - {self.ID} ][ Cookies saved to {COOKIES_FILE} ]")
+        log.info(f"[ TIKTOK SESSION - {self.ID} ][ Cookies saved to {COOKIES_FILE}. ]")
 
     def load_cookies(self):
         if os.path.exists(COOKIES_FILE):
@@ -72,7 +71,7 @@ class InitializeSession:
                 log.error(f"[ TIKTOK SESSION - {self.ID} ][ Error loading cookies: {e} ]")
                 return False
         else:
-            log.error(f"[ TIKTOK SESSION - {self.ID} ][ Cookie file not found ]")
+            log.error(f"[ TIKTOK SESSION - {self.ID} ][ Cookie file not found. ]")
             return False
 
     def initialize_session(self):

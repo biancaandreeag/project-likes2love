@@ -2,6 +2,7 @@ from kafka_consumer import KafkaConsumerClient
 from shared_utils.logger_config import log
 from shared_utils.kafka_producer import send_to_analysis
 
+#de verificat conversia emoticoanelor, emoji urilor -> nu merge tot timpul cum trebuie
 def main():
     consumer = KafkaConsumerClient(kafka_server="broker:29092", topic="to_preprocessing", group_id="preprocessor-group")
     

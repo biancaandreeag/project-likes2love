@@ -99,6 +99,7 @@ async def get_analysis(uuid: str, post_link: str, model: str):
             "post_link": post_link,
             "model" : model 
             }
+            send_to_preprocessor(payload,uuid)
             send_to_scraper(payload,uuid) 
             return {"status": "success", "message": "Payload sent to Scraping Service."}
 
@@ -111,7 +112,6 @@ async def get_analysis(uuid: str, post_link: str, model: str):
         
         payload = {
             "type": "metadata",
-            "_id": str(post["_id"]),
             "uuid": post["uuid"],
             "post_link": post["post_link"],
             "model" : model 
@@ -125,8 +125,7 @@ async def get_analysis(uuid: str, post_link: str, model: str):
 
         for i in range(0, len(comments_list), batch_size):
             batch = {
-                "type":"comments_batch",
-                "_id": str(post["_id"]), 
+                "type":"comments_batch", 
                 "comments": comments_list[i:i + batch_size]
             }
             log.info(f"[ SERVER API ][ Sending comment batch {i // batch_size + 1} with {len(batch['comments'])} comments ]")

@@ -2,6 +2,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from shared_utils.kafka_producer import send_to_preprocessor
 import time
 
 from shared_utils.logger_config import log
@@ -18,7 +19,7 @@ class TiktokScraper:
             self.driver.get(video_url)
             self.post_url = video_url
             time.sleep(5) 
-            log.info(f"[ TIKTOK SCRAPER ][ Navigated to {video_url} ]")
+            log.info(f"[ TIKTOK SCRAPER ][ Navigated to {video_url}. ]")
             
             self.click_comment_button()
         
@@ -28,10 +29,9 @@ class TiktokScraper:
 
         
         except TimeoutError:
-            log.error(f"[ TIKTOK SCRAPER ][ Timeout while trying to load {video_url} ]")
+            log.error(f"[ TIKTOK SCRAPER ][ Timeout while trying to load {video_url}. ]")
             print(f"Timeout while trying to load {video_url}")
-
-    
+   
     def click_comment_button(self):
         try:
             comment_button = self.driver.find_element(By.CSS_SELECTOR, 'span[data-e2e="comment-icon"]')
@@ -47,7 +47,7 @@ class TiktokScraper:
             )
 
             comment_count = comment_count_element.text
-            log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ Comment count: {comment_count} ]")
+            log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ Comments count: {comment_count}. ]")
             self.scroll_comment()
         
         except Exception as e:
@@ -71,7 +71,7 @@ class TiktokScraper:
 
                 last_height = new_height
 
-            log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ Successfully scrolled through comments ]")
+            log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ Successfully scrolled through comments. ]")
             self.expand_all_replies()
 
         except Exception as e:
@@ -181,54 +181,57 @@ class TiktokScraper:
 
     def save_comments(self):
         try:
-            comments = []
+            comments_batch=[]
+            comments_database=[]
+            batch_size=10
 
             comment_blocks = self.driver.find_elements(By.CSS_SELECTOR, 'div.css-1k8xzzl-DivCommentContentWrapper')
 
             if not comment_blocks:
                 log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ No comments found on this post. ]")
 
+            batch = 0
             for block in comment_blocks:
                 try:
                     comment_text_elem = block.find_elements(By.CSS_SELECTOR, 'span[data-e2e="comment-level-1"] p')
-                    #comment_type = 'comment'
 
                     if not comment_text_elem:
                         comment_text_elem = block.find_elements(By.CSS_SELECTOR, 'span[data-e2e="comment-level-2"] p')
-                        #comment_type = 'reply'
 
                     if not comment_text_elem:
                         continue  
 
                     comment_text = comment_text_elem[0].text.strip()
-
-                    #try:
-                        #like_elem = block.find_element(By.CSS_SELECTOR, 'div.css-1nd5cw-DivLikeContainer span')
-                        #like_count = int(like_elem.text.strip()) if like_elem.text.strip().isdigit() else 0
-                    #except:
-                        #like_count = 0 
-                         
-                    #log.info(f"{comment_text}")
-                    comments.append({
-                        #'type': comment_type,
-                        'comment': comment_text
-                        #'likes': like_count
-                    })
+                    
+                    comments_batch.append(comment_text)
+                    comments_database.append(comment_text)
+                    if(len(comments_batch)==batch_size):
+                        batch = {
+                            "type":"comments_batch",
+                            "comments":comments_batch.copy()
+                        }
+                        comments_batch.clear()
+                        send_to_preprocessor(batch,self.ID)
+                        log.info(f"[ SERVER API ][ Sending comment batch {len(batch['comments'])} comments ]")
 
                 except Exception as e:
                     pass
 
-            if comments:
-                data_to_save = {
-                    'post_url': self.post_url,
-                    'uuid':self.ID,
-                    #'no_comments': len(comments),
-                    'comments': comments
+            if comments_batch:
+                batch = {
+                    "type": "comments_batch",
+                    "comments": comments_batch
                 }
+                send_to_preprocessor(batch,self.ID)
+                log.info(f"[ SERVER API ][ Sending comment batch {len(batch['comments'])} comments ]")
 
-
-                self.no_comments=len(comments)
-                log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ {len(comments)} comments: {data_to_save}]")
+            if comments_database:
+                data_to_save = {
+                    "type":"comments_batch",
+                    'comments': comments_database
+                }
+                self.no_comments=len(comments_database)
+                log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ {len(comments_database)} comments: {data_to_save}]")
             else:
                 log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ No comments to save. ]")
 
