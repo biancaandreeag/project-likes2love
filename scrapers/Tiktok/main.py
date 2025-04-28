@@ -1,8 +1,7 @@
 from Tiktok.initialize_session import InitializeSession
+from shared_utils.logger_config import log
 from Tiktok.scraper import TiktokScraper
 import time 
-
-from shared_utils.logger_config import log
 
 def run(post_url,uuid):
     session = InitializeSession(uuid) 

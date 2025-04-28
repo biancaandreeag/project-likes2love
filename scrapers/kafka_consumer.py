@@ -1,9 +1,9 @@
-from kafka import KafkaConsumer
-from initialize import go_to_scraper
-import json
-import os
-import time
 from shared_utils.logger_config  import log
+from initialize import go_to_scraper
+from kafka import KafkaConsumer
+import json
+import time
+import os
 
 class KafkaConsumerClient:
     def __init__(self, kafka_server: str = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'broker:29092'),

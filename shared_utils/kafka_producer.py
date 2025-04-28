@@ -1,5 +1,4 @@
-from kafka.admin import KafkaAdminClient, NewTopic
-from  shared_utils.logger_config import log
+from shared_utils.logger_config import log
 from kafka import KafkaProducer
 import json
 import os

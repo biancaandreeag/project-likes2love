@@ -1,11 +1,11 @@
-from kafka import KafkaConsumer
 from shared_utils.kafka_producer import send_to_analysis
 from preprocessing.translator import TextTranslator
 from preprocessing.preprocess import PreprocessData
-import json
-import os
-import time
 from shared_utils.logger_config  import log
+from kafka import KafkaConsumer
+import json
+import time
+import os
 
 class KafkaConsumerClient:
     def __init__(self, kafka_server: str = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'broker:29092'),

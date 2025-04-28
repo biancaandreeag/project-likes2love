@@ -1,11 +1,10 @@
+from shared_utils.kafka_producer import send_to_preprocessor,send_to_server
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-from shared_utils.kafka_producer import send_to_preprocessor,send_to_server
-import time
-
 from shared_utils.logger_config import log
+import time
 
 class TiktokScraper:
     def __init__(self, driver, uuid):
@@ -183,7 +182,7 @@ class TiktokScraper:
         try:
             comments_batch=[]
             comments_database=[]
-            batch_size=10
+            batch_size=500
 
             comment_blocks = self.driver.find_elements(By.CSS_SELECTOR, 'div.css-1k8xzzl-DivCommentContentWrapper')
 
@@ -212,7 +211,7 @@ class TiktokScraper:
                         }
                         comments_batch.clear()
                         send_to_preprocessor(batch,key=self.ID)
-                        log.info(f"[ SERVER API ][ Sending comment batch {len(batch['comments'])} comments ]")
+                        log.info(f"[ SCRAPING ][ Sending comment batch {len(batch['comments'])} comments ]")
 
                 except Exception as e:
                     pass
@@ -223,7 +222,7 @@ class TiktokScraper:
                     "comments": comments_batch
                 }
                 send_to_preprocessor(batch,key=self.ID)
-                log.info(f"[ SERVER API ][ Sending comment batch {len(batch['comments'])} comments ]")
+                log.info(f"[ SCRAPING ][ Sending comment batch {len(batch['comments'])} comments ]")
 
             send_to_preprocessor({"type": "end", "uuid": self.ID}, key=self.ID)
 

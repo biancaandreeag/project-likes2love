@@ -101,8 +101,6 @@ class PreprocessData:
         text = contractions.fix(text)
         return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8', 'ignore') 
     
-
-    
     def preprocess_text(self, comments):
         df_comments = pd.DataFrame(comments, columns=['text'])
         

@@ -1,6 +1,5 @@
 from kafka_consumer import KafkaConsumerClient
 from shared_utils.logger_config import log
-from shared_utils.kafka_producer import send_to_analysis
 
 #de verificat conversia emoticoanelor, emoji urilor -> nu merge tot timpul cum trebuie
 def main():
@@ -9,8 +8,7 @@ def main():
     for message in consumer.listen():
         consumer.consume_and_send(message)
 
-    log.info(f"[KAFKA CONSUMER - 'to_preprocessing' ][ Finished preprocessing the messages. ]")
-    
-   
+    log.info(f"[ KAFKA CONSUMER - 'to_preprocessing' ][ Finished preprocessing the messages. ]")
+     
 if __name__ == "__main__":
     main()

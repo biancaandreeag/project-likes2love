@@ -1,9 +1,8 @@
+from kafka_consumer import KafkaConsumerClient
+from shared_utils.logger_config import log
 from fastapi import FastAPI
 from routes import routes
-from shared_utils.logger_config import log
-from kafka_consumer import KafkaConsumerClient
 import threading
-import os
 
 #http://127.0.0.1:8000/docs -> pentru testare
 

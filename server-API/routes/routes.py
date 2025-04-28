@@ -1,12 +1,9 @@
+from shared_utils.kafka_producer import send_to_preprocessor,send_to_scraper
 from database.schemas import list_serial, individual_serial
 from database.database import posts_collection
 from fastapi import APIRouter, HTTPException 
-from shared_utils.kafka_producer import send_to_preprocessor,send_to_scraper
-from database.posts import Post
 from  shared_utils.logger_config import log
-
-#salvare rezultate dupa modul AI in db
-#trimite comentarii raw dupa scraping in db
+from database.posts import Post
 
 router = APIRouter()
 

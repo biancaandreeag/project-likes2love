@@ -1,10 +1,9 @@
-from kafka import KafkaConsumer
-import json
-import os
-import time
 from database.database import posts_collection
 from shared_utils.logger_config  import log
-from database.schemas import individual_serial
+from kafka import KafkaConsumer
+import json
+import time
+import os
 
 class KafkaConsumerClient:
     def __init__(self, kafka_server: str = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'broker:29092'),
@@ -34,34 +33,34 @@ class KafkaConsumerClient:
                 )
                 break
             except Exception as e:
-                log.error(f"[KAFKA CONSUMER - '{self.topic}' ][ Connection error: {str(e)} ]")
+                log.error(f"[ KAFKA CONSUMER - '{self.topic}' ][ Connection error: {str(e)} ]")
                 retries -= 1
                 if retries > 0:
                     time.sleep(5)
                 else:
-                    log.error(f"[KAFKA CONSUMER - '{self.topic}' ][ Failed to connect after several retries. ]")
+                    log.error(f"[ KAFKA CONSUMER - '{self.topic}' ][ Failed to connect after several retries. ]")
 
     def listen(self):
         if self.consumer:
-            log.info(f"[KAFKA CONSUMER - '{self.topic}' ][ Listening on topic '{self.topic}'... ]")
+            log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ Listening on topic '{self.topic}'... ]")
             for message in self.consumer:
                 yield message
         else:
             log.error(f"[ KAFKA CONSUMER - '{self.topic}' ][ Not initialized. ]")
 
     def consume(self, message):
-        log.info(f"[KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
+        log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
         data=message.value
         
         if isinstance(data, dict):
             try:
                 result = posts_collection.insert_one(data)
-                log.info(f"[DATABASE][ Inserted post with ID: {result.inserted_id} ]")
+                log.info(f"[ DATABASE ][ Inserted post with ID: {result.inserted_id} ]")
                 
             except Exception as e:
-                log.error(f"[DATABASE][ Error inserting post: {str(e)} ]")
+                log.error(f"[ DATABASE ][ Error inserting post: {str(e)} ]")
         else:
-            log.warning(f"[DATABASE][ Message value is not a proper post: {data} ]")
+            log.warning(f"[ DATABASE ][ Message value is not a proper post: {data} ]")
 
         
 

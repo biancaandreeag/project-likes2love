@@ -1,18 +1,15 @@
 from tiktok_captcha_solver import make_undetected_chromedriver_solver
+from shared_utils.logger_config import log
 import undetected_chromedriver as uc
+from dotenv import load_dotenv
 import pickle
 import time
 import os
 
-from shared_utils.logger_config import log
-from dotenv import load_dotenv
-import os
-
 load_dotenv()
 api_key = os.getenv("API_KEY")
-
-COOKIES_FILE = "Tiktok/cookies.pkl"
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+COOKIES_FILE = os.getenv("COOKIES_FILE")
+USER_AGENT = os.getenv("USER_AGENT")
 
 class InitializeSession:
     def __init__(self,uuid):
