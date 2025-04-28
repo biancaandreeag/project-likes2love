@@ -132,7 +132,7 @@ class TiktokScraper:
                         log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ No replies were expanded. ]")
 
                 except Exception as e:
-                    log.warning(f"[ TIKTOK SCRAPER - {self.ID} ][ Failed to process reply block: {e} ]")
+                    pass
 
             log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ All replies and 'View more', 'View replies', 'View reply' buttons clicked. ]")
             self.expand_all_view_more()
@@ -191,23 +191,24 @@ class TiktokScraper:
             for block in comment_blocks:
                 try:
                     comment_text_elem = block.find_elements(By.CSS_SELECTOR, 'span[data-e2e="comment-level-1"] p')
-                    comment_type = 'comment'
+                    #comment_type = 'comment'
 
                     if not comment_text_elem:
                         comment_text_elem = block.find_elements(By.CSS_SELECTOR, 'span[data-e2e="comment-level-2"] p')
-                        comment_type = 'reply'
+                        #comment_type = 'reply'
 
                     if not comment_text_elem:
                         continue  
 
                     comment_text = comment_text_elem[0].text.strip()
 
-                    try:
-                        like_elem = block.find_element(By.CSS_SELECTOR, 'div.css-1nd5cw-DivLikeContainer span')
-                        like_count = int(like_elem.text.strip()) if like_elem.text.strip().isdigit() else 0
-                    except:
-                        like_count = 0  
-
+                    #try:
+                        #like_elem = block.find_element(By.CSS_SELECTOR, 'div.css-1nd5cw-DivLikeContainer span')
+                        #like_count = int(like_elem.text.strip()) if like_elem.text.strip().isdigit() else 0
+                    #except:
+                        #like_count = 0 
+                         
+                    #log.info(f"{comment_text}")
                     comments.append({
                         #'type': comment_type,
                         'comment': comment_text
@@ -215,8 +216,7 @@ class TiktokScraper:
                     })
 
                 except Exception as e:
-                    #log.error(f"[ TIKTOK SCRAPER - {self.ID} ][ Error processing a comment block: {e} ]")
-                    continue
+                    pass
 
             if comments:
                 data_to_save = {

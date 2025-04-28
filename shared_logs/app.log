@@ -7251,3 +7251,564 @@ Stacktrace:
 [ 2025-04-28 16:41:27,892 ][ INFO ][ TIKTOK-MAIN ] [ Duration: 94.82 seconds ]
 [ 2025-04-28 16:41:27,893 ][ INFO ][ TIKTOK-MAIN ] [ Closing the application. ]
 [ 2025-04-28 16:41:28,092 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Browser closed successfully. ]
+[ 2025-04-28 16:47:01,631 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
+[ 2025-04-28 16:47:01,643 ][ INFO ][KAFKA CONSUMER - 'to_analysis' ][ Listening on topic 'to_analysis'... ]
+[ 2025-04-28 16:47:02,480 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-04-28 16:47:02,490 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-04-28 16:47:02,785 ][ INFO ][ KAFKA CONSUMER 'to_preprocessing' ][ Connected on topic 'to_preprocessing'... ]
+[ 2025-04-28 16:47:02,795 ][ INFO ][ TRANSLATE ][ DEEPL_API_KEY loaded successfully! ]
+[ 2025-04-28 16:47:03,119 ][ INFO ][ KAFKA CONSUMER ][ Listening on topic 'to_preprocessing'... ]
+[ 2025-04-28 16:47:03,331 ][ INFO ][ SERVER API ][ Connecting to database and starting API...]
+[ 2025-04-28 16:49:50,404 ][ INFO ][ SERVER API ][ Received analysis request: uuid=uuid-001, link=https://www.tiktok.com/@kashmirconcept/video/7497915872967707926, model=transformers ]
+[ 2025-04-28 16:49:50,432 ][ INFO ][ SERVER API ][ Post with uuid=uuid-001 and link=https://www.tiktok.com/@kashmirconcept/video/7497915872967707926 not found in database ]
+[ 2025-04-28 16:49:50,561 ][ INFO ][ KAFKA PRODUCER - to_scraper ][ Message with key: uuid-001 sent to topic. ]
+[ 2025-04-28 16:49:50,566 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: uuid-001 | Value: {'type': 'metadata', 'uuid': 'uuid-001', 'post_link': 'https://www.tiktok.com/@kashmirconcept/video/7497915872967707926', 'model': 'transformers'} ]
+[ 2025-04-28 16:49:50,567 ][ INFO ][ SCRAPER - uuid-001 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-04-28 16:49:58,007 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Driver set up successfully. ]
+[ 2025-04-28 16:50:11,661 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Loaded 9 cookies. ]
+[ 2025-04-28 16:50:11,747 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Cookies loaded successfully! ]
+[ 2025-04-28 16:50:15,039 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Cookies loaded. No need to accept again. ]
+[ 2025-04-28 16:50:22,656 ][ INFO ][ TIKTOK SCRAPER ][ Navigated to https://www.tiktok.com/@kashmirconcept/video/7497915872967707926 ]
+[ 2025-04-28 16:50:23,031 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ Comment button clicked successfully. ]
+[ 2025-04-28 16:50:34,617 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ Comment count: 99 ]
+[ 2025-04-28 16:50:55,153 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ Successfully scrolled through comments ]
+[ 2025-04-28 16:50:58,327 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5591889c275a <unknown>
+#1 0x5591884754b0 <unknown>
+#2 0x55918847c0b6 <unknown>
+#3 0x55918847e928 <unknown>
+#4 0x55918847e9b3 <unknown>
+#5 0x5591884c63e5 <unknown>
+#6 0x5591884c6ba1 <unknown>
+#7 0x5591884ba8d3 <unknown>
+#8 0x5591884ec5bd <unknown>
+#9 0x5591884ba36a <unknown>
+#10 0x5591884ec75e <unknown>
+#11 0x5591885125e0 <unknown>
+#12 0x5591884ec363 <unknown>
+#13 0x5591884b8d63 <unknown>
+#14 0x5591884b99c1 <unknown>
+#15 0x559188987a6b <unknown>
+#16 0x55918898b951 <unknown>
+#17 0x55918896fb62 <unknown>
+#18 0x55918898c4c4 <unknown>
+#19 0x55918895413f <unknown>
+#20 0x5591889b06f8 <unknown>
+#21 0x5591889b08d6 <unknown>
+#22 0x5591889c15a6 <unknown>
+#23 0x7efcdfb501f5 <unknown>
+ ]
+[ 2025-04-28 16:51:01,408 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5591889c275a <unknown>
+#1 0x5591884754b0 <unknown>
+#2 0x55918847c0b6 <unknown>
+#3 0x55918847e928 <unknown>
+#4 0x55918847e9b3 <unknown>
+#5 0x5591884c63e5 <unknown>
+#6 0x5591884c6ba1 <unknown>
+#7 0x5591884ba8d3 <unknown>
+#8 0x5591884ec5bd <unknown>
+#9 0x5591884ba36a <unknown>
+#10 0x5591884ec75e <unknown>
+#11 0x5591885125e0 <unknown>
+#12 0x5591884ec363 <unknown>
+#13 0x5591884b8d63 <unknown>
+#14 0x5591884b99c1 <unknown>
+#15 0x559188987a6b <unknown>
+#16 0x55918898b951 <unknown>
+#17 0x55918896fb62 <unknown>
+#18 0x55918898c4c4 <unknown>
+#19 0x55918895413f <unknown>
+#20 0x5591889b06f8 <unknown>
+#21 0x5591889b08d6 <unknown>
+#22 0x5591889c15a6 <unknown>
+#23 0x7efcdfb501f5 <unknown>
+ ]
+[ 2025-04-28 16:51:04,507 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5591889c275a <unknown>
+#1 0x5591884754b0 <unknown>
+#2 0x55918847c0b6 <unknown>
+#3 0x55918847e928 <unknown>
+#4 0x55918847e9b3 <unknown>
+#5 0x5591884c63e5 <unknown>
+#6 0x5591884c6ba1 <unknown>
+#7 0x5591884ba8d3 <unknown>
+#8 0x5591884ec5bd <unknown>
+#9 0x5591884ba36a <unknown>
+#10 0x5591884ec75e <unknown>
+#11 0x5591885125e0 <unknown>
+#12 0x5591884ec363 <unknown>
+#13 0x5591884b8d63 <unknown>
+#14 0x5591884b99c1 <unknown>
+#15 0x559188987a6b <unknown>
+#16 0x55918898b951 <unknown>
+#17 0x55918896fb62 <unknown>
+#18 0x55918898c4c4 <unknown>
+#19 0x55918895413f <unknown>
+#20 0x5591889b06f8 <unknown>
+#21 0x5591889b08d6 <unknown>
+#22 0x5591889c15a6 <unknown>
+#23 0x7efcdfb501f5 <unknown>
+ ]
+[ 2025-04-28 16:51:08,009 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5591889c275a <unknown>
+#1 0x5591884754b0 <unknown>
+#2 0x55918847c0b6 <unknown>
+#3 0x55918847e928 <unknown>
+#4 0x55918847e9b3 <unknown>
+#5 0x5591884c63e5 <unknown>
+#6 0x5591884c6ba1 <unknown>
+#7 0x5591884ba8d3 <unknown>
+#8 0x5591884ec5bd <unknown>
+#9 0x5591884ba36a <unknown>
+#10 0x5591884ec75e <unknown>
+#11 0x5591885125e0 <unknown>
+#12 0x5591884ec363 <unknown>
+#13 0x5591884b8d63 <unknown>
+#14 0x5591884b99c1 <unknown>
+#15 0x559188987a6b <unknown>
+#16 0x55918898b951 <unknown>
+#17 0x55918896fb62 <unknown>
+#18 0x55918898c4c4 <unknown>
+#19 0x55918895413f <unknown>
+#20 0x5591889b06f8 <unknown>
+#21 0x5591889b08d6 <unknown>
+#22 0x5591889c15a6 <unknown>
+#23 0x7efcdfb501f5 <unknown>
+ ]
+[ 2025-04-28 16:51:11,101 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5591889c275a <unknown>
+#1 0x5591884754b0 <unknown>
+#2 0x55918847c0b6 <unknown>
+#3 0x55918847e928 <unknown>
+#4 0x55918847e9b3 <unknown>
+#5 0x5591884c63e5 <unknown>
+#6 0x5591884c6ba1 <unknown>
+#7 0x5591884ba8d3 <unknown>
+#8 0x5591884ec5bd <unknown>
+#9 0x5591884ba36a <unknown>
+#10 0x5591884ec75e <unknown>
+#11 0x5591885125e0 <unknown>
+#12 0x5591884ec363 <unknown>
+#13 0x5591884b8d63 <unknown>
+#14 0x5591884b99c1 <unknown>
+#15 0x559188987a6b <unknown>
+#16 0x55918898b951 <unknown>
+#17 0x55918896fb62 <unknown>
+#18 0x55918898c4c4 <unknown>
+#19 0x55918895413f <unknown>
+#20 0x5591889b06f8 <unknown>
+#21 0x5591889b08d6 <unknown>
+#22 0x5591889c15a6 <unknown>
+#23 0x7efcdfb501f5 <unknown>
+ ]
+[ 2025-04-28 16:51:14,172 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5591889c275a <unknown>
+#1 0x5591884754b0 <unknown>
+#2 0x55918847c0b6 <unknown>
+#3 0x55918847e928 <unknown>
+#4 0x55918847e9b3 <unknown>
+#5 0x5591884c63e5 <unknown>
+#6 0x5591884c6ba1 <unknown>
+#7 0x5591884ba8d3 <unknown>
+#8 0x5591884ec5bd <unknown>
+#9 0x5591884ba36a <unknown>
+#10 0x5591884ec75e <unknown>
+#11 0x5591885125e0 <unknown>
+#12 0x5591884ec363 <unknown>
+#13 0x5591884b8d63 <unknown>
+#14 0x5591884b99c1 <unknown>
+#15 0x559188987a6b <unknown>
+#16 0x55918898b951 <unknown>
+#17 0x55918896fb62 <unknown>
+#18 0x55918898c4c4 <unknown>
+#19 0x55918895413f <unknown>
+#20 0x5591889b06f8 <unknown>
+#21 0x5591889b08d6 <unknown>
+#22 0x5591889c15a6 <unknown>
+#23 0x7efcdfb501f5 <unknown>
+ ]
+[ 2025-04-28 16:51:20,338 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5591889c275a <unknown>
+#1 0x5591884754b0 <unknown>
+#2 0x55918847c0b6 <unknown>
+#3 0x55918847e928 <unknown>
+#4 0x55918847e9b3 <unknown>
+#5 0x5591884c63e5 <unknown>
+#6 0x5591884c6ba1 <unknown>
+#7 0x5591884ba8d3 <unknown>
+#8 0x5591884ec5bd <unknown>
+#9 0x5591884ba36a <unknown>
+#10 0x5591884ec75e <unknown>
+#11 0x5591885125e0 <unknown>
+#12 0x5591884ec363 <unknown>
+#13 0x5591884b8d63 <unknown>
+#14 0x5591884b99c1 <unknown>
+#15 0x559188987a6b <unknown>
+#16 0x55918898b951 <unknown>
+#17 0x55918896fb62 <unknown>
+#18 0x55918898c4c4 <unknown>
+#19 0x55918895413f <unknown>
+#20 0x5591889b06f8 <unknown>
+#21 0x5591889b08d6 <unknown>
+#22 0x5591889c15a6 <unknown>
+#23 0x7efcdfb501f5 <unknown>
+ ]
+[ 2025-04-28 16:51:20,338 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ All replies and 'View more', 'View replies', 'View reply' buttons clicked. ]
+[ 2025-04-28 16:51:29,570 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ No new 'View more' buttons clicked, exiting loop. ]
+[ 2025-04-28 16:51:29,570 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ All 'View more' buttons were expanded. ]
+[ 2025-04-28 16:51:29,633 ][ INFO ]Fetelor depinde și de mîna celui care te tunde!
+[ 2025-04-28 16:51:29,691 ][ INFO ]exact...pe mine de câțiva ani doar soțul îmi tunde vârfurile și îmi creste parul foarte repede
+[ 2025-04-28 16:51:29,720 ][ INFO ]unde locuiesti?😅de cand ma chinui sa mi creasca
+[ 2025-04-28 16:51:29,756 ][ INFO ]veniți la Pitești!
+[ 2025-04-28 16:51:29,791 ][ INFO ]departe😁
+[ 2025-04-28 16:51:29,828 ][ INFO ]departe de Ro
+[ 2025-04-28 16:51:29,865 ][ INFO ]De când imi tund singură vârfurile părul meu crește foarte repede 🦋
+[ 2025-04-28 16:51:29,888 ][ INFO ]De cand am invatat sā ma tund singura am cel mai frumos par 🙏creste ca prin minune
+[ 2025-04-28 16:51:29,914 ][ INFO ]Eu nu am ținut niciodată cont de așa superstiții ! L-am sunt în iunie anul trecut și mi-a crescut imediat !
+[ 2025-04-28 16:51:29,940 ][ INFO ]Adevărat la mine a funcționat
+[ 2025-04-28 16:51:29,964 ][ INFO ]Chiar am programare în 10 mai 😍
+[ 2025-04-28 16:51:29,987 ][ INFO ]nu sunt mituri aveam o prietena care ma tundea mereu și îmi creștea parul foarte greu ,anul trecut mam tuns bob la o doamnă la salon și nici într-un an am parul peste umar
+[ 2025-04-28 16:51:30,024 ][ INFO ]Eu la fel...de fiecare dată cînd mă duc la salon, vin acasă și mi l mai reglez cu foarfeca, după mîna mea crește foarte repede...am găsit secretul și funcționează 🥰!
+[ 2025-04-28 16:51:30,051 ][ INFO ]eu nu am avut niciodată părul mai lung jumătatea spatelui deși mi-aș dori . Nu îmi crește!🤷
+[ 2025-04-28 16:51:30,084 ][ INFO ]El creste, daca te uiti la radacina. Probabil ca se tot rupe, de aceea pare ca sta pe loc. Si eu patesc la fel.
+[ 2025-04-28 16:51:30,116 ][ INFO ]nici mie
+[ 2025-04-28 16:51:30,144 ][ INFO ]Acum 2 ani l-am avut m-ai jos de fund și l-am tuns puțin m-ai jos de umeri și părul l-am donat și acum e la jumătate de soate!
+[ 2025-04-28 16:51:30,185 ][ INFO ]Creșterea părului depinde, culmea, de cat de des vă tundeți părul. Dacă neglijați tunderea periodică a vârfurilor arse sau despicate el o să se tot rupă și creșterea nu mai e vizibilă
+[ 2025-04-28 16:51:30,205 ][ INFO ]eu am ținut cont de luna în creștere și chiar a funcționat..in condițiile in care am un par care crește f greu..
+[ 2025-04-28 16:51:30,235 ][ INFO ]Este mental și de aceea ajuta.Adica tu manifești acest lucru 😊
+[ 2025-04-28 16:51:30,263 ][ INFO ]serios? și mie îmi crește tare greu😢
+[ 2025-04-28 16:51:30,288 ][ INFO ]da si al meu crește f greu.si nca ceva încearcă să ți tai singura din vârfuri
+[ 2025-04-28 16:51:30,322 ][ INFO ]încearcă singura doar puțin din vârfuri
+[ 2025-04-28 16:51:30,352 ][ INFO ]cu siguranță voi incerca, ms🥰
+[ 2025-04-28 16:51:30,381 ][ INFO ]🥰
+[ 2025-04-28 16:51:30,410 ][ INFO ]off azi m-am tuns 🥺🥺va fi de bine?
+[ 2025-04-28 16:51:30,457 ][ INFO ]da
+[ 2025-04-28 16:51:30,487 ][ INFO ]voi incerca😁si vom vedea🥰
+[ 2025-04-28 16:51:30,519 ][ INFO ]2 Mai , programare la tuns🥰
+[ 2025-04-28 16:51:30,550 ][ INFO ]Eu știu ca în martie e bine să te tunzi 🙏
+[ 2025-04-28 16:51:30,579 ][ INFO ]programare 21 mai 😅😒
+[ 2025-04-28 16:51:30,602 ][ INFO ]mulțumesc nu dtiam🥰🥰🥰
+[ 2025-04-28 16:51:30,622 ][ INFO ]eu am maine programarea 28 aprilie....?
+[ 2025-04-28 16:51:30,655 ][ INFO ]îs mituri stai liniștită
+[ 2025-04-28 16:51:30,676 ][ INFO ]În iunie când e bine să ne tundem?
+[ 2025-04-28 16:51:30,703 ][ INFO ]Am pe 20 mai😂
+[ 2025-04-28 16:51:30,725 ][ INFO ]Mersi!😘
+[ 2025-04-28 16:51:30,757 ][ INFO ]Este genitic cat de repede iti creste parul. Mie imi creste foarte repede,intre 1,5 cm 1,8 cm pe luna
+[ 2025-04-28 16:51:30,804 ][ INFO ]Esti norocoasa
+[ 2025-04-28 16:51:30,839 ][ INFO ]Nu este adevărat, eu când mă tundeam la salon, niciodată nu îmi trecea părul de umeri, și specificam că vreau doar vârfurile tunse, de când mă tund singură, mi-a crescut părul, îl am aproape de fund.
+[ 2025-04-28 16:51:30,872 ][ INFO ]în luna Martie știam eu .🙂
+[ 2025-04-28 16:51:30,902 ][ INFO ]Dacă luna e în fecioara, mai ales.
+[ 2025-04-28 16:51:30,925 ][ INFO ]Unde scrie pamflet ? ….
+[ 2025-04-28 16:51:30,959 ][ INFO ]Păstrez tradiția asta de un an de zile și chiar funcționează,ca nu prea cred în chesti cu universul , recomand respectați zilele 👌
+[ 2025-04-28 16:51:30,986 ][ INFO ]funcționează sigur
+[ 2025-04-28 16:51:31,017 ][ INFO ]cred in asta pentru ca anul trecut m am tuns in Mai si toata lumea se uimea de parul meu cat e de lung , in schimb anul asta m am tuns de 2 luni dar deloc nu ii merge
+[ 2025-04-28 16:51:31,048 ][ INFO ]Pe 30 acum e lună în creștere 😁❤
+[ 2025-04-28 16:51:31,073 ][ INFO ]3 mai programare la tuns 🥰
+[ 2025-04-28 16:51:31,101 ][ INFO ]Luna în descreștere este în iunie?😂😂😂
+[ 2025-04-28 16:51:31,135 ][ INFO ]M-as tunde in ambele perioade ca sa fiu sigura ca imi creste :)) sau anuleaza rezultatul ?
+[ 2025-04-28 16:51:31,165 ][ INFO ]Aștept pentru luna iunie 🥰🤗
+[ 2025-04-28 16:51:31,199 ][ INFO ]Mulțumesc!
+[ 2025-04-28 16:51:31,227 ][ INFO ]@Tania Güngör
+[ 2025-04-28 16:51:31,253 ][ INFO ]@Maria Catalina
+[ 2025-04-28 16:51:31,282 ][ INFO ]@Ale Stroia
+[ 2025-04-28 16:51:31,317 ][ INFO ]Da🤣🤣🤣
+[ 2025-04-28 16:51:31,341 ][ INFO ]😭😭😭
+[ 2025-04-28 16:51:31,371 ][ INFO ]👍👍👍
+[ 2025-04-28 16:51:31,402 ][ INFO ]❤❤
+[ 2025-04-28 16:51:31,435 ][ INFO ]🙏🙏🙏🙏🙏🙏
+[ 2025-04-28 16:51:31,466 ][ INFO ]👍👍👍👍👍👍
+[ 2025-04-28 16:51:31,492 ][ INFO ]🥺🥺🥺
+[ 2025-04-28 16:51:31,535 ][ INFO ]😂😂😂
+[ 2025-04-28 16:51:31,571 ][ INFO ]🥰🥰🥰
+[ 2025-04-28 16:51:31,606 ][ INFO ]🥰🥰🥰
+[ 2025-04-28 16:51:31,637 ][ INFO ]🥰❤️❤️
+[ 2025-04-28 16:51:31,666 ][ INFO ]🥰🥰🥰😂😂😂
+[ 2025-04-28 16:51:31,697 ][ INFO ]😂😂😂
+[ 2025-04-28 16:51:31,724 ][ INFO ]❤️❤️❤️❤️❤️
+[ 2025-04-28 16:51:31,749 ][ INFO ]🥰🥰🥰
+[ 2025-04-28 16:51:31,782 ][ INFO ]Da și se mai zice, la lună nou cum se înoește luna așa să se inoească părul se spune de trei ori succes 😏
+[ 2025-04-28 16:51:31,806 ][ INFO ]🤣🤣🤣🤣🤣am trait sa o aud si pe asta 🤣🤣🤣🤣sa te tunzi in anumite zile si cum e luna pe cer așezată 🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣
+[ 2025-04-28 16:51:31,837 ][ INFO ]Al meu crește ca din apă,nu sunt bucuroasă ce repede crește.
+[ 2025-04-28 16:51:31,865 ][ INFO ]depinde de genetica nu mai credeti tot ce zboara
+[ 2025-04-28 16:51:31,889 ][ INFO ]😂😂😂totul este o minciuna parul se taie doar pe 1 martie pt ca atunci infloresc toti copacii si vita de vie si suvița se ingroapa la radacina vitei niciodata in mai pt ca se scutură toate florile
+[ 2025-04-28 16:51:31,920 ][ INFO ]auzi,dar luna asta nu spune nimic de vreun venit substantial...?sa iesim din criza?😂😂 ia vezi,cerceteaza si ne anunti.ca de par nu prea ma.intereseaza sa creasca cand o vrea.dar am niste datorii .😅
+[ 2025-04-28 16:51:31,953 ][ INFO ]placebo
+[ 2025-04-28 16:51:31,954 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ 77 comments: {'post_url': 'https://www.tiktok.com/@kashmirconcept/video/7497915872967707926', 'uuid': 'uuid-001', 'comments': [{'comment': 'Fetelor depinde și de mîna celui care te tunde!'}, {'comment': 'exact...pe mine de câțiva ani doar soțul îmi tunde vârfurile și îmi creste parul foarte repede'}, {'comment': 'unde locuiesti?😅de cand ma chinui sa mi creasca'}, {'comment': 'veniți la Pitești!'}, {'comment': 'departe😁'}, {'comment': 'departe de Ro'}, {'comment': 'De când imi tund singură vârfurile părul meu crește foarte repede 🦋'}, {'comment': 'De cand am invatat sā ma tund singura am cel mai frumos par 🙏creste ca prin minune'}, {'comment': 'Eu nu am ținut niciodată cont de așa superstiții ! L-am sunt în iunie anul trecut și mi-a crescut imediat !'}, {'comment': 'Adevărat la mine a funcționat'}, {'comment': 'Chiar am programare în 10 mai 😍'}, {'comment': 'nu sunt mituri aveam o prietena care ma tundea mereu și îmi creștea parul foarte greu ,anul trecut mam tuns bob la o doamnă la salon și nici într-un an am parul peste umar'}, {'comment': 'Eu la fel...de fiecare dată cînd mă duc la salon, vin acasă și mi l mai reglez cu foarfeca, după mîna mea crește foarte repede...am găsit secretul și funcționează 🥰!'}, {'comment': 'eu nu am avut niciodată părul mai lung jumătatea spatelui deși mi-aș dori . Nu îmi crește!🤷'}, {'comment': 'El creste, daca te uiti la radacina. Probabil ca se tot rupe, de aceea pare ca sta pe loc. Si eu patesc la fel.'}, {'comment': 'nici mie'}, {'comment': 'Acum 2 ani l-am avut m-ai jos de fund și l-am tuns puțin m-ai jos de umeri și părul l-am donat și acum e la jumătate de soate!'}, {'comment': 'Creșterea părului depinde, culmea, de cat de des vă tundeți părul. Dacă neglijați tunderea periodică a vârfurilor arse sau despicate el o să se tot rupă și creșterea nu mai e vizibilă'}, {'comment': 'eu am ținut cont de luna în creștere și chiar a funcționat..in condițiile in care am un par care crește f greu..'}, {'comment': 'Este mental și de aceea ajuta.Adica tu manifești acest lucru 😊'}, {'comment': 'serios? și mie îmi crește tare greu😢'}, {'comment': 'da si al meu crește f greu.si nca ceva încearcă să ți tai singura din vârfuri'}, {'comment': 'încearcă singura doar puțin din vârfuri'}, {'comment': 'cu siguranță voi incerca, ms🥰'}, {'comment': '🥰'}, {'comment': 'off azi m-am tuns 🥺🥺va fi de bine?'}, {'comment': 'da'}, {'comment': 'voi incerca😁si vom vedea🥰'}, {'comment': '2 Mai , programare la tuns🥰'}, {'comment': 'Eu știu ca în martie e bine să te tunzi 🙏'}, {'comment': 'programare 21 mai 😅😒'}, {'comment': 'mulțumesc nu dtiam🥰🥰🥰'}, {'comment': 'eu am maine programarea 28 aprilie....?'}, {'comment': 'îs mituri stai liniștită'}, {'comment': 'În iunie când e bine să ne tundem?'}, {'comment': 'Am pe 20 mai😂'}, {'comment': 'Mersi!😘'}, {'comment': 'Este genitic cat de repede iti creste parul. Mie imi creste foarte repede,intre 1,5 cm 1,8 cm pe luna'}, {'comment': 'Esti norocoasa'}, {'comment': 'Nu este adevărat, eu când mă tundeam la salon, niciodată nu îmi trecea părul de umeri, și specificam că vreau doar vârfurile tunse, de când mă tund singură, mi-a crescut părul, îl am aproape de fund.'}, {'comment': 'în luna Martie știam eu .🙂'}, {'comment': 'Dacă luna e în fecioara, mai ales.'}, {'comment': 'Unde scrie pamflet ? ….'}, {'comment': 'Păstrez tradiția asta de un an de zile și chiar funcționează,ca nu prea cred în chesti cu universul , recomand respectați zilele 👌'}, {'comment': 'funcționează sigur'}, {'comment': 'cred in asta pentru ca anul trecut m am tuns in Mai si toata lumea se uimea de parul meu cat e de lung , in schimb anul asta m am tuns de 2 luni dar deloc nu ii merge'}, {'comment': 'Pe 30 acum e lună în creștere 😁❤'}, {'comment': '3 mai programare la tuns 🥰'}, {'comment': 'Luna în descreștere este în iunie?😂😂😂'}, {'comment': 'M-as tunde in ambele perioade ca sa fiu sigura ca imi creste :)) sau anuleaza rezultatul ?'}, {'comment': 'Aștept pentru luna iunie 🥰🤗'}, {'comment': 'Mulțumesc!'}, {'comment': '@Tania Güngör'}, {'comment': '@Maria Catalina'}, {'comment': '@Ale Stroia'}, {'comment': 'Da🤣🤣🤣'}, {'comment': '😭😭😭'}, {'comment': '👍👍👍'}, {'comment': '❤❤'}, {'comment': '🙏🙏🙏🙏🙏🙏'}, {'comment': '👍👍👍👍👍👍'}, {'comment': '🥺🥺🥺'}, {'comment': '😂😂😂'}, {'comment': '🥰🥰🥰'}, {'comment': '🥰🥰🥰'}, {'comment': '🥰❤️❤️'}, {'comment': '🥰🥰🥰😂😂😂'}, {'comment': '😂😂😂'}, {'comment': '❤️❤️❤️❤️❤️'}, {'comment': '🥰🥰🥰'}, {'comment': 'Da și se mai zice, la lună nou cum se înoește luna așa să se inoească părul se spune de trei ori succes 😏'}, {'comment': '🤣🤣🤣🤣🤣am trait sa o aud si pe asta 🤣🤣🤣🤣sa te tunzi in anumite zile si cum e luna pe cer așezată 🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣'}, {'comment': 'Al meu crește ca din apă,nu sunt bucuroasă ce repede crește.'}, {'comment': 'depinde de genetica nu mai credeti tot ce zboara'}, {'comment': '😂😂😂totul este o minciuna parul se taie doar pe 1 martie pt ca atunci infloresc toti copacii si vita de vie si suvița se ingroapa la radacina vitei niciodata in mai pt ca se scutură toate florile'}, {'comment': 'auzi,dar luna asta nu spune nimic de vreun venit substantial...?sa iesim din criza?😂😂 ia vezi,cerceteaza si ne anunti.ca de par nu prea ma.intereseaza sa creasca cand o vrea.dar am niste datorii .😅'}, {'comment': 'placebo'}]}]
+[ 2025-04-28 16:51:31,961 ][ INFO ][ TIKTOK-MAIN ] [ Duration: 76.92 seconds ]
+[ 2025-04-28 16:51:31,961 ][ INFO ][ TIKTOK-MAIN ] [ Closing the application. ]
+[ 2025-04-28 16:51:32,153 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Browser closed successfully. ]
+[ 2025-04-28 16:55:44,291 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
+[ 2025-04-28 16:55:44,304 ][ INFO ][KAFKA CONSUMER - 'to_analysis' ][ Listening on topic 'to_analysis'... ]
+[ 2025-04-28 16:55:45,206 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-04-28 16:55:45,216 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-04-28 16:55:45,542 ][ INFO ][ KAFKA CONSUMER 'to_preprocessing' ][ Connected on topic 'to_preprocessing'... ]
+[ 2025-04-28 16:55:45,560 ][ INFO ][ TRANSLATE ][ DEEPL_API_KEY loaded successfully! ]
+[ 2025-04-28 16:55:45,774 ][ INFO ][ KAFKA CONSUMER ][ Listening on topic 'to_preprocessing'... ]
+[ 2025-04-28 16:55:46,122 ][ INFO ][ SERVER API ][ Connecting to database and starting API...]
+[ 2025-04-28 16:56:05,222 ][ INFO ][ SERVER API ][ Received analysis request: uuid=uuid-001, link=https://www.tiktok.com/@kashmirconcept/video/7497915872967707926, model=transformers ]
+[ 2025-04-28 16:56:05,253 ][ INFO ][ SERVER API ][ Post with uuid=uuid-001 and link=https://www.tiktok.com/@kashmirconcept/video/7497915872967707926 not found in database ]
+[ 2025-04-28 16:56:05,391 ][ INFO ][ KAFKA PRODUCER - to_scraper ][ Message with key: uuid-001 sent to topic. ]
+[ 2025-04-28 16:56:09,157 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: uuid-001 | Value: {'type': 'metadata', 'uuid': 'uuid-001', 'post_link': 'https://www.tiktok.com/@kashmirconcept/video/7497915872967707926', 'model': 'transformers'} ]
+[ 2025-04-28 16:56:09,159 ][ INFO ][ SCRAPER - uuid-001 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-04-28 16:56:16,961 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Driver set up successfully. ]
+[ 2025-04-28 16:56:24,106 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Loaded 9 cookies. ]
+[ 2025-04-28 16:56:24,201 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Cookies loaded successfully! ]
+[ 2025-04-28 16:56:28,089 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Cookies loaded. No need to accept again. ]
+[ 2025-04-28 16:56:47,714 ][ INFO ][ TIKTOK SCRAPER ][ Navigated to https://www.tiktok.com/@kashmirconcept/video/7497915872967707926 ]
+[ 2025-04-28 16:56:48,034 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ Comment button clicked successfully. ]
+[ 2025-04-28 16:56:58,074 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ Comment count: 99 ]
+[ 2025-04-28 16:57:18,461 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ Successfully scrolled through comments ]
+[ 2025-04-28 16:57:21,587 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5633e13fb75a <unknown>
+#1 0x5633e0eae4b0 <unknown>
+#2 0x5633e0eb50b6 <unknown>
+#3 0x5633e0eb7928 <unknown>
+#4 0x5633e0eb79b3 <unknown>
+#5 0x5633e0eff3e5 <unknown>
+#6 0x5633e0effba1 <unknown>
+#7 0x5633e0ef38d3 <unknown>
+#8 0x5633e0f255bd <unknown>
+#9 0x5633e0ef336a <unknown>
+#10 0x5633e0f2575e <unknown>
+#11 0x5633e0f4b5e0 <unknown>
+#12 0x5633e0f25363 <unknown>
+#13 0x5633e0ef1d63 <unknown>
+#14 0x5633e0ef29c1 <unknown>
+#15 0x5633e13c0a6b <unknown>
+#16 0x5633e13c4951 <unknown>
+#17 0x5633e13a8b62 <unknown>
+#18 0x5633e13c54c4 <unknown>
+#19 0x5633e138d13f <unknown>
+#20 0x5633e13e96f8 <unknown>
+#21 0x5633e13e98d6 <unknown>
+#22 0x5633e13fa5a6 <unknown>
+#23 0x7f69d37071f5 <unknown>
+ ]
+[ 2025-04-28 16:57:24,667 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5633e13fb75a <unknown>
+#1 0x5633e0eae4b0 <unknown>
+#2 0x5633e0eb50b6 <unknown>
+#3 0x5633e0eb7928 <unknown>
+#4 0x5633e0eb79b3 <unknown>
+#5 0x5633e0eff3e5 <unknown>
+#6 0x5633e0effba1 <unknown>
+#7 0x5633e0ef38d3 <unknown>
+#8 0x5633e0f255bd <unknown>
+#9 0x5633e0ef336a <unknown>
+#10 0x5633e0f2575e <unknown>
+#11 0x5633e0f4b5e0 <unknown>
+#12 0x5633e0f25363 <unknown>
+#13 0x5633e0ef1d63 <unknown>
+#14 0x5633e0ef29c1 <unknown>
+#15 0x5633e13c0a6b <unknown>
+#16 0x5633e13c4951 <unknown>
+#17 0x5633e13a8b62 <unknown>
+#18 0x5633e13c54c4 <unknown>
+#19 0x5633e138d13f <unknown>
+#20 0x5633e13e96f8 <unknown>
+#21 0x5633e13e98d6 <unknown>
+#22 0x5633e13fa5a6 <unknown>
+#23 0x7f69d37071f5 <unknown>
+ ]
+[ 2025-04-28 16:57:27,747 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5633e13fb75a <unknown>
+#1 0x5633e0eae4b0 <unknown>
+#2 0x5633e0eb50b6 <unknown>
+#3 0x5633e0eb7928 <unknown>
+#4 0x5633e0eb79b3 <unknown>
+#5 0x5633e0eff3e5 <unknown>
+#6 0x5633e0effba1 <unknown>
+#7 0x5633e0ef38d3 <unknown>
+#8 0x5633e0f255bd <unknown>
+#9 0x5633e0ef336a <unknown>
+#10 0x5633e0f2575e <unknown>
+#11 0x5633e0f4b5e0 <unknown>
+#12 0x5633e0f25363 <unknown>
+#13 0x5633e0ef1d63 <unknown>
+#14 0x5633e0ef29c1 <unknown>
+#15 0x5633e13c0a6b <unknown>
+#16 0x5633e13c4951 <unknown>
+#17 0x5633e13a8b62 <unknown>
+#18 0x5633e13c54c4 <unknown>
+#19 0x5633e138d13f <unknown>
+#20 0x5633e13e96f8 <unknown>
+#21 0x5633e13e98d6 <unknown>
+#22 0x5633e13fa5a6 <unknown>
+#23 0x7f69d37071f5 <unknown>
+ ]
+[ 2025-04-28 16:57:30,836 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5633e13fb75a <unknown>
+#1 0x5633e0eae4b0 <unknown>
+#2 0x5633e0eb50b6 <unknown>
+#3 0x5633e0eb7928 <unknown>
+#4 0x5633e0eb79b3 <unknown>
+#5 0x5633e0eff3e5 <unknown>
+#6 0x5633e0effba1 <unknown>
+#7 0x5633e0ef38d3 <unknown>
+#8 0x5633e0f255bd <unknown>
+#9 0x5633e0ef336a <unknown>
+#10 0x5633e0f2575e <unknown>
+#11 0x5633e0f4b5e0 <unknown>
+#12 0x5633e0f25363 <unknown>
+#13 0x5633e0ef1d63 <unknown>
+#14 0x5633e0ef29c1 <unknown>
+#15 0x5633e13c0a6b <unknown>
+#16 0x5633e13c4951 <unknown>
+#17 0x5633e13a8b62 <unknown>
+#18 0x5633e13c54c4 <unknown>
+#19 0x5633e138d13f <unknown>
+#20 0x5633e13e96f8 <unknown>
+#21 0x5633e13e98d6 <unknown>
+#22 0x5633e13fa5a6 <unknown>
+#23 0x7f69d37071f5 <unknown>
+ ]
+[ 2025-04-28 16:57:33,957 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5633e13fb75a <unknown>
+#1 0x5633e0eae4b0 <unknown>
+#2 0x5633e0eb50b6 <unknown>
+#3 0x5633e0eb7928 <unknown>
+#4 0x5633e0eb79b3 <unknown>
+#5 0x5633e0eff3e5 <unknown>
+#6 0x5633e0effba1 <unknown>
+#7 0x5633e0ef38d3 <unknown>
+#8 0x5633e0f255bd <unknown>
+#9 0x5633e0ef336a <unknown>
+#10 0x5633e0f2575e <unknown>
+#11 0x5633e0f4b5e0 <unknown>
+#12 0x5633e0f25363 <unknown>
+#13 0x5633e0ef1d63 <unknown>
+#14 0x5633e0ef29c1 <unknown>
+#15 0x5633e13c0a6b <unknown>
+#16 0x5633e13c4951 <unknown>
+#17 0x5633e13a8b62 <unknown>
+#18 0x5633e13c54c4 <unknown>
+#19 0x5633e138d13f <unknown>
+#20 0x5633e13e96f8 <unknown>
+#21 0x5633e13e98d6 <unknown>
+#22 0x5633e13fa5a6 <unknown>
+#23 0x7f69d37071f5 <unknown>
+ ]
+[ 2025-04-28 16:57:37,064 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5633e13fb75a <unknown>
+#1 0x5633e0eae4b0 <unknown>
+#2 0x5633e0eb50b6 <unknown>
+#3 0x5633e0eb7928 <unknown>
+#4 0x5633e0eb79b3 <unknown>
+#5 0x5633e0eff3e5 <unknown>
+#6 0x5633e0effba1 <unknown>
+#7 0x5633e0ef38d3 <unknown>
+#8 0x5633e0f255bd <unknown>
+#9 0x5633e0ef336a <unknown>
+#10 0x5633e0f2575e <unknown>
+#11 0x5633e0f4b5e0 <unknown>
+#12 0x5633e0f25363 <unknown>
+#13 0x5633e0ef1d63 <unknown>
+#14 0x5633e0ef29c1 <unknown>
+#15 0x5633e13c0a6b <unknown>
+#16 0x5633e13c4951 <unknown>
+#17 0x5633e13a8b62 <unknown>
+#18 0x5633e13c54c4 <unknown>
+#19 0x5633e138d13f <unknown>
+#20 0x5633e13e96f8 <unknown>
+#21 0x5633e13e98d6 <unknown>
+#22 0x5633e13fa5a6 <unknown>
+#23 0x7f69d37071f5 <unknown>
+ ]
+[ 2025-04-28 16:57:43,277 ][ WARNING ][ TIKTOK SCRAPER - uuid-001 ][ Failed to process reply block: Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.114); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+#0 0x5633e13fb75a <unknown>
+#1 0x5633e0eae4b0 <unknown>
+#2 0x5633e0eb50b6 <unknown>
+#3 0x5633e0eb7928 <unknown>
+#4 0x5633e0eb79b3 <unknown>
+#5 0x5633e0eff3e5 <unknown>
+#6 0x5633e0effba1 <unknown>
+#7 0x5633e0ef38d3 <unknown>
+#8 0x5633e0f255bd <unknown>
+#9 0x5633e0ef336a <unknown>
+#10 0x5633e0f2575e <unknown>
+#11 0x5633e0f4b5e0 <unknown>
+#12 0x5633e0f25363 <unknown>
+#13 0x5633e0ef1d63 <unknown>
+#14 0x5633e0ef29c1 <unknown>
+#15 0x5633e13c0a6b <unknown>
+#16 0x5633e13c4951 <unknown>
+#17 0x5633e13a8b62 <unknown>
+#18 0x5633e13c54c4 <unknown>
+#19 0x5633e138d13f <unknown>
+#20 0x5633e13e96f8 <unknown>
+#21 0x5633e13e98d6 <unknown>
+#22 0x5633e13fa5a6 <unknown>
+#23 0x7f69d37071f5 <unknown>
+ ]
+[ 2025-04-28 16:57:43,278 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ All replies and 'View more', 'View replies', 'View reply' buttons clicked. ]
+[ 2025-04-28 16:57:53,918 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ No new 'View more' buttons clicked, exiting loop. ]
+[ 2025-04-28 16:57:53,919 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ All 'View more' buttons were expanded. ]
+[ 2025-04-28 16:57:56,313 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ 77 comments: {'post_url': 'https://www.tiktok.com/@kashmirconcept/video/7497915872967707926', 'uuid': 'uuid-001', 'comments': [{'comment': 'Fetelor depinde și de mîna celui care te tunde!'}, {'comment': 'exact...pe mine de câțiva ani doar soțul îmi tunde vârfurile și îmi creste parul foarte repede'}, {'comment': 'unde locuiesti?😅de cand ma chinui sa mi creasca'}, {'comment': 'veniți la Pitești!'}, {'comment': 'departe😁'}, {'comment': 'departe de Ro'}, {'comment': 'De când imi tund singură vârfurile părul meu crește foarte repede 🦋'}, {'comment': 'De cand am invatat sā ma tund singura am cel mai frumos par 🙏creste ca prin minune'}, {'comment': 'Eu nu am ținut niciodată cont de așa superstiții ! L-am sunt în iunie anul trecut și mi-a crescut imediat !'}, {'comment': 'Adevărat la mine a funcționat'}, {'comment': 'Chiar am programare în 10 mai 😍'}, {'comment': 'nu sunt mituri aveam o prietena care ma tundea mereu și îmi creștea parul foarte greu ,anul trecut mam tuns bob la o doamnă la salon și nici într-un an am parul peste umar'}, {'comment': 'Eu la fel...de fiecare dată cînd mă duc la salon, vin acasă și mi l mai reglez cu foarfeca, după mîna mea crește foarte repede...am găsit secretul și funcționează 🥰!'}, {'comment': 'eu nu am avut niciodată părul mai lung jumătatea spatelui deși mi-aș dori . Nu îmi crește!🤷'}, {'comment': 'El creste, daca te uiti la radacina. Probabil ca se tot rupe, de aceea pare ca sta pe loc. Si eu patesc la fel.'}, {'comment': 'nici mie'}, {'comment': 'Acum 2 ani l-am avut m-ai jos de fund și l-am tuns puțin m-ai jos de umeri și părul l-am donat și acum e la jumătate de soate!'}, {'comment': 'Creșterea părului depinde, culmea, de cat de des vă tundeți părul. Dacă neglijați tunderea periodică a vârfurilor arse sau despicate el o să se tot rupă și creșterea nu mai e vizibilă'}, {'comment': 'voi incerca😁si vom vedea🥰'}, {'comment': 'eu am ținut cont de luna în creștere și chiar a funcționat..in condițiile in care am un par care crește f greu..'}, {'comment': 'Este mental și de aceea ajuta.Adica tu manifești acest lucru 😊'}, {'comment': 'serios? și mie îmi crește tare greu😢'}, {'comment': 'da si al meu crește f greu.si nca ceva încearcă să ți tai singura din vârfuri'}, {'comment': 'încearcă singura doar puțin din vârfuri'}, {'comment': 'cu siguranță voi incerca, ms🥰'}, {'comment': '🥰'}, {'comment': 'off azi m-am tuns 🥺🥺va fi de bine?'}, {'comment': 'da'}, {'comment': 'Eu știu ca în martie e bine să te tunzi 🙏'}, {'comment': '2 Mai , programare la tuns🥰'}, {'comment': 'mulțumesc nu dtiam🥰🥰🥰'}, {'comment': 'programare 21 mai 😅😒'}, {'comment': 'În iunie când e bine să ne tundem?'}, {'comment': 'eu am maine programarea 28 aprilie....?'}, {'comment': 'îs mituri stai liniștită'}, {'comment': 'Mersi!😘'}, {'comment': 'Am pe 20 mai😂'}, {'comment': 'Este genitic cat de repede iti creste parul. Mie imi creste foarte repede,intre 1,5 cm 1,8 cm pe luna'}, {'comment': 'Esti norocoasa'}, {'comment': 'Nu este adevărat, eu când mă tundeam la salon, niciodată nu îmi trecea părul de umeri, și specificam că vreau doar vârfurile tunse, de când mă tund singură, mi-a crescut părul, îl am aproape de fund.'}, {'comment': 'în luna Martie știam eu .🙂'}, {'comment': 'Dacă luna e în fecioara, mai ales.'}, {'comment': 'Unde scrie pamflet ? ….'}, {'comment': 'Pe 30 acum e lună în creștere 😁❤'}, {'comment': 'funcționează sigur'}, {'comment': 'cred in asta pentru ca anul trecut m am tuns in Mai si toata lumea se uimea de parul meu cat e de lung , in schimb anul asta m am tuns de 2 luni dar deloc nu ii merge'}, {'comment': 'Luna în descreștere este în iunie?😂😂😂'}, {'comment': 'Păstrez tradiția asta de un an de zile și chiar funcționează,ca nu prea cred în chesti cu universul , recomand respectați zilele 👌'}, {'comment': '3 mai programare la tuns 🥰'}, {'comment': 'M-as tunde in ambele perioade ca sa fiu sigura ca imi creste :)) sau anuleaza rezultatul ?'}, {'comment': 'Aștept pentru luna iunie 🥰🤗'}, {'comment': 'Mulțumesc!'}, {'comment': '@Tania Güngör'}, {'comment': '@Maria Catalina'}, {'comment': '@Ale Stroia'}, {'comment': 'Da🤣🤣🤣'}, {'comment': '😭😭😭'}, {'comment': '👍👍👍'}, {'comment': '❤❤'}, {'comment': '🙏🙏🙏🙏🙏🙏'}, {'comment': '👍👍👍👍👍👍'}, {'comment': '🥺🥺🥺'}, {'comment': '😂😂😂'}, {'comment': '🥰🥰🥰'}, {'comment': '🥰🥰🥰'}, {'comment': '🥰❤️❤️'}, {'comment': '🥰🥰🥰😂😂😂'}, {'comment': '😂😂😂'}, {'comment': '❤️❤️❤️❤️❤️'}, {'comment': '🥰🥰🥰'}, {'comment': 'Da și se mai zice, la lună nou cum se înoește luna așa să se inoească părul se spune de trei ori succes 😏'}, {'comment': '🤣🤣🤣🤣🤣am trait sa o aud si pe asta 🤣🤣🤣🤣sa te tunzi in anumite zile si cum e luna pe cer așezată 🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣'}, {'comment': 'Al meu crește ca din apă,nu sunt bucuroasă ce repede crește.'}, {'comment': 'depinde de genetica nu mai credeti tot ce zboara'}, {'comment': '😂😂😂totul este o minciuna parul se taie doar pe 1 martie pt ca atunci infloresc toti copacii si vita de vie si suvița se ingroapa la radacina vitei niciodata in mai pt ca se scutură toate florile'}, {'comment': 'auzi,dar luna asta nu spune nimic de vreun venit substantial...?sa iesim din criza?😂😂 ia vezi,cerceteaza si ne anunti.ca de par nu prea ma.intereseaza sa creasca cand o vrea.dar am niste datorii .😅'}, {'comment': 'placebo'}]}]
+[ 2025-04-28 16:57:56,314 ][ INFO ][ TIKTOK-MAIN ] [ Duration: 88.22 seconds ]
+[ 2025-04-28 16:57:56,315 ][ INFO ][ TIKTOK-MAIN ] [ Closing the application. ]
+[ 2025-04-28 16:57:56,495 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Browser closed successfully. ]
+[ 2025-04-28 16:58:57,076 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
+[ 2025-04-28 16:58:57,091 ][ INFO ][KAFKA CONSUMER - 'to_analysis' ][ Listening on topic 'to_analysis'... ]
+[ 2025-04-28 16:58:57,965 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-04-28 16:58:57,977 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-04-28 16:58:58,034 ][ INFO ][ KAFKA CONSUMER 'to_preprocessing' ][ Connected on topic 'to_preprocessing'... ]
+[ 2025-04-28 16:58:58,043 ][ INFO ][ TRANSLATE ][ DEEPL_API_KEY loaded successfully! ]
+[ 2025-04-28 16:58:58,231 ][ INFO ][ KAFKA CONSUMER ][ Listening on topic 'to_preprocessing'... ]
+[ 2025-04-28 16:58:58,513 ][ INFO ][ SERVER API ][ Connecting to database and starting API...]
+[ 2025-04-28 16:59:03,862 ][ INFO ][ SERVER API ][ Received analysis request: uuid=uuid-001, link=https://www.tiktok.com/@kashmirconcept/video/7497915872967707926, model=transformers ]
+[ 2025-04-28 16:59:03,879 ][ INFO ][ SERVER API ][ Post with uuid=uuid-001 and link=https://www.tiktok.com/@kashmirconcept/video/7497915872967707926 not found in database ]
+[ 2025-04-28 16:59:04,002 ][ INFO ][ KAFKA PRODUCER - to_scraper ][ Message with key: uuid-001 sent to topic. ]
+[ 2025-04-28 16:59:04,005 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: uuid-001 | Value: {'type': 'metadata', 'uuid': 'uuid-001', 'post_link': 'https://www.tiktok.com/@kashmirconcept/video/7497915872967707926', 'model': 'transformers'} ]
+[ 2025-04-28 16:59:04,005 ][ INFO ][ SCRAPER - uuid-001 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-04-28 16:59:10,396 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Driver set up successfully. ]
+[ 2025-04-28 16:59:20,033 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Loaded 9 cookies. ]
+[ 2025-04-28 16:59:20,351 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Cookies loaded successfully! ]
+[ 2025-04-28 16:59:24,203 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Cookies loaded. No need to accept again. ]
+[ 2025-04-28 16:59:31,309 ][ INFO ][ TIKTOK SCRAPER ][ Navigated to https://www.tiktok.com/@kashmirconcept/video/7497915872967707926 ]
+[ 2025-04-28 16:59:31,648 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ Comment button clicked successfully. ]
+[ 2025-04-28 16:59:41,680 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ Comment count: 99 ]
+[ 2025-04-28 17:00:02,070 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ Successfully scrolled through comments ]
+[ 2025-04-28 17:00:27,693 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ All replies and 'View more', 'View replies', 'View reply' buttons clicked. ]
+[ 2025-04-28 17:00:36,974 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ No new 'View more' buttons clicked, exiting loop. ]
+[ 2025-04-28 17:00:36,974 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ All 'View more' buttons were expanded. ]
+[ 2025-04-28 17:00:38,236 ][ INFO ][ TIKTOK SCRAPER - uuid-001 ][ 77 comments: {'post_url': 'https://www.tiktok.com/@kashmirconcept/video/7497915872967707926', 'uuid': 'uuid-001', 'comments': [{'comment': 'Fetelor depinde și de mîna celui care te tunde!'}, {'comment': 'exact...pe mine de câțiva ani doar soțul îmi tunde vârfurile și îmi creste parul foarte repede'}, {'comment': 'unde locuiesti?😅de cand ma chinui sa mi creasca'}, {'comment': 'veniți la Pitești!'}, {'comment': 'departe😁'}, {'comment': 'departe de Ro'}, {'comment': 'De când imi tund singură vârfurile părul meu crește foarte repede 🦋'}, {'comment': 'De cand am invatat sā ma tund singura am cel mai frumos par 🙏creste ca prin minune'}, {'comment': 'Eu nu am ținut niciodată cont de așa superstiții ! L-am sunt în iunie anul trecut și mi-a crescut imediat !'}, {'comment': 'Adevărat la mine a funcționat'}, {'comment': 'Chiar am programare în 10 mai 😍'}, {'comment': 'nu sunt mituri aveam o prietena care ma tundea mereu și îmi creștea parul foarte greu ,anul trecut mam tuns bob la o doamnă la salon și nici într-un an am parul peste umar'}, {'comment': 'Eu la fel...de fiecare dată cînd mă duc la salon, vin acasă și mi l mai reglez cu foarfeca, după mîna mea crește foarte repede...am găsit secretul și funcționează 🥰!'}, {'comment': 'eu nu am avut niciodată părul mai lung jumătatea spatelui deși mi-aș dori . Nu îmi crește!🤷'}, {'comment': 'El creste, daca te uiti la radacina. Probabil ca se tot rupe, de aceea pare ca sta pe loc. Si eu patesc la fel.'}, {'comment': 'nici mie'}, {'comment': 'Acum 2 ani l-am avut m-ai jos de fund și l-am tuns puțin m-ai jos de umeri și părul l-am donat și acum e la jumătate de soate!'}, {'comment': 'Creșterea părului depinde, culmea, de cat de des vă tundeți părul. Dacă neglijați tunderea periodică a vârfurilor arse sau despicate el o să se tot rupă și creșterea nu mai e vizibilă'}, {'comment': 'voi incerca😁si vom vedea🥰'}, {'comment': 'eu am ținut cont de luna în creștere și chiar a funcționat..in condițiile in care am un par care crește f greu..'}, {'comment': 'Este mental și de aceea ajuta.Adica tu manifești acest lucru 😊'}, {'comment': 'serios? și mie îmi crește tare greu😢'}, {'comment': 'da si al meu crește f greu.si nca ceva încearcă să ți tai singura din vârfuri'}, {'comment': 'încearcă singura doar puțin din vârfuri'}, {'comment': 'cu siguranță voi incerca, ms🥰'}, {'comment': '🥰'}, {'comment': 'off azi m-am tuns 🥺🥺va fi de bine?'}, {'comment': 'da'}, {'comment': 'Eu știu ca în martie e bine să te tunzi 🙏'}, {'comment': '2 Mai , programare la tuns🥰'}, {'comment': 'programare 21 mai 😅😒'}, {'comment': 'mulțumesc nu dtiam🥰🥰🥰'}, {'comment': 'În iunie când e bine să ne tundem?'}, {'comment': 'eu am maine programarea 28 aprilie....?'}, {'comment': 'îs mituri stai liniștită'}, {'comment': 'Mersi!😘'}, {'comment': 'Am pe 20 mai😂'}, {'comment': 'Este genitic cat de repede iti creste parul. Mie imi creste foarte repede,intre 1,5 cm 1,8 cm pe luna'}, {'comment': 'Esti norocoasa'}, {'comment': 'Nu este adevărat, eu când mă tundeam la salon, niciodată nu îmi trecea părul de umeri, și specificam că vreau doar vârfurile tunse, de când mă tund singură, mi-a crescut părul, îl am aproape de fund.'}, {'comment': 'în luna Martie știam eu .🙂'}, {'comment': 'Dacă luna e în fecioara, mai ales.'}, {'comment': 'Unde scrie pamflet ? ….'}, {'comment': 'Pe 30 acum e lună în creștere 😁❤'}, {'comment': 'funcționează sigur'}, {'comment': 'cred in asta pentru ca anul trecut m am tuns in Mai si toata lumea se uimea de parul meu cat e de lung , in schimb anul asta m am tuns de 2 luni dar deloc nu ii merge'}, {'comment': 'Luna în descreștere este în iunie?😂😂😂'}, {'comment': 'Păstrez tradiția asta de un an de zile și chiar funcționează,ca nu prea cred în chesti cu universul , recomand respectați zilele 👌'}, {'comment': '3 mai programare la tuns 🥰'}, {'comment': 'M-as tunde in ambele perioade ca sa fiu sigura ca imi creste :)) sau anuleaza rezultatul ?'}, {'comment': 'Aștept pentru luna iunie 🥰🤗'}, {'comment': 'Mulțumesc!'}, {'comment': '@Tania Güngör'}, {'comment': '@Maria Catalina'}, {'comment': '@Ale Stroia'}, {'comment': 'Da🤣🤣🤣'}, {'comment': '😭😭😭'}, {'comment': '👍👍👍'}, {'comment': '❤❤'}, {'comment': '🙏🙏🙏🙏🙏🙏'}, {'comment': '👍👍👍👍👍👍'}, {'comment': '🥺🥺🥺'}, {'comment': '😂😂😂'}, {'comment': '🥰🥰🥰'}, {'comment': '🥰🥰🥰'}, {'comment': '🥰❤️❤️'}, {'comment': '🥰🥰🥰😂😂😂'}, {'comment': '😂😂😂'}, {'comment': '❤️❤️❤️❤️❤️'}, {'comment': '🥰🥰🥰'}, {'comment': 'Da și se mai zice, la lună nou cum se înoește luna așa să se inoească părul se spune de trei ori succes 😏'}, {'comment': '🤣🤣🤣🤣🤣am trait sa o aud si pe asta 🤣🤣🤣🤣sa te tunzi in anumite zile si cum e luna pe cer așezată 🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣'}, {'comment': 'Al meu crește ca din apă,nu sunt bucuroasă ce repede crește.'}, {'comment': 'depinde de genetica nu mai credeti tot ce zboara'}, {'comment': '😂😂😂totul este o minciuna parul se taie doar pe 1 martie pt ca atunci infloresc toti copacii si vita de vie si suvița se ingroapa la radacina vitei niciodata in mai pt ca se scutură toate florile'}, {'comment': 'auzi,dar luna asta nu spune nimic de vreun venit substantial...?sa iesim din criza?😂😂 ia vezi,cerceteaza si ne anunti.ca de par nu prea ma.intereseaza sa creasca cand o vrea.dar am niste datorii .😅'}, {'comment': 'placebo'}]}]
+[ 2025-04-28 17:00:38,238 ][ INFO ][ TIKTOK-MAIN ] [ Duration: 74.03 seconds ]
+[ 2025-04-28 17:00:38,238 ][ INFO ][ TIKTOK-MAIN ] [ Closing the application. ]
+[ 2025-04-28 17:00:38,446 ][ INFO ][ TIKTOK SESSION - uuid-001 ][ Browser closed successfully. ]
+[ 2025-04-28 17:11:34,261 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
+[ 2025-04-28 17:11:34,276 ][ INFO ][KAFKA CONSUMER - 'to_analysis' ][ Listening on topic 'to_analysis'... ]
+[ 2025-04-28 17:11:35,750 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-04-28 17:11:35,764 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-04-28 17:11:36,365 ][ INFO ][ KAFKA CONSUMER 'to_preprocessing' ][ Connected on topic 'to_preprocessing'... ]
+[ 2025-04-28 17:11:36,370 ][ INFO ][ TRANSLATE ][ DEEPL_API_KEY loaded successfully! ]
+[ 2025-04-28 17:11:36,395 ][ INFO ][ SERVER API ][ Connecting to database and starting API...]
+[ 2025-04-28 17:11:36,523 ][ INFO ][ KAFKA CONSUMER ][ Listening on topic 'to_preprocessing'... ]
