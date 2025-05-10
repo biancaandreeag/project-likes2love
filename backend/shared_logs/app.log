@@ -11212,3 +11212,14 @@ Stacktrace:
 #16 0x559faeca9666 <unknown>
 #17 0x7fd437c341f5 <unknown>
  ]
+[ 2025-05-10 21:08:37,720 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
+[ 2025-05-10 21:08:37,758 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Listening on topic 'to_analysis'... ]
+[ 2025-05-10 21:08:39,474 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-05-10 21:08:39,495 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-05-10 21:08:39,622 ][ INFO ][ KAFKA CONSUMER 'to_preprocessing' ][ Connected on topic 'to_preprocessing'... ]
+[ 2025-05-10 21:08:39,639 ][ INFO ][ TRANSLATE ][ DEEPL_API_KEY loaded successfully! ]
+[ 2025-05-10 21:08:40,126 ][ INFO ][ KAFKA CONSUMER ][ Listening on topic 'to_preprocessing'... ]
+[ 2025-05-10 21:08:41,469 ][ INFO ][ SERVER API ][ Connecting to database and starting API...]
+[ 2025-05-10 21:08:41,478 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Connected on topic 'to_server'... ]
+[ 2025-05-10 21:08:41,478 ][ INFO ][ SERVER API ][ Kafka Consumer started successfully in background thread. ]
+[ 2025-05-10 21:08:41,488 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Listening on topic 'to_server'... ]

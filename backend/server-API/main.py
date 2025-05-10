@@ -1,5 +1,6 @@
 from kafka_consumer import KafkaConsumerClient
 from shared_utils.logger_config import log
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from routes import routes
 import threading
@@ -8,6 +9,16 @@ import threading
 
 app = FastAPI()
 log.info("[ SERVER API ][ Connecting to database and starting API...]")
+
+origins = [
+    "http://localhost:3000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 app.include_router(routes.router)
 
