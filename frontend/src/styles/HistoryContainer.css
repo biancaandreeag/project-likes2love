@@ -1,0 +1,647 @@
+/* Container principal */
+.history-container {
+  background-color: #f5f5f7;
+  border-radius: 20px;
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: top left;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Starea expandată a containerului */
+.history-container.expanded {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: calc(80vh + 50px);
+  max-width: 1400px;
+  z-index: 9999;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 25px;
+  margin-top: 25px;
+}
+
+/* Overlay pentru când containerul este expandat */
+.history-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.history-overlay.visible {
+  opacity: 1;
+}
+
+/* Header cu titlu */
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+  position: relative;
+  padding-bottom: 15px;
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+/* Iconiță din header cu gradient */
+.history-icon {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.history-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: url(#history-gradient);
+}
+
+/* Titlu */
+.history-title {
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+}
+
+/* Linie de separare */
+.history-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
+}
+
+/* Container pentru căutare */
+.search-container {
+  margin-bottom: 15px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+  background-color: #f5f5f7;
+  color: #333;
+  font-weight: 500;
+}
+
+.search-input:focus {
+  border-color: rgba(63, 94, 251, 0.5);
+  box-shadow: 0 0 0 2px rgba(63, 94, 251, 0.1);
+  background-color: white;
+}
+
+.search-input::placeholder {
+  color: #666;
+  font-weight: 500;
+}
+
+/* Buton de expandare - transformare + în - */
+.expand-button {
+  position: absolute;
+  top: -5px;
+  right: 0;
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 32px;
+  cursor: pointer;
+  z-index: 10000;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.expand-button::before {
+  content: '+';
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: rotate(0deg);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 0;
+  line-height: 1;
+  padding-bottom: 2px;
+}
+
+.history-container.expanded .expand-button::before {
+  content: '−';
+  transform: rotate(180deg);
+  font-weight: 600;
+  margin-top: 0;
+  padding-bottom: 4px;
+}
+
+.expand-button:hover {
+  background: linear-gradient(135deg, rgba(63, 94, 251, 0.9) 0%, rgba(252, 70, 107, 0.9) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+/* Container pentru conținut scrollabil */
+.history-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Container pentru filtre */
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding: 20px;
+  background-color: #f5f5f7;
+  border-radius: 12px;
+  flex-shrink: 0;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.filter-group label {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Stilizare pentru dropdown model */
+.filter-select {
+  padding: 10px 35px 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  min-width: 140px;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.filter-select:hover {
+  background-color: white;
+  border-color: rgba(63, 94, 251, 0.3);
+}
+
+.filter-select:focus {
+  background-color: white;
+  border-color: rgba(63, 94, 251, 0.5);
+  box-shadow: 0 0 0 2px rgba(63, 94, 251, 0.1);
+}
+
+.filter-select option {
+  color: #333;
+  font-weight: 500;
+  background-color: white;
+  padding: 8px;
+}
+
+/* Stilizare pentru input de dată */
+.date-input {
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  outline: none;
+  min-width: 140px;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.date-input:hover {
+  background-color: white;
+  border-color: rgba(63, 94, 251, 0.3);
+}
+
+.date-input:focus {
+  background-color: white;
+  border-color: rgba(63, 94, 251, 0.5);
+  box-shadow: 0 0 0 2px rgba(63, 94, 251, 0.1);
+}
+
+/* Buton pentru Clear Filters */
+.clear-filters-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: linear-gradient(135deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+  color: white;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.clear-filters-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Lista de elemente din istoric - cu scroll */
+.history-items {
+  flex: 1;
+  overflow-y: scroll;
+  min-height: 0;
+  height: 100%;
+  padding-right: 10px;
+  margin-right: -10px;
+  padding-bottom: 10px;
+}
+
+/* Mesaj când nu există elemente în istoric */
+.empty-history {
+  color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  margin-top: 30px;
+  font-style: italic;
+}
+
+/* Stilizare pentru scrollbar */
+.history-items::-webkit-scrollbar {
+  width: 8px;
+}
+
+.history-items::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.history-items::-webkit-scrollbar-thumb {
+  background-color: rgba(63, 94, 251, 0.3);
+  border-radius: 10px;
+}
+
+.history-items::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(63, 94, 251, 0.5);
+}
+
+/* Stiluri responsive */
+@media (max-width: 768px) {
+  .history-container.expanded {
+    width: 95%;
+    height: 90%;
+  }
+
+  .filters-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Header tabelar pentru starea expandată */
+.table-header {
+  display: none;
+  grid-template-columns: 1fr 120px 120px 140px;
+  gap: 20px;
+  padding: 10px 15px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: #666;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.table-header > div:last-child {
+  text-align: center;
+}
+
+.history-container.expanded .table-header {
+  display: grid;
+}
+
+/* Modificăm HistoryItem pentru a avea layout tabelar în starea expandată */
+.history-container.expanded .history-item {
+  display: grid;
+  grid-template-columns: 1fr 120px 120px 140px;
+  gap: 20px;
+  align-items: center;
+  padding: 15px;
+}
+
+.history-container.expanded .history-item-content {
+  display: contents;
+}
+
+.history-container.expanded .history-item-title {
+  margin-bottom: 0;
+}
+
+.history-container.expanded .history-item-details {
+  display: contents;
+}
+
+.history-container.expanded .history-item-date,
+.history-container.expanded .history-item-model {
+  text-align: left;
+  margin: 0;
+}
+
+.history-container.expanded .history-item-options {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.history-container.expanded .action-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-container.expanded .action-button:hover {
+  background-color: rgba(63, 94, 251, 0.1);
+  color: rgba(63, 94, 251, 1);
+  transform: translateY(-1px);
+}
+
+.history-container.expanded .action-button.delete:hover {
+  background-color: rgba(255, 59, 48, 0.1);
+  color: rgb(255, 59, 48);
+}
+
+/* Ascundem butonul cu 3 puncte în modul expandat */
+.history-container.expanded .options-button {
+  display: none;
+}
+
+/* Stiluri pentru butoanele de acțiune în starea normală */
+.history-item-options {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  z-index: 15;
+}
+
+.options-button {
+  position: relative;
+}
+
+/* Meniul care apare la click */
+.options-menu {
+  position: fixed !important;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 999999 !important;
+  min-width: 150px;
+  padding: 8px;
+}
+
+/* Asigurăm că parent container-ul permite stacking context corect */
+.history-item {
+  position: relative;
+}
+
+/* Stiluri pentru menu items, dar păstrând z-index-ul mare */
+.options-menu .menu-item {
+  z-index: 99999 !important;
+}
+
+/* Asigurăm că și butonul are z-index mare când meniul e deschis */
+.options-button:focus,
+.options-button.active {
+  z-index: 99999 !important;
+}
+
+.options-button:hover {
+  color: rgba(63, 94, 251, 1);
+  background-color: rgba(63, 94, 251, 0.1);
+}
+
+.options-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+  min-width: 180px;
+  padding: 8px 0;
+  overflow: hidden;
+  margin-top: 5px;
+  transform-origin: top right;
+  animation: menuAppear 0.2s ease;
+}
+
+@keyframes menuAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+  color: #666;
+}
+
+.menu-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.menu-item svg {
+  margin-right: 10px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.menu-item span {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.menu-item.delete {
+  color: #e74c3c;
+}
+
+.menu-item.delete svg {
+  color: #e74c3c;
+}
+
+.menu-item.delete span {
+  color: #e74c3c;
+}
+
+.menu-item:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Stiluri pentru item în starea normală */
+.history-item {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.history-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.history-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-right: 45px;
+}
+
+.history-item-title {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.history-item-details {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.history-item-date {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.history-item-model {
+  font-size: 0.8rem;
+  background: linear-gradient(135deg, rgba(63, 94, 251, 0.8) 0%, rgba(252, 70, 107, 0.8) 100%);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Doar pentru meniurile din history items */
+.history-item .menu-dots {
+  position: relative;
+}
+
+.history-item .menu-content,
+.history-item .dropdown-content {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 99999 !important;
+  min-width: 150px;
+}
+
+/* Asigurăm că și butonul three-dots are z-index mare când e deschis meniul */
+.history-item .menu-dots.active {
+  z-index: 99999 !important;
+}
+
+/* Asigurăm că toți părinții permit stacking context corect */
+.history-container,
+.history-column,
+.history-item {
+  position: relative;
+}
+
+/* Containerul pentru buton și meniu */
+.history-item {
+  isolation: isolate;
+}
+
+/* Butonul și meniul său */
+.options-button {
+  position: relative;
+  isolation: isolate;
+}
+
+.options-menu {
+  position: fixed !important;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 999999 !important;
+  min-width: 150px;
+  padding: 8px;
+}

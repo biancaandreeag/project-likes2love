@@ -1,0 +1,102 @@
+/* AI Analysis Page Styles */
+.ai-analysis-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background video */
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.video-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Main Content */
+.ai-analysis-content {
+  position: relative;
+  z-index: 10;
+  padding: 70px 5% 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  height: calc(100vh);
+}
+
+.ai-analysis-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Eliminăm stilurile pentru butonul de toggle dacă există */
+.toggle-button {
+  display: none; /* Ascundem butonul de toggle */
+}
+
+/* Ajustăm stilurile pentru layout */
+.analysis-layout {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+  align-items: stretch; /* Asigurăm că elementele se întind pe toată înălțimea */
+}
+
+.history-column {
+  width: 30%;
+  max-width: 350px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .analysis-layout {
+    flex-direction: column;
+  }
+
+  .history-column {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    height: 300px;
+  }
+
+  .ai-analysis-content {
+    height: auto;
+    min-height: calc(100vh);
+  }
+}
+
+@media (max-width: 768px) {
+  .ai-analysis-content {
+    padding: 100px 20px 40px;
+  }
+}
+
+/* Doar adăugăm această regulă pentru meniul care apare la click pe butonul cu trei puncte */
+.history-column .menu-content,
+.history-column .dropdown-content {
+  position: absolute;
+  z-index: 99999 !important;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
