@@ -22,11 +22,13 @@ Supported languages:
 ## Architecture
 
 ### General schema
+```plaintext
 +-----------+ +-----------+
 | | REST | |
 | Frontend +-------->+ Backend |
 | (React) | | (FastAPI) |
 +-----------+ +-----------+
+```
 
 ### Backend Arhitecture
 
