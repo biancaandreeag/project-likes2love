@@ -17,6 +17,18 @@ Supported languages:
 - [Arhitecture](#documentation)  
 - [Quick Start Quide](#getting-started)  
 - [Documentation](#documentation)  
-- [Additional Installation Sources](#installing)  
+- [Additional Installation Sources](#installing)
+
+## Architecture
+
+### General schema
++-----------+         +-----------+
+|           |  REST   |           |
+| Frontend  +-------->+  Backend  |
+| (React)   |         | (FastAPI) |
++-----------+         +-----------+
+
+### Backend Arhitecture
+
 
 
