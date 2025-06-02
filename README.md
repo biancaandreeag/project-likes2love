@@ -75,7 +75,7 @@ docker compose up --build
 ## Additional Installation & Enviroment Files
 
 - 🐍 **PyCharm** : https://www.jetbrains.com/pycharm/download/ (optional)
-- 🗄️ **MongoDB Compas** s: https://www.mongodb.com/try/download/compass
+- 🗄️ **MongoDB Compass** : https://www.mongodb.com/try/download/compass
 - 🐳 **Docker Desktop** : https://www.docker.com/products/docker-desktop/
 - 🖥️ **XLaunch** (for scraping containter) :  https://sourceforge.net/projects/vcxsrv/
 
