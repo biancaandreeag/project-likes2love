@@ -2,7 +2,7 @@
 
 The platform focuses on the detection of cyberbullying while offering a foundation for analyzing user opinions expressed in comments and their engagement with various posts. 
 
-## Platform & Language Coverage
+##  🌐 Platform & Language Coverage
 **form2love** analyzes content from the main social media networks:  
 - 📘 ***Facebook***  
 - 🎵 ***TikTok***
@@ -12,10 +12,10 @@ Supported languages:
 - ***RO*** — actively under development to expand coverage
 *(Note: Theoretically, all 47 languages supported by the DeepL API could be used; however, this tool does not guarantee reliable results for all of them. For more information, skip to x chapter .)*
 
-## Table of Contents
+## 📚 Table of Contents
 
 - [Arhitecture](#documentation)  
-- [Quick Start Quide](#getting-started)  
+- [Quick Start Guide](#getting-started)  
 - [Documentation](#documentation)  
 - [Additional Installation Sources](#installing)
 
@@ -30,7 +30,6 @@ Supported languages:
 +-----------+         +-----------+
 ```
 
-### Backend Arhitecture
-
+## Quick Start Guide
 
 
