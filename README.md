@@ -39,4 +39,16 @@ Use the following command to download the project locally:
 ```bash
 git clone https://github.com/biancaandreeag/likes2love.git
 cd likes2love
+```
+
+### 2. Start the Frontend (React + Vite)
+
+Navigate to the frontend folder, install dependencies, and run the development server:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
 
