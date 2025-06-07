@@ -1,49 +1,21 @@
-import { useState, useRef, useEffect } from "react"
+"use client"
+
+import { useState, useEffect } from "react"
 import "../styles/AnalysisContainer.css"
 import "../styles/DashboardContainer.css"
 
 function AnalysisContainer({ onShowDashboard, onMount }) {
   const [inputValue, setInputValue] = useState("")
-  const [selectedModel, setSelectedModel] = useState("RoBERTa")
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [selectedPlatform, setSelectedPlatform] = useState("facebook")
-
-  const [showTooltip, setShowTooltip] = useState(false)
-
   const [showGuide, setShowGuide] = useState(false)
-
   const [isLoading, setIsLoading] = useState(false)
-
-  const dropdownRef = useRef(null)
 
   useEffect(() => {
     onMount && onMount()
   }, [])
 
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false)
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [dropdownRef])
-
   const handleInputChange = (e) => {
     setInputValue(e.target.value)
-  }
-
-  const handleModelSelect = (model) => {
-    setSelectedModel(model)
-    setIsDropdownOpen(false)
-  }
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen)
   }
 
   const handlePlatformSelect = (platform) => {
@@ -55,76 +27,73 @@ function AnalysisContainer({ onShowDashboard, onMount }) {
   }
 
   const waitForAnalysis = async (post_link, model) => {
-    const params = new URLSearchParams({ post_link, model });
+    const params = new URLSearchParams({ post_link, model })
 
     while (true) {
       try {
         const response = await fetch(`http://localhost:8000/analysis-status?${params.toString()}`, {
           credentials: "include",
-        });
+        })
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP error! status: ${response.status}`)
         }
 
-        const data = await response.json();
+        const data = await response.json()
 
         if (data.status === "done") {
-          return true; // analiza e gata, ieșim
+          return data.analysis
         }
 
         if (data.status === "processing" || data.status === "not_found") {
-          await new Promise(resolve => setTimeout(resolve, 180000));
-          continue;
+          await new Promise((resolve) => setTimeout(resolve, 10000))
+          continue
         }
 
-        throw new Error("Unexpected status: " + data.status);
-
+        throw new Error("Unexpected status: " + data.status)
       } catch (error) {
-        console.error("Error checking analysis status:", error);
-        throw error;
+        console.error("Error checking analysis status:", error)
+        throw error
       }
     }
-  };
+  }
 
-
-   const handleSubmit = async () => {
-    if (!inputValue.trim()) return;
-    setIsLoading(true);
+  const handleSubmit = async () => {
+    if (!inputValue.trim()) return
+    setIsLoading(true)
 
     try {
       const params = new URLSearchParams({
         post_link: inputValue,
-        model: selectedModel,
-        platform: selectedPlatform
-      });
+        model: "default", // Using a default model since dropdown is removed
+        platform: selectedPlatform,
+      })
 
       const response = await fetch(`http://localhost:8000/get-analysis?${params.toString()}`, {
         method: "POST",
-        credentials: "include"
-      });
+        credentials: "include",
+      })
 
       if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`HTTP ${response.status}: ${text}`);
+        const text = await response.text()
+        throw new Error(`HTTP ${response.status}: ${text}`)
       }
 
-      const data = await response.json();
-      console.log("Start analysis response:", data);
+      const data = await response.json()
+      console.log("Start analysis response:", data)
 
       if (data.status === "success" || data.status === "exists") {
-        await waitForAnalysis(inputValue, selectedModel);
-
-        onShowDashboard && onShowDashboard(inputValue);
+        const analysis = await waitForAnalysis(inputValue, "default")
+        onShowDashboard && onShowDashboard(inputValue, analysis)
       } else {
-        alert("Something went wrong: " + data.message);
+        alert("Something went wrong: " + data.message)
       }
     } catch (error) {
-      alert("Failed to submit analysis or check status: " + error.message);
+      alert("Failed to submit analysis or check status: " + error.message)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="analysis-container">
@@ -149,200 +118,6 @@ function AnalysisContainer({ onShowDashboard, onMount }) {
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
               <path d="M9 12l2 2 4-4"></path>
             </svg>
-          </div>
-
-          <div className="model-dropdown-container">
-            <div className="model-selection">
-              <div className="model-dropdown" onClick={toggleDropdown} ref={dropdownRef}>
-                <span className="selected-model">{selectedModel}</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`dropdown-arrow ${isDropdownOpen ? "open" : ""}`}
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-                {isDropdownOpen && (
-                  <div className="dropdown-menu">
-                    <div className="dropdown-item" onClick={() => handleModelSelect("RoBERTa")}>
-                      <div className="model-icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                          <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                      </div>
-                      <span>RoBERTa</span>
-                      {selectedModel === "RoBERTa" && (
-                        <div className="check-icon">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M20 6L9 17l-5-5"></path>
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                    <div className="dropdown-item" onClick={() => handleModelSelect("BERT")}>
-                      <div className="model-icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                          <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                        </svg>
-                      </div>
-                      <span>BERT</span>
-                      {selectedModel === "BERT" && (
-                        <div className="check-icon">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M20 6L9 17l-5-5"></path>
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                    <div className="dropdown-item" onClick={() => handleModelSelect("GPT")}>
-                      <div className="model-icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                        </svg>
-                      </div>
-                      <span>GPT</span>
-                      {selectedModel === "GPT" && (
-                        <div className="check-icon">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M20 6L9 17l-5-5"></path>
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                    <div className="dropdown-item" onClick={() => handleModelSelect("RandomForest")}>
-                      <div className="model-icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                          <circle cx="9" cy="7" r="4"></circle>
-                          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                      </div>
-                      <span>RandomForest</span>
-                      {selectedModel === "RandomForest" && (
-                        <div className="check-icon">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M20 6L9 17l-5-5"></path>
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Înlocuim onMouseEnter și onMouseLeave cu o implementare mai robustă */}
-              <div
-                className="info-button"
-                onMouseEnter={() => {
-                  setTimeout(() => {
-                    setShowTooltip(true)
-                  }, 0)
-                }}
-                onMouseLeave={() => {
-                  setShowTooltip(false)
-                }}
-              >
-                <div className="info-icon">i</div>
-                {showTooltip && (
-                  <div className="info-tooltip">
-                    Explore the <span className="gradient-text">About</span> page to see what's suits your interests
-                    best.
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
         </div>
 
@@ -393,13 +168,20 @@ function AnalysisContainer({ onShowDashboard, onMount }) {
                 placeholder="Enter post URL here..."
                 value={inputValue}
                 onChange={handleInputChange}
+                onKeyPress={(e) => e.key === "Enter" && !isLoading && handleSubmit()}
               />
-              <button className="arrow-button" onClick={handleSubmit} aria-label="Submit" disabled={isLoading}>
+              <button
+                className="arrow-button"
+                onClick={handleSubmit}
+                aria-label="Submit"
+                disabled={isLoading}
+                type="button"
+              >
                 {isLoading ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
+                    width="18"
+                    height="18"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -414,8 +196,8 @@ function AnalysisContainer({ onShowDashboard, onMount }) {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
+                    width="18"
+                    height="18"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"

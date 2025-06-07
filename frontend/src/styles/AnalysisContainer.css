@@ -9,6 +9,18 @@
   justify-content: space-between;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   z-index: 20;
+  animation: slideInFromBottom 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Eliminăm video background și overlay din acest container */
@@ -41,222 +53,10 @@
   filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.3));
 }
 
-/* Stiluri pentru dropdown */
-.model-dropdown-container {
-  position: relative;
-  z-index: 25;
-  width: 300px;
-  align-self: center;
-  margin: 0 auto 40px; /* Redus marginea de jos pentru a aduce textul mai sus */
-}
-
-/* Container pentru dropdown și butonul de informații */
-.model-selection {
-  position: relative;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.model-dropdown {
-  position: relative;
-  z-index: 100;
-  background-color: rgba(245, 245, 247, 0.95);
-  border-radius: 10px;
-  padding: 12px 15px;
-  font-size: 0.95rem;
-  color: rgba(0, 0, 0, 0.7);
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.3s ease;
-  text-align: center;
-  flex: 1;
-  border: 1px solid transparent;
-}
-
-.model-dropdown:hover {
-  background-color: #e8e8ec;
-  border-color: rgba(63, 94, 251, 0.2);
-  box-shadow: 0 3px 8px rgba(63, 94, 251, 0.08);
-  transform: translateY(-1px);
-  border: 1px solid rgba(63, 94, 251, 0.2);
-}
-
-/* Stiluri modificate pentru textul din dropdown */
-.selected-model {
-  font-weight: 600; /* Creștem font-weight de la 500 la 600 */
-  letter-spacing: 0.2px;
-  margin-right: 10px;
-  font-size: 1.1rem;
-  color: rgba(0, 0, 0, 0.45); /* Schimbăm culoarea de la 0.55 (gri deschis) la 0.85 (aproape negru) pentru contrast mai bun */
-}
-
-/* Opțional, putem adăuga și un efect de umbră subtilă pentru a evidenția și mai mult textul */
-.model-dropdown .selected-model {
-  text-shadow: 0 0 0.5px rgba(0, 0, 0, 0.2);
-}
-
-/* Stiluri pentru butonul de informații */
-.info-button {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  margin-left: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 50%;
-  z-index: 101; /* Mărit z-index pentru a asigura că tooltip-ul apare deasupra dropdown-ului */
-}
-
-.info-icon {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  font-style: normal;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
-  transition: all 0.3s ease;
-}
-
-.info-button:hover .info-icon {
-  transform: scale(1.1);
-  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
-}
-
-/* Modificăm stilurile pentru tooltip pentru a rezolva problema de poziționare */
-
-/* Stiluri pentru tooltip */
-.info-tooltip {
-  position: absolute;
-  top: 50%;
-  left: calc(100% + 10px);
-  transform: translateY(-50%);
-  width: 250px;
-  background-color: white;
-  border-radius: 8px;
-  padding: 10px 15px;
-  font-size: 0.85rem;
-  color: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  z-index: 35;
-  pointer-events: none;
-  /* Eliminăm animația care cauzează problema */
-  opacity: 1;
-  transition: opacity 0.2s ease;
-}
-
-.info-tooltip .gradient-text {
-  background: linear-gradient(135deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  font-weight: 600;
-}
-
-/* Eliminăm animația veche care cauza problema */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.dropdown-arrow {
-  transition: transform 0.3s ease;
-  color: rgba(0, 0, 0, 0.5);
-  position: absolute;
-  right: 15px;
-}
-
-.dropdown-arrow.open {
-  transform: rotate(180deg);
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: calc(100% + 5px);
-  left: 0;
-  width: 100%;
-  background-color: #e8e8ec;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 30;
-  overflow: hidden;
-  animation: fadeInDropdown 0.2s ease;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  padding: 5px;
-}
-
-@keyframes fadeInDropdown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.dropdown-item {
-  padding: 10px 12px;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-  color: rgba(0, 0, 0, 0.7);
-  border-radius: 8px;
-  margin-bottom: 2px;
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.dropdown-item:last-child {
-  margin-bottom: 0;
-}
-
-.dropdown-item:hover {
-  background-color: rgba(63, 94, 251, 0.08);
-  color: rgba(63, 94, 251, 0.9);
-  border-radius: 8px;
-}
-
-.model-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  background-color: #f0f0f2;
-  border-radius: 50%;
-  margin-right: 10px;
-  color: rgba(0, 0, 0, 0.6);
-  padding: 4px;
-}
-
-.check-icon {
-  position: absolute;
-  right: 10px;
-  color: rgba(63, 94, 251, 0.8);
-}
-
 /* Text descriptiv între dropdown și butoanele radio - modificat */
 .description-text {
   text-align: center;
-  margin: 20px auto 30px; /* Redus marginea de jos pentru a aduce butoanele radio mai aproape */
+  margin: 40px auto 50px; /* Mărit marginile pentru mai mult spațiu */
   max-width: 700px;
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.7);
@@ -374,24 +174,33 @@
   gap: 15px;
 }
 
+/* SOLUȚIA DEFINITIVĂ - Input wrapper cu flexbox */
 .input-wrapper {
-  display: flex;
   position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
+  height: 54px; /* Înălțime fixă pentru wrapper */
 }
 
+/* Input cu resetare completă */
 .analysis-input {
   flex: 1;
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  padding: 15px 20px;
-  padding-right: 50px;
+  padding: 0 65px 0 20px; /* Simplificat padding */
   font-size: 1.1rem;
   color: rgba(0, 0, 0, 0.8);
   outline: none;
   transition: all 0.3s ease;
-  width: 100%;
+  height: 100%; /* Ocupă toată înălțimea wrapper-ului */
+  line-height: normal; /* Reset line-height */
+  box-sizing: border-box;
+  display: block;
+  margin: 0; /* Reset margin */
+  vertical-align: top; /* Reset vertical align */
+  font-family: inherit; /* Moștenește font-family */
 }
 
 .analysis-input:focus {
@@ -401,6 +210,7 @@
 
 .analysis-input::placeholder {
   color: rgba(0, 0, 0, 0.4);
+  line-height: normal;
 }
 
 .analysis-input:hover {
@@ -409,28 +219,48 @@
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
 }
 
+/* Buton cu poziționare absolută și centrare garantată */
 .arrow-button {
   position: absolute;
   right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 10px; /* Schimbat din 50% */
+  bottom: 10px; /* Adăugat pentru centrare automată */
+  margin: auto 0; /* Centrare verticală automată */
   background: linear-gradient(135deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(63, 94, 251, 0.3);
+  z-index: 10;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  line-height: 1;
 }
 
-.arrow-button:hover {
-  transform: translateY(-50%) scale(1.1);
+.arrow-button:hover:not(:disabled) {
+  transform: scale(1.05); /* Eliminat translateY */
   box-shadow: 0 4px 12px rgba(63, 94, 251, 0.5);
+}
+
+.arrow-button:disabled {
+  background: linear-gradient(135deg, rgba(63, 94, 251, 0.6) 0%, rgba(252, 70, 107, 0.6) 100%);
+  cursor: not-allowed;
+  box-shadow: 0 2px 5px rgba(63, 94, 251, 0.2);
+}
+
+/* Asigurăm că SVG-ul din buton este centrat perfect */
+.arrow-button svg {
+  display: block;
+  margin: 0 auto;
 }
 
 /* Modificăm stilizarea pentru textul mic sub secțiunea de input */
@@ -469,8 +299,6 @@
   margin-right: 4px;
 }
 
-/* Modificăm stilurile pentru containerul ghidului pentru a-l face să apară ca un modal */
-
 /* Stiluri pentru containerul ghidului */
 .quick-guide-container {
   position: fixed;
@@ -499,7 +327,7 @@
   }
 }
 
-/* Adăugăm un overlay pentru a întuneca fundalul */
+/* Overlay pentru modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -510,12 +338,10 @@
   z-index: 40;
 }
 
-/* Eliminăm săgeata de la containerul ghidului */
 .quick-guide-container::before {
   display: none;
 }
 
-/* Modificăm stilul pentru linia de separare pentru a avea gradient */
 .quick-guide-header {
   display: flex;
   align-items: center;
@@ -668,13 +494,13 @@
   overflow-y: auto;
 }
 
-/* Ajustare pentru layout-ul general */
+/* Layout general */
 .content-wrapper {
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: flex-start; /* Schimbat din space-between pentru a aduce elementele mai sus */
-  padding-top: 20px; /* Adăugat padding sus pentru a nu lipi elementele de marginea de sus */
+  justify-content: center;
+  padding-top: 0;
 }
 
 .top-section {
@@ -682,7 +508,7 @@
 }
 
 .middle-section {
-  flex: 0 0 auto; /* Schimbat din 1 1 auto pentru a nu ocupa tot spațiul disponibil */
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -692,20 +518,10 @@
 
 .bottom-section {
   flex: 0 0 auto;
-  margin-top: 20px; /* Redus marginea de sus pentru a aduce secțiunea mai aproape de text */
+  margin-top: 20px;
 }
 
-/* Adăugăm stiluri pentru animația de loading și rezultatul analizei */
-
-/* 1. Adăugăm stiluri pentru butonul de submit când este disabled: */
-.arrow-button:disabled {
-  background: linear-gradient(135deg, rgba(63, 94, 251, 0.7) 0%, rgba(252, 70, 107, 0.7) 100%);
-  cursor: not-allowed;
-  transform: translateY(-50%);
-  box-shadow: 0 2px 5px rgba(63, 94, 251, 0.2);
-}
-
-/* 2. Adăugăm animație pentru spinner: */
+/* Animații */
 .loading-spinner {
   animation: spin 1.5s linear infinite;
 }
@@ -719,7 +535,6 @@
   }
 }
 
-/* 3. Adăugăm stiluri pentru rezultatul analizei: */
 .analysis-result {
   display: flex;
   align-items: center;
@@ -770,7 +585,7 @@
   }
 }
 
-/* Adăugăm un efect de pulsație pentru butonul de submit */
+/* Efect de pulsație pentru buton */
 @keyframes pulse {
   0% {
     box-shadow: 0 0 0 0 rgba(63, 94, 251, 0.4);
@@ -789,4 +604,84 @@
 
 .arrow-button:hover:not(:disabled) {
   animation: none;
+}
+
+/* Responsive pentru mobile */
+@media (max-width: 768px) {
+  .analysis-input {
+    height: 48px;
+    padding: 12px 16px;
+    padding-right: 55px;
+    font-size: 1rem;
+  }
+
+  .arrow-button {
+    width: 30px;
+    height: 30px;
+    right: 9px;
+  }
+
+  .arrow-button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .description-text {
+    margin: 30px auto 40px;
+  }
+
+  .headline {
+    font-size: 1.5rem;
+  }
+
+  .subheadline {
+    font-size: 1rem;
+  }
+}
+
+/* Reset complet pentru a elimina conflictele */
+.input-wrapper,
+.input-wrapper * {
+  box-sizing: border-box;
+}
+
+.analysis-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.arrow-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-style: none;
+  border-width: 0;
+}
+
+/* Responsive actualizat */
+@media (max-width: 768px) {
+  .input-wrapper {
+    height: 48px;
+  }
+
+  .analysis-input {
+    padding: 0 55px 0 16px;
+    font-size: 1rem;
+  }
+
+  .arrow-button {
+    width: 30px;
+    height: 30px;
+    right: 9px;
+    top: 9px;
+    bottom: 9px;
+  }
+
+  .arrow-button svg {
+    width: 16px;
+    height: 16px;
+  }
 }

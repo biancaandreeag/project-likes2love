@@ -22,7 +22,6 @@ function FindMore() {
 
       <Navbar isFlipped={false} />
 
-
       <div className="video-background">
         <video autoPlay loop muted playsInline>
           <source src="/videos/background.mp4" type="video/mp4" />
@@ -62,9 +61,9 @@ function FindMore() {
             </div>
             <h3>Safe Content Scraping</h3>
             <p>
-              Our platform performs ethical scraping of posts and comments without extracting personal user data. We
-              focus solely on content analysis to identify potential cyberbullying patterns while maintaining strict
-              privacy standards.
+              Our platform performs ethical scraping of posts and comments without collecting personal user data.
+              We focus solely on content analysis to identify online user behavior, including potential cyberbullying and bot
+              activity patterns, while strictly maintaining user privacy standards.
             </p>
           </div>
 
@@ -125,9 +124,9 @@ function FindMore() {
             </div>
             <h3>Advanced AI Models</h3>
             <p>
-              We leverage state-of-the-art RoBERTa and BERT models with custom optimizations for cyberbullying
-              detection. Our AI continuously learns from new data, improving its accuracy in identifying subtle forms of
-              online harassment across multiple languages.
+              We employ a diverse range of advanced AI models—including RoBERTa, BERT, and other specialized architectures—tailored for various types of
+              content analysis and detection tasks. These models are continuously refined to better recognize subtle forms of cyberbullying
+              and online harassment. More details about our approach can be found in the About section.
             </p>
           </div>
 
@@ -146,9 +145,10 @@ function FindMore() {
             </div>
             <h3>Comprehensive Analytics</h3>
             <p>
-              Our detailed dashboard provides in-depth analysis of content, highlighting potential risks, sentiment
-              patterns, and actionable insights. Track trends over time, receive customized reports, and implement
-              proactive measures to create safer online environments.
+              Our comprehensive dashboard offers an overview of sentiment trends across the platform, followed by detailed
+              insights into detected cyberbullying behaviors and bot activity. It also includes engagement metrics derived
+              from user comments, helping you monitor interaction quality and take informed, proactive steps toward a safer
+              digital environment.
             </p>
           </div>
         </div>
@@ -165,25 +165,25 @@ function FindMore() {
               <div className="workflow-step">
                 <h4 className="step-title">1.Select the platform you want</h4>
                 <div className="step-circle"></div>
-                <p className="step-description">Facebook and TikTok are supported by our bot</p>
+                <p className="step-description">Our bot integrates with both Facebook and TikTok platforms.</p>
               </div>
 
               <div className="workflow-step">
                 <h4 className="step-title">2.Introduce post link</h4>
                 <div className="step-circle"></div>
-                <p className="step-description">Be careful in choosing a public post</p>
+                <p className="step-description">Kindly ensure careful selection of public posts</p>
               </div>
 
               <div className="workflow-step">
-                <h4 className="step-title">3.Choose the model</h4>
+                <h4 className="step-title">3.Choose the prefered language</h4>
                 <div className="step-circle"></div>
-                <p className="step-description">Choose the model that suits best your interests</p>
+                <p className="step-description">Select EN for English/multilingual or RO for Romanian posts</p>
               </div>
 
               <div className="workflow-step">
                 <h4 className="step-title">4.Generate dashboard</h4>
                 <div className="step-circle"></div>
-                <p className="step-description">Look at the generated information and decide if the post is alright</p>
+                <p className="step-description">Assess the generated details and confirm if the post meets the guidelines</p>
               </div>
 
               <div className="workflow-progress-line"></div>

@@ -53,15 +53,9 @@ function Home() {
           <div className={`content ${isFlipped ? "content-right" : ""}`}>
             <div className="title-logo animate-element">
               <img
-                src="/logo-full.png"
+                src="/logo_full.png"
                 alt="likes2love"
                 className="logo-image"
-                onError={(e) => {
-                  console.error("Eroare la încărcarea imaginii principale")
-                  e.target.onerror = null
-                  e.target.src =
-                    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%2011%20mai%202025%2C%2003_54_41-QQlMAQoIgHQSYxrZGGbGbOstOd13m7.png"
-                }}
               />
             </div>
 
@@ -84,15 +78,9 @@ function Home() {
             <div className="content content-right">
               <div className="title-logo animate-element">
                 <img
-                  src="/logo-full.png"
+                  src="/logo_full.png"
                   alt="likes2love"
                   className="logo-image"
-                  onError={(e) => {
-                    console.error("Eroare la încărcarea imaginii principale")
-                    e.target.onerror = null
-                    e.target.src =
-                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%2011%20mai%202025%2C%2003_54_41-QQlMAQoIgHQSYxrZGGbGbOstOd13m7.png"
-                  }}
                 />
               </div>
 

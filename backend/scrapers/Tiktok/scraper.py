@@ -11,6 +11,7 @@ class TiktokScraper:
         self.driver = driver
         self.post_url = None 
         self.ID = uuid
+        self.platform = "TikTok"
         self.no_comments = None
 
     def navigate(self, video_url):
@@ -280,11 +281,12 @@ class TiktokScraper:
                 data_to_save = {
                     "uuid":self.ID,
                     "post_link":self.post_url,
+                    "platform":self.platform,
                     'comments': comments_database
                 }
                 self.no_comments=len(comments_database)
                 send_to_server(data_to_save,key=self.ID)
-                log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ {len(comments_database)} comments: {data_to_save}]")
+                #log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ {len(comments_database)} comments: {data_to_save}]")
             else:
                 log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ No comments to save. ]")
 

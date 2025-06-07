@@ -1,4 +1,5 @@
 from kafka import KafkaConsumer
+from shared_utils.kafka_producer import send_to_server
 from GeneralSentiment.generalAnalysis import GeneralSentimentAnalyzer
 import json
 import os
@@ -14,7 +15,9 @@ class KafkaConsumerClient:
         self.consumer = None
         self.init_consumer()
         self.all_data = []
-        self.analyzer = GeneralSentimentAnalyzer(task='sentiment')
+        self.post_link = None
+        self.platform = None
+        self.sentiment_analyzer = GeneralSentimentAnalyzer()
 
     def init_consumer(self):
         retries = 5
@@ -55,6 +58,8 @@ class KafkaConsumerClient:
         message_type=data.get("type")
 
         if message_type == "metadata":
+            self.post_link = data.get("post_link")
+            self.platform = data.get("platform")
             log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
 
         if message_type == "comments_batch":
@@ -63,6 +68,17 @@ class KafkaConsumerClient:
 
         if message_type=="end":
             log.info(f"[ KAFKA CONSUMER - '{self.topic}'  ][ Data with key: {message.key} is ready for analysis. ]")
-            log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ Data: {self.all_data}, size: {len(self.all_data)} ]")
+            #log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ Data: {self.all_data} ]")
+            flat_comments = [c for batch in self.all_data for c in batch]
+            self.all_data = []
 
-            
+            if flat_comments:
+                general_results = self.sentiment_analyzer.analyze_batch(flat_comments)
+                general_results.update({
+                    "type": "general_analysis",
+                    "post_link": self.post_link,
+                })
+                log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ General Results: {general_results} ]")
+
+                send_to_server(general_results, message.key)
+

@@ -1,11 +1,18 @@
+"use client"
+
 import { useState, useRef, useEffect } from "react"
 import "../styles/HistoryItem.css"
 
-function HistoryItem({ title, date, model, isExpanded, onRename, onExport, onDelete }) {
+function HistoryItem({ title, date, platform, isExpanded, onRename, onExport, onDelete, onClick }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editValue, setEditValue] = useState(title)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(null)
+  const [showErrorMessage, setShowErrorMessage] = useState(null)
   const menuRef = useRef(null)
   const buttonRef = useRef(null)
-
+  const inputRef = useRef(null)
 
   const toggleMenu = (e) => {
     e.stopPropagation()
@@ -19,19 +26,148 @@ function HistoryItem({ title, date, model, isExpanded, onRename, onExport, onDel
 
     switch (actionType) {
       case "rename":
-        onRename && onRename()
+        setIsEditing(true)
+        setEditValue(title)
+        setMenuOpen(false)
         break
       case "export":
         onExport && onExport()
         break
       case "delete":
-        onDelete && onDelete()
+        setShowDeleteConfirm(true)
+        setMenuOpen(false)
         break
       default:
         break
     }
-    setMenuOpen(false)
   }
+
+  const handleConfirmDelete = async () => {
+    setShowDeleteConfirm(false)
+    try {
+      await onDelete()
+      showMessage("Analysis deleted successfully! 🗑️", "success")
+    } catch (error) {
+      showMessage("Failed to delete analysis. Please try again.", "error")
+    }
+  }
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false)
+  }
+
+  const showMessage = (message, type) => {
+    if (type === "success") {
+      setShowSuccessMessage(message)
+      setTimeout(() => setShowSuccessMessage(null), 3000)
+    } else {
+      setShowErrorMessage(message)
+      setTimeout(() => setShowErrorMessage(null), 4000)
+    }
+  }
+
+  const checkNameExists = async (newName) => {
+    try {
+      const response = await fetch("http://localhost:8000/check-name-exists", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          post_name: newName.trim(),
+          current_post_name: title, // Exclude current item from check
+        }),
+      })
+
+      if (!response.ok) {
+        return false // If endpoint doesn't exist, skip validation
+      }
+
+      const result = await response.json()
+      return result.exists
+    } catch (error) {
+      console.log("Name validation endpoint not available, skipping check")
+      return false
+    }
+  }
+
+  const handleSaveEdit = async (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+
+    const trimmedValue = editValue.trim()
+
+    if (trimmedValue === "" || trimmedValue === title) {
+      setIsEditing(false)
+      return
+    }
+
+    // Check if name already exists
+    const nameExists = await checkNameExists(trimmedValue)
+    if (nameExists) {
+      showMessage(`Name "${trimmedValue}" already exists. Please choose a different name.`, "error")
+      return
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/edit-name", {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          post_link: "", // Will be handled by backend
+          old_post_name: title,
+          new_post_name: trimmedValue,
+          analysis_date: date,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`)
+      }
+
+      const result = await response.json()
+      console.log("✅ Name updated successfully:", result)
+
+      // Apelează callback-ul pentru a actualiza numele în părinte
+      if (onRename) {
+        onRename(trimmedValue)
+      }
+
+      setIsEditing(false)
+      showMessage(`Successfully renamed to "${trimmedValue}" ✏️`, "success")
+    } catch (error) {
+      console.error("❌ Error updating name:", error)
+      showMessage(`Failed to update name: ${error.message}`, "error")
+      setIsEditing(false)
+    }
+  }
+
+  const handleCancelEdit = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setIsEditing(false)
+    setEditValue(title)
+  }
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSaveEdit(e)
+    } else if (e.key === "Escape") {
+      handleCancelEdit(e)
+    }
+  }
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus()
+      inputRef.current.select()
+    }
+  }, [isEditing])
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -50,7 +186,6 @@ function HistoryItem({ title, date, model, isExpanded, onRename, onExport, onDel
       document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [])
-
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,8 +207,12 @@ function HistoryItem({ title, date, model, isExpanded, onRename, onExport, onDel
 
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === "Escape" && menuOpen) {
-        setMenuOpen(false)
+      if (e.key === "Escape") {
+        if (showDeleteConfirm) {
+          setShowDeleteConfirm(false)
+        } else if (menuOpen) {
+          setMenuOpen(false)
+        }
       }
     }
 
@@ -81,112 +220,571 @@ function HistoryItem({ title, date, model, isExpanded, onRename, onExport, onDel
     return () => {
       document.removeEventListener("keydown", handleEscape)
     }
-  }, [menuOpen])
+  }, [menuOpen, showDeleteConfirm])
+
+  // Funcție pentru formatarea datei din ISO în format prieten
+  const formatDate = (isoDateString) => {
+    if (!isoDateString) return "-"
+
+    try {
+      const date = new Date(isoDateString)
+
+      // Verifică dacă data este validă
+      if (isNaN(date.getTime())) return "-"
+
+      // Formatează data în format prieten: "Dec 3, 2024 at 11:04 PM"
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      }
+
+      return date.toLocaleDateString("en-US", options)
+    } catch (error) {
+      console.error("Error formatting date:", error)
+      return "-"
+    }
+  }
+
+  // Funcție pentru a afișa iconița platformei
+  const getPlatformIcon = (platformName) => {
+    if (platformName === "Facebook") {
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+          <path
+            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+            fill="#3b5998"
+          />
+        </svg>
+      )
+    } else if (platformName === "TikTok") {
+      return (
+        <svg viewBox="0 0 24 24" width="16" height="16">
+          <path
+            d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z"
+            fill="#fe2c55"
+          />
+        </svg>
+      )
+    }
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="16"
+        height="16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+      </svg>
+    )
+  }
+
+  // Funcție pentru a obține stilurile platformei
+  const getPlatformStyle = (platformName) => {
+    if (platformName === "TikTok") {
+      return {
+        color: "#fe2c55",
+      }
+    } else if (platformName === "Facebook") {
+      return {
+        color: "#3b5998",
+      }
+    }
+    return {
+      color: "rgba(0, 0, 0, 0.6)",
+    }
+  }
+
+  // Formatăm data pentru afișare
+  const formattedDate = formatDate(date)
 
   if (isExpanded) {
     return (
-      <div className="history-item">
-        <div className="history-item-title">{title}</div>
-        <div className="history-item-model">{model}</div>
-        <div className="history-item-date">{date}</div>
-        <div className="history-item-actions">
-          <button className="action-button" onClick={onRename} title="Rename">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+      <>
+        <div
+          className="history-item expanded"
+          onClick={!isEditing ? onClick : undefined}
+          style={{ cursor: isEditing ? "default" : "pointer" }}
+        >
+          <div className="history-item-title" title={title}>
+            {isEditing ? (
+              <div className="edit-container" onClick={(e) => e.stopPropagation()}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={editValue}
+                  onChange={(e) => setEditValue(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  className="edit-input"
+                  placeholder="Enter new name..."
+                />
+                <div className="edit-buttons">
+                  <button className="save-button" onClick={handleSaveEdit} title="Save">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </button>
+                  <button className="cancel-button" onClick={handleCancelEdit} title="Cancel">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              title
+            )}
+          </div>
+          <div className="history-item-platform">
+            <div className="platform-display" style={getPlatformStyle(platform)}>
+              {getPlatformIcon(platform)}
+              <span>{platform}</span>
+            </div>
+          </div>
+          <div className="history-item-date" title={formattedDate}>
+            {formattedDate}
+          </div>
+          <div className="history-item-actions">
+            <button
+              className="action-button"
+              onClick={(e) => {
+                e.stopPropagation()
+                handleAction("rename", e)
+              }}
+              title="Rename"
+              disabled={isEditing}
             >
-              <path d="M12 20h9"></path>
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-            </svg>
-          </button>
-          <button className="action-button" onClick={onExport} title="Export">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </button>
+            <button
+              className="action-button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onExport && onExport()
+              }}
+              title="Export"
+              disabled={isEditing}
             >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-          </button>
-          <button className="action-button delete" onClick={onDelete} title="Delete">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </button>
+            <button
+              className="action-button delete"
+              onClick={(e) => {
+                e.stopPropagation()
+                handleAction("delete", e)
+              }}
+              title="Delete"
+              disabled={isEditing}
             >
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              <line x1="10" y1="11" x2="10" y2="17"></line>
-              <line x1="14" y1="11" x2="14" y2="17"></line>
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2 2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirm && (
+          <>
+            <div className="modal-overlay" onClick={handleCancelDelete}></div>
+            <div className="confirmation-modal">
+              <div className="modal-header">
+                <div className="modal-icon delete-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                  </svg>
+                </div>
+                <h3>Delete Analysis</h3>
+              </div>
+              <div className="modal-content">
+                <p>Are you sure you want to delete this analysis?</p>
+                <p className="modal-subtitle">
+                  <strong>"{title}"</strong>
+                </p>
+                <p className="modal-warning">This action cannot be undone.</p>
+              </div>
+              <div className="modal-actions">
+                <button className="modal-button cancel" onClick={handleCancelDelete}>
+                  Cancel
+                </button>
+                <button className="modal-button delete" onClick={handleConfirmDelete}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2 2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Success Message */}
+        {showSuccessMessage && (
+          <div className="toast-message success">
+            <div className="toast-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span>{showSuccessMessage}</span>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {showErrorMessage && (
+          <div className="toast-message error">
+            <div className="toast-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+              </svg>
+            </div>
+            <span>{showErrorMessage}</span>
+          </div>
+        )}
+      </>
     )
   }
 
   return (
-    <div className="history-item">
-      <div className="history-item-content">
-        <div className="history-item-title">{title}</div>
-        <div className="history-item-details">
-          <span className="history-item-date">{date}</span>
-          <span className="history-item-model">{model}</span>
+    <>
+      <div
+        className="history-item"
+        onClick={!isEditing ? onClick : undefined}
+        style={{ cursor: isEditing ? "default" : "pointer" }}
+      >
+        <div className="history-item-content">
+          <div className="history-item-title" title={title}>
+            {isEditing ? (
+              <div className="edit-container" onClick={(e) => e.stopPropagation()}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={editValue}
+                  onChange={(e) => setEditValue(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  className="edit-input"
+                  placeholder="Enter new name..."
+                />
+                <div className="edit-buttons">
+                  <button className="save-button" onClick={handleSaveEdit} title="Save">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </button>
+                  <button className="cancel-button" onClick={handleCancelEdit} title="Cancel">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              title
+            )}
+          </div>
+          <div className="history-item-details">
+            <span className="history-item-date" title={formattedDate}>
+              {formattedDate}
+            </span>
+            <span className="history-item-platform">
+              <div className="platform-display" style={getPlatformStyle(platform)}>
+                {getPlatformIcon(platform)}
+                <span>{platform}</span>
+              </div>
+            </span>
+          </div>
+        </div>
+        <div className="history-item-options">
+          <button
+            ref={buttonRef}
+            className={`options-button ${menuOpen ? "active" : ""}`}
+            onClick={toggleMenu}
+            aria-label="Options"
+            disabled={isEditing}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <defs>
+                <linearGradient id="dotsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="rgba(63, 94, 251, 1)" />
+                  <stop offset="100%" stopColor="rgba(252, 70, 107, 1)" />
+                </linearGradient>
+              </defs>
+              <circle cx="12" cy="5" r="1"></circle>
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="12" cy="19" r="1"></circle>
+            </svg>
+          </button>
+
+          {menuOpen && !isEditing && (
+            <div ref={menuRef} className="options-menu">
+              <button className="menu-item" onClick={(e) => handleAction("rename", e)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+                <span>Rename</span>
+              </button>
+              <button className="menu-item" onClick={(e) => handleAction("export", e)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Export</span>
+              </button>
+              <button className="menu-item delete" onClick={(e) => handleAction("delete", e)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2 2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+                <span>Delete</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
-      {/* Comentăm butonul
-    <div className="history-item-options">
-      <button ref={buttonRef} className={`options-button ${menuOpen ? "active" : ""}`} onClick={toggleMenu}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <defs>
-            <linearGradient id="dotsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(63, 94, 251, 1)" />
-              <stop offset="100%" stopColor="rgba(252, 70, 107, 1)" />
-            </linearGradient>
-          </defs>
-          <circle cx="12" cy="12" r="1"></circle>
-          <circle cx="12" cy="5" r="1"></circle>
-          <circle cx="12" cy="19" r="1"></circle>
-        </svg>
-      </button>
-      {menuOpen && (
-        <div className="options-menu" ref={menuRef}>
-          <button className="menu-item" onClick={(e) => handleAction("rename", e)}>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <>
+          <div className="modal-overlay" onClick={handleCancelDelete}></div>
+          <div className="confirmation-modal">
+            <div className="modal-header">
+              <div className="modal-icon delete-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="15" y1="9" x2="9" y2="15"></line>
+                  <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+              </div>
+              <h3>Delete Analysis</h3>
+            </div>
+            <div className="modal-content">
+              <p>Are you sure you want to delete this analysis?</p>
+              <p className="modal-subtitle">
+                <strong>"{title}"</strong>
+              </p>
+              <p className="modal-warning">This action cannot be undone.</p>
+            </div>
+            <div className="modal-actions">
+              <button className="modal-button cancel" onClick={handleCancelDelete}>
+                Cancel
+              </button>
+              <button className="modal-button delete" onClick={handleConfirmDelete}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2 2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                Delete
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Success Message */}
+      {showSuccessMessage && (
+        <div className="toast-message success">
+          <div className="toast-icon">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -194,53 +792,37 @@ function HistoryItem({ title, date, model, isExpanded, onRename, onExport, onDel
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M12 20h9"></path>
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
-            <span>Rename</span>
-          </button>
-          <button className="menu-item" onClick={(e) => handleAction("export", e)}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            <span>Export PDF</span>
-          </button>
-          <button className="menu-item delete" onClick={(e) => handleAction("delete", e)}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              <line x1="10" y1="11" x2="10" y2="17"></line>
-              <line x1="14" y1="11" x2="14" y2="17"></line>
-            </svg>
-            <span>Delete</span>
-          </button>
+          </div>
+          <span>{showSuccessMessage}</span>
         </div>
       )}
-    </div>
-    */}
-    </div>
+
+      {/* Error Message */}
+      {showErrorMessage && (
+        <div className="toast-message error">
+          <div className="toast-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <span>{showErrorMessage}</span>
+        </div>
+      )}
+    </>
   )
 }
 

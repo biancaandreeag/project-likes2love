@@ -135,7 +135,7 @@ body {
 /* Noul stil pentru descriere - înlocuiește subtitle-secondary */
 .home-description {
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 2rem;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   font-weight: 300;

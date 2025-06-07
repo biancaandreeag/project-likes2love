@@ -1,8 +1,20 @@
-import { useEffect } from "react"
+"use client"
+
+import { useState, useEffect } from "react"
+import { useForm, ValidationError } from "@formspree/react"
 import "../styles/About.css"
 import Navbar from "../components/Navbar"
 
 function About() {
+  const [state, handleSubmit] = useForm("xyzjzapv")
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  })
+
   useEffect(() => {
     setTimeout(() => {
       const elements = document.querySelectorAll(".animate-element")
@@ -12,10 +24,23 @@ function About() {
     }, 100)
   }, [])
 
+  useEffect(() => {
+    if (state.succeeded) {
+      setFormData({ name: "", email: "", subject: "", message: "" })
+    }
+  }, [state.succeeded])
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
   return (
     <div className="about-container">
-
-        <Navbar isFlipped={false} />
+      <Navbar isFlipped={false} />
 
       <div className="video-background">
         <video autoPlay loop muted playsInline>
@@ -24,7 +49,6 @@ function About() {
         </video>
         <div className="overlay"></div>
       </div>
-
 
       <div className="about-content">
         <div className="about-header animate-element">
@@ -50,10 +74,10 @@ function About() {
               <div className="model-tag">Primary Model</div>
             </div>
             <p>
-              RoBERTa (Robustly Optimized BERT Pretraining Approach) is our primary model for content analysis.
-              It's a transformer-based model that builds on BERT's architecture with modified key hyperparameters and
-              training methodology. RoBERTa excels at understanding context and nuance in language, making it
-              particularly effective at detecting subtle forms of cyberbullying.
+              RoBERTa (Robustly Optimized BERT Pretraining Approach) is our primary model for content analysis. It's a
+              transformer-based model that builds on BERT's architecture with modified key hyperparameters and training
+              methodology. RoBERTa excels at understanding context and nuance in language, making it particularly
+              effective at detecting subtle forms of cyberbullying.
             </p>
             <div className="model-features">
               <div className="feature">
@@ -76,8 +100,8 @@ function About() {
             <p>
               BERT (Bidirectional Encoder Representations from Transformers) provides deep bidirectional representations
               from unlabeled text. We use BERT as a supporting model to enhance our understanding of context and
-              relationships between words in analyzed content. BERT's pre-training on a large corpus of text helps
-              it understand language patterns that may indicate bullying behavior.
+              relationships between words in analyzed content. BERT's pre-training on a large corpus of text helps it
+              understand language patterns that may indicate bullying behavior.
             </p>
             <div className="model-features">
               <div className="feature">
@@ -100,8 +124,8 @@ function About() {
             <p>
               We leverage GPT (Generative Pre-trained Transformer) models for deeper content analysis and understanding
               of complex linguistic patterns. GPT's strength in generating human-like text helps us understand context
-              and intent behind messages, allowing for more nuanced detection of cyberbullying that might evade
-              simpler pattern-matching approaches.
+              and intent behind messages, allowing for more nuanced detection of cyberbullying that might evade simpler
+              pattern-matching approaches.
             </p>
             <div className="model-features">
               <div className="feature">
@@ -122,10 +146,10 @@ function About() {
               <div className="model-tag">Classification</div>
             </div>
             <p>
-              RandomForest is an ensemble learning method that operates by constructing multiple decision trees.
-              We use RandomForest for its robustness in classification tasks, particularly for categorizing different
-              types of harmful content. Its ability to handle large feature sets and resistance to overfitting makes
-              it valuable for reliable content classification.
+              RandomForest is an ensemble learning method that operates by constructing multiple decision trees. We use
+              RandomForest for its robustness in classification tasks, particularly for categorizing different types of
+              harmful content. Its ability to handle large feature sets and resistance to overfitting makes it valuable
+              for reliable content classification.
             </p>
             <div className="model-features">
               <div className="feature">
@@ -145,8 +169,8 @@ function About() {
           <h2>Multi-Label Classification</h2>
           <p>
             Our platform employs multi-label classification techniques to identify multiple types of harmful content
-            simultaneously. Unlike traditional binary classification that simply identifies content as "harmful" or "safe,"
-            our approach can detect and categorize multiple forms of cyberbullying in a single piece of content.
+            simultaneously. Unlike traditional binary classification that simply identifies content as "harmful" or
+            "safe," our approach can detect and categorize multiple forms of cyberbullying in a single piece of content.
           </p>
 
           <div className="classification-diagram">
@@ -234,8 +258,8 @@ function About() {
         <div className="technology-section animate-element">
           <h2>Our Technology Stack</h2>
           <p>
-            Our platform combines cutting-edge AI technologies with robust web development frameworks to deliver
-            a seamless, responsive experience for users while providing powerful cyberbullying detection capabilities.
+            Our platform combines cutting-edge AI technologies with robust web development frameworks to deliver a
+            seamless, responsive experience for users while providing powerful cyberbullying detection capabilities.
           </p>
 
           <div className="tech-stack">
@@ -269,42 +293,212 @@ function About() {
           </div>
         </div>
 
-        <div className="team-section animate-element">
-          <h2>Our Research Team</h2>
+        {/* CONTACT SECTION - FORMSPREE INTEGRATION */}
+        <div className="contact-section animate-element">
+          <h2>Get In Touch</h2>
           <p>
-            Our platform is developed by a multidisciplinary team of AI researchers, data scientists, and
-            cyberbullying prevention experts committed to creating safer online spaces.
+            Have questions about our AI models or want to collaborate? We'd love to hear from you. Reach out to our team
+            and we'll get back to you as soon as possible.
           </p>
 
-          <div className="team-grid">
-            <div className="team-member">
-              <div className="member-avatar">AI</div>
-              <div className="member-info">
-                <h4>Dr. Alexandra Ionescu</h4>
-                <p>Lead AI Researcher</p>
+          <div className="contact-container">
+            <div className="contact-info">
+              <div className="contact-item">
+                <div className="contact-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </div>
+                <div className="contact-details">
+                  <h4>Email Us</h4>
+                  <p>contact@likes2love.com</p>
+                </div>
+              </div>
+
+              <div className="contact-item">
+                <div className="contact-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12,6 12,12 16,14"></polyline>
+                  </svg>
+                </div>
+                <div className="contact-details">
+                  <h4>Response Time</h4>
+                  <p>Within 24 hours</p>
+                </div>
+              </div>
+
+              <div className="contact-item">
+                <div className="contact-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <div className="contact-details">
+                  <h4>Location</h4>
+                  <p>Bucharest, Romania</p>
+                </div>
               </div>
             </div>
-            <div className="team-member">
-              <div className="member-avatar">ML</div>
-              <div className="member-info">
-                <h4>Dr. Mihai Lungu</h4>
-                <p>Machine Learning Specialist</p>
+
+            <form className="contact-form" onSubmit={handleSubmit} method="POST">
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="name">Full Name *</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="Your full name"
+                  />
+                  <ValidationError prefix="Name" field="name" errors={state.errors} />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="email">Email Address *</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="your.email@example.com"
+                  />
+                  <ValidationError prefix="Email" field="email" errors={state.errors} />
+                </div>
               </div>
-            </div>
-            <div className="team-member">
-              <div className="member-avatar">NLP</div>
-              <div className="member-info">
-                <h4>Dr. Cristina Popescu</h4>
-                <p>NLP Expert</p>
+
+              <div className="form-group">
+                <label htmlFor="subject">Subject *</label>
+                <select id="subject" name="subject" value={formData.subject} onChange={handleInputChange} required>
+                  <option value="">Select a subject</option>
+                  <option value="general">General Inquiry</option>
+                  <option value="collaboration">Research Collaboration</option>
+                  <option value="technical">Technical Support</option>
+                </select>
+                <ValidationError prefix="Subject" field="subject" errors={state.errors} />
               </div>
-            </div>
-            <div className="team-member">
-              <div className="member-avatar">CB</div>
-              <div className="member-info">
-                <h4>Dr. Andrei Dumitrescu</h4>
-                <p>Cyberbullying Prevention Specialist</p>
+
+              <div className="form-group">
+                <label htmlFor="message">Message *</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  required
+                  rows="6"
+                  placeholder="Tell us about your inquiry, project, or how we can help you..."
+                ></textarea>
+                <ValidationError prefix="Message" field="message" errors={state.errors} />
               </div>
-            </div>
+
+              <button
+                type="submit"
+                className={`submit-button ${state.submitting ? "submitting" : ""}`}
+                disabled={state.submitting}
+              >
+                {state.submitting ? (
+                  <>
+                    <div className="spinner"></div>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="22" y1="2" x2="11" y2="13"></line>
+                      <polygon points="22,2 15,22 11,13 2,9"></polygon>
+                    </svg>
+                    Send Message
+                  </>
+                )}
+              </button>
+
+              {state.succeeded && (
+                <div className="status-message success">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="20,6 9,17 4,12"></polyline>
+                  </svg>
+                  Thank you! Your message has been sent successfully. We'll get back to you soon.
+                </div>
+              )}
+
+              {state.errors && state.errors.length > 0 && (
+                <div className="status-message error">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                  </svg>
+                  Sorry, there was an error sending your message. Please try again or contact us directly.
+                </div>
+              )}
+            </form>
           </div>
         </div>
       </div>

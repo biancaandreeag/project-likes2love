@@ -27,7 +27,7 @@ class PreprocessData:
         self.UNICODE_EMO = {v: k for k, v in EMO_UNICODE.items()}
         
 
-    def configuration(self, post_id, model):
+    def configuration(self, post_id, model="transformers"):
         self.post_id = post_id
         self.post_model = model
         if self.post_model == 'classifier':
@@ -112,7 +112,7 @@ class PreprocessData:
         start_time = time.time()
         df_comments = pd.DataFrame(comments, columns=['text'])
         
-        if self.post_model == "Random Forest":
+        if self.post_model == "classifier":
             log.info(f"[ PREPROCESS - {self.post_id} ][ Starting preprocess for classifier model... ]")
             start_time = time.time()
             df_comments['text']=df_comments['text'].str.replace(r"http\S+", "", regex=True) #remove URLs
@@ -129,7 +129,7 @@ class PreprocessData:
             df_comments['text']=df_comments['text'].str.lower()
             df_comments['text']=df_comments['text'].apply(lambda x: self.correction_stopwords_lemmatize(x))
         
-        if self.post_model == "RoBERTa":
+        if self.post_model == "transformers":
             log.info(f"[ PREPROCESS - {self.post_id} ][ Starting preprocess for transformer model... ]")
             start_time = time.time()
             df_comments['text']=df_comments['text'].str.replace(r"http\S+", "URL", regex=True)

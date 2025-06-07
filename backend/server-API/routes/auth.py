@@ -45,3 +45,25 @@ def init_uuid(auth_token: str = Cookie(None)):
         path="/"
     )
     return response
+
+@router.get("/auth/refresh")
+def refresh_token(auth_token: str = Cookie(None)):
+    if not auth_token:
+        return JSONResponse(content={"error": "No token provided"}, status_code=401)
+
+    uuid = verify_token(auth_token)
+    if not uuid:
+        return JSONResponse(content={"error": "Invalid or expired token"}, status_code=401)
+
+    new_token = create_token(uuid)
+    response = JSONResponse(content={"message": "Token refreshed"}, status_code=200)
+    response.set_cookie(
+        key="auth_token",
+        value=new_token,
+        httponly=True,
+        secure=False,
+        samesite="Lax",
+        max_age=60 * 60 * 24 * EXPIRE_DAYS,
+        path="/"
+    )
+    return response

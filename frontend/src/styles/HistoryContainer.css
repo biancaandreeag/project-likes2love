@@ -146,7 +146,7 @@
 }
 
 .expand-button::before {
-  content: '+';
+  content: "+";
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform: rotate(0deg);
   font-weight: 600;
@@ -161,7 +161,7 @@
 }
 
 .history-container.expanded .expand-button::before {
-  content: '−';
+  content: "−";
   transform: rotate(180deg);
   font-weight: 600;
   margin-top: 0;
@@ -350,11 +350,11 @@
   }
 }
 
-/* Header tabelar pentru starea expandată */
+/* Header tabelar pentru starea expandată - ajustat pentru mai mult spațiu la platformă și dată */
 .table-header {
   display: none;
-  grid-template-columns: 1fr 120px 120px 140px;
-  gap: 20px;
+  grid-template-columns: 1.8fr 1.1fr 1.3fr 120px;
+  gap: 16px;
   padding: 10px 15px;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 8px;
@@ -373,11 +373,11 @@
   display: grid;
 }
 
-/* Modificăm HistoryItem pentru a avea layout tabelar în starea expandată */
+/* Modificăm HistoryItem pentru a avea layout tabelar în starea expandată - ajustat pentru mai mult spațiu */
 .history-container.expanded .history-item {
   display: grid;
-  grid-template-columns: 1fr 120px 120px 140px;
-  gap: 20px;
+  grid-template-columns: 1.8fr 1.1fr 1.3fr 120px;
+  gap: 16px;
   align-items: center;
   padding: 15px;
 }
@@ -453,7 +453,7 @@
   position: fixed !important;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 999999 !important;
   min-width: 150px;
   padding: 8px;
@@ -610,7 +610,7 @@
   right: 0;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 99999 !important;
   min-width: 150px;
 }
@@ -642,7 +642,7 @@
   position: fixed !important;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 999999 !important;
   min-width: 150px;
   padding: 8px;

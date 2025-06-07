@@ -1,3 +1,4 @@
+from shared_utils.kafka_producer import send_to_preprocessor
 from shared_utils.logger_config  import log
 from initialize import go_to_scraper
 from kafka import KafkaConsumer
@@ -57,6 +58,7 @@ class KafkaConsumerClient:
             log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
             post_link=data.get("post_link")
             platform = data.get("platform")
+            send_to_preprocessor(message.value, message.key)
             go_to_scraper(post_link,uuid,platform)
             
         

@@ -1,185 +1,599 @@
 .history-item {
-  background-color: white;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
   position: relative;
-  z-index: 1;
 }
 
 .history-item:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.95);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.history-item-content {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding-right: 45px;
+.history-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Expanded view styles - ajustat pentru mai mult spațiu la platformă și dată */
+.history-item.expanded {
+  display: grid;
+  grid-template-columns: 1.8fr 1.1fr 1.3fr 120px;
+  gap: 16px;
+  align-items: center;
 }
 
 .history-item-title {
   font-weight: 500;
-  color: #333;
-  margin-bottom: 5px;
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0; /* Important pentru flexbox/grid truncation */
+  max-width: 100%; /* Asigură că nu depășește containerul */
+}
+
+/* Pentru expanded view, asigură că titlul nu depășește coloana */
+.history-item.expanded .history-item-title {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Edit container styles */
+.edit-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.edit-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 2px solid rgba(63, 94, 251, 0.5);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.8);
+  background-color: white;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.edit-input:focus {
+  border-color: rgba(63, 94, 251, 0.8);
+  box-shadow: 0 0 0 2px rgba(63, 94, 251, 0.1);
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.save-button,
+.cancel-button {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save-button {
+  color: #22c55e;
+}
+
+.save-button:hover {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.cancel-button {
+  color: #ef4444;
+}
+
+.cancel-button:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+/* Platform display with icon - FĂRĂ truncare în expanded view */
+.history-item-platform {
+  display: flex;
+  align-items: center;
+  min-width: 0; /* Permite shrinking doar în collapsed view */
+}
+
+.platform-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.7);
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  /* Eliminăm truncarea pentru expanded view */
+}
+
+.platform-display svg {
+  flex-shrink: 0;
+}
+
+.platform-display span {
+  /* Eliminăm truncarea pentru expanded view */
+}
+
+/* Date - FĂRĂ truncare în expanded view */
+.history-item-date {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.5);
+  /* Eliminăm truncarea pentru expanded view */
+}
+
+/* Doar pentru collapsed view aplicăm truncarea la platformă și dată */
+.history-item:not(.expanded) .platform-display {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-item:not(.expanded) .platform-display span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-item:not(.expanded) .history-item-date {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-item-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0; /* Nu se micșorează niciodată */
+}
+
+.action-button {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.6);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Butoanele nu se micșorează */
+}
+
+.action-button:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-button.delete:hover:not(:disabled) {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* Collapsed view styles */
+.history-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0; /* Important pentru truncation */
+  overflow: hidden; /* Previne overflow */
+}
+
+/* Pentru collapsed view, asigură că titlul se truncează */
+.history-item:not(.expanded) .history-item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .history-item-details {
   display: flex;
-  gap: 10px;
   align-items: center;
-}
-
-.history-item-date {
-  font-size: 0.85rem;
-  color: #666;
-}
-
-.history-item-model {
+  gap: 12px;
   font-size: 0.8rem;
-  background: linear-gradient(135deg, rgba(63, 94, 251, 0.8) 0%, rgba(252, 70, 107, 0.8) 100%);
-  color: white;
-  padding: 2px 8px;
-  border-radius: 4px;
+  min-width: 0; /* Permite shrinking */
 }
 
-/* Stiluri pentru butonul de opțiuni */
+.history-item-details > span {
+  flex-shrink: 0; /* Data și platforma nu se micșorează */
+}
+
 .history-item-options {
-  position: absolute;
-  top: 50%;
-  right: 15px;
-  transform: translateY(-50%);
-  z-index: 9999;
+  position: relative;
+  margin-left: auto;
+  flex-shrink: 0; /* Opțiunile nu se micșorează */
+  margin-right: -4px; /* Mută butonul mai în dreapta */
 }
 
 .options-button {
   background: none;
   border: none;
+  padding: 8px 12px 8px 8px; /* Mai mult padding în dreapta */
+  border-radius: 50%;
   cursor: pointer;
-  padding: 5px;
+  color: rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 9999;
 }
 
-.options-button:hover,
+.options-button:hover:not(:disabled),
 .options-button.active {
-  color: rgba(63, 94, 251, 1);
-  background-color: rgba(63, 94, 251, 0.1);
+  background-color: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.options-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .options-button svg {
-  transition: all 0.3s ease;
-}
-
-.options-button:hover svg {
   stroke: url(#dotsGradient);
 }
 
-/* Meniul care apare la click */
 .options-menu {
   position: absolute;
-  top: 0;
-  left: 100%; /* Poziționăm în dreapta butonului */
+  top: 100%;
+  right: 0;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 999999; /* Z-index foarte mare pentru a fi deasupra tuturor elementelor */
-  min-width: 150px;
-  padding: 8px;
-  margin-left: 10px; /* Spațiu între buton și meniu */
-  transform-origin: top left;
-  animation: menuAppear 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  min-width: 140px;
+  z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  animation: menuFadeIn 0.2s ease;
 }
 
-@keyframes menuAppear {
+@keyframes menuFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
 }
 
 .menu-item {
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
   width: 100%;
   background: none;
   border: none;
-  cursor: pointer;
+  padding: 10px 16px;
   text-align: left;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 0.85rem;
   transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .menu-item:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.menu-item.delete:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
 .menu-item svg {
-  margin-right: 10px;
-  color: rgba(0, 0, 0, 0.6);
+  width: 16px;
+  height: 16px;
 }
 
-.menu-item span {
-  font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.8);
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  animation: overlayFadeIn 0.3s ease;
 }
 
-.menu-item.delete {
-  color: #e74c3c;
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.menu-item.delete svg {
-  color: #e74c3c;
+/* Confirmation Modal */
+.confirmation-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  min-width: 400px;
+  max-width: 500px;
+  animation: modalSlideIn 0.3s ease;
 }
 
-.menu-item.delete span {
-  color: #e74c3c;
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
 }
 
-.menu-item:not(:last-child) {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-/* Stiluri pentru butoanele de acțiune în modul expandat */
-.history-item-actions {
+.modal-header {
   display: flex;
-  gap: 10px;
-  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 20px 0 20px;
+  margin-bottom: 16px;
 }
 
-.action-button {
-  background: none;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  color: #666;
+.modal-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
-.action-button:hover {
-  background-color: rgba(63, 94, 251, 0.1);
-  color: rgba(63, 94, 251, 1);
+.modal-icon.delete-icon {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+  padding: 0 20px;
+  margin-bottom: 24px;
+}
+
+.modal-content p {
+  margin: 0 0 8px 0;
+  color: rgba(0, 0, 0, 0.7);
+  line-height: 1.5;
+}
+
+.modal-subtitle {
+  color: rgba(0, 0, 0, 0.9) !important;
+  font-size: 0.95rem;
+}
+
+.modal-warning {
+  color: rgba(239, 68, 68, 0.8) !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  padding: 0 20px 20px 20px;
+  justify-content: flex-end;
+}
+
+.modal-button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-button.cancel {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-button.cancel:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-button.delete {
+  background-color: #ef4444;
+  color: white;
+}
+
+.modal-button.delete:hover {
+  background-color: #dc2626;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
-.action-button.delete:hover {
-  background-color: rgba(255, 59, 48, 0.1);
-  color: rgb(255, 59, 48);
+/* Toast Messages */
+.toast-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 10000;
+  min-width: 300px;
+  animation: toastSlideIn 0.3s ease;
+  border-left: 4px solid;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.toast-message.success {
+  border-left-color: #22c55e;
+  background-color: rgba(34, 197, 94, 0.05);
+}
+
+.toast-message.error {
+  border-left-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+.toast-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.toast-message.success .toast-icon {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.toast-message.error .toast-icon {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.toast-message span {
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .history-item {
+    padding: 10px 12px;
+  }
+
+  .history-item-title {
+    font-size: 0.85rem;
+  }
+
+  .platform-display {
+    font-size: 0.8rem;
+  }
+
+  .history-item-date {
+    font-size: 0.75rem;
+  }
+
+  .action-button {
+    padding: 4px;
+  }
+
+  .action-button svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Pentru mobile, ajustăm grid-ul să fie mai compact */
+  .history-item.expanded {
+    grid-template-columns: 1.5fr 0.8fr 1fr 100px;
+    gap: 12px;
+  }
+
+  .edit-input {
+    font-size: 0.85rem;
+    padding: 5px 8px;
+  }
+
+  .edit-buttons {
+    gap: 2px;
+  }
+
+  .save-button,
+  .cancel-button {
+    padding: 4px;
+  }
+
+  .confirmation-modal {
+    min-width: 320px;
+    margin: 0 20px;
+  }
+
+  .toast-message {
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+  }
+}
+
+/* Stil special pentru titluri foarte lungi - tooltip pe hover */
+.history-item-title[title] {
+  cursor: help;
+}
+
+.history-item-title:hover {
+  color: rgba(0, 0, 0, 1);
+}
+
+/* Asigură că toate elementele din grid respectă limitele */
+.history-item.expanded > * {
+  min-width: 0;
+  overflow: hidden;
 }

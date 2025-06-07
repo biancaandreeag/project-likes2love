@@ -1,6 +1,7 @@
 from database.database import posts_collection
 from shared_utils.logger_config  import log
 from kafka import KafkaConsumer
+from datetime import datetime, timezone
 import json
 import time
 import os
@@ -49,11 +50,38 @@ class KafkaConsumerClient:
             log.error(f"[ KAFKA CONSUMER - '{self.topic}' ][ Not initialized. ]")
 
     def consume(self, message):
-        log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
+        log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} ]")
+        #log.info(f"| Value: {message.value}")
         data=message.value
-        
-        if isinstance(data, dict):
+
+        if data.get("type") == "general_analysis":
+            uuid = message.key
+            result_data = {k: v for k, v in data.items() if k not in ("type", "post_link")}
+
+            analysis_entry = {
+                "type": "general_analysis",
+                "result": result_data
+            }
+
             try:
+                update_result = posts_collection.update_one(
+                    {"uuid": uuid},
+                    {"$push": {"analyses": analysis_entry}}
+                )
+
+                if update_result.matched_count == 0:
+                    log.warning(f"[ DATABASE ][ No post found with UUID: {uuid} ]")
+                else:
+                    log.info(f"[ DATABASE ][ Analysis added to post {uuid} ]")
+
+            except Exception as e:
+                log.error(f"[ DATABASE ][ Error updating post with UUID {uuid}: {str(e)} ]")
+
+        elif isinstance(data, dict):
+            try:
+                if "post_name" not in data:
+                    data["post_name"] = data["post_link"]
+                data["analysis_date"] = datetime.now(timezone.utc).isoformat()
                 result = posts_collection.insert_one(data)
                 log.info(f"[ DATABASE ][ Inserted post with ID: {result.inserted_id} ]")
                 

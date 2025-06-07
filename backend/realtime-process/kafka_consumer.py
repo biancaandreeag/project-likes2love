@@ -59,9 +59,8 @@ class KafkaConsumerClient:
         if message_type=="metadata":
             send_to_analysis(data, message.key)
             self.translator.set_post_id(message.key) 
-            
-            model=data.get("model")
-            self.preprocess_tool.configuration(message.key,model)
+
+            self.preprocess_tool.configuration(message.key)
             log.info(f"[KAFKA CONSUMER] [ New message received. Key: {message.key} | Value: {message.value} ]")
 
         if message_type=="comments_batch":
@@ -73,7 +72,7 @@ class KafkaConsumerClient:
                 "type":"comments_batch", 
                 "comments": preprocessed_comments
             }
-            log.info(f"[ KAKFA CONSUMER - '{self.topic}' ][ Recieved and translated batch with {len(comments_list)} comments. ]")
+            #log.info(f"[ KAKFA CONSUMER - '{self.topic}' ][ Recieved and translated batch with {len(comments_list)} comments. ]")
             send_to_analysis(batch, message.key)
 
         if message_type=="end":

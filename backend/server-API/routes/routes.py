@@ -7,6 +7,7 @@ from database.posts import Post
 from fastapi import Cookie
 from jose import jwt, JWTError
 from dotenv import load_dotenv
+from pydantic import BaseModel
 import os
 
 load_dotenv()
@@ -41,9 +42,23 @@ async def get_history(auth_token: str = Cookie(None)):
             "analyses": {"$exists": True, "$not": {"$size": 0}}
         }
         posts = posts_collection.find(query)
-        result = list_serial(posts)
+        posts_list = list_serial(posts)
 
-        log.info(f"[ SERVER API ][ Found {len(result)} posts with analyses for uuid: {uuid} ]")
+        result = []
+        for post in posts_list:
+            post_link = post.get("post_link")
+            post_name = post.get("post_name", None)
+            analysis_date = post.get("analysis_date")
+            platform = post.get("platform")
+
+            result.append({
+                "post_link": post_link,
+                "post_name": post_name,
+                "analysis_date": analysis_date,
+                "platform": platform
+            })
+
+        log.info(f"[ SERVER API ][ Found {len(result)} posts for uuid: {uuid} ]")
         return result
 
     except Exception as e:
@@ -51,107 +66,118 @@ async def get_history(auth_token: str = Cookie(None)):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @router.delete("/delete-post")
-async def delete_post(post_link: str, model: str,auth_token: str = Cookie(None)):
+async def delete_post(post_name: str, analysis_date: str, auth_token: str = Cookie(None)):
     uuid = get_uuid_from_token(auth_token)
-    try:
-        post = posts_collection.find_one({"uuid": uuid, "post_link": post_link})
-        
-        if not post:
-            log.warning(f"[ SERVER API ][ Post not found: {uuid}, {post_link} ]")
-            raise HTTPException(status_code=404, detail="Post not found")
-        
-        analyses = post.get("analyses", [])
-        
-        if analyses:
-            analysis_to_remove = next((a for a in analyses if a["model"] == model), None)
-            
-            if analysis_to_remove:
-                if len(analyses) == 1:
-                    posts_collection.delete_one({"_id": post["_id"]})
-                    log.info(f"[ SERVER API ][ Post and analysis deleted: {post['_id']} ]")
-                    return {"status": "success", "message": "Post and its analysis deleted"}
-                else:
-                    posts_collection.update_one(
-                        {"_id": post["_id"]},
-                        {"$pull": {"analyses": {"model": model}}}
-                    )
-                    log.info(f"[ SERVER API ][ Analysis {model} deleted from post: {post['_id']} ]")
-                    return {"status": "success", "message": "Analysis deleted from post"}
-            else:
-                log.warning(f"[ SERVER API ][ Analysis model not found: {model} ]")
-                raise HTTPException(status_code=404, detail="Analysis model not found")
-        else:
-            log.warning(f"[ SERVER API ][ No analyses found in post: {post['_id']} ]")
-            raise HTTPException(status_code=404, detail="No analyses found in post")
-    
-    except Exception as e:
-        log.error(f"[ SERVER API ][ Error deleting post or analysis: {str(e)} ]")
-        return {"status": "error", "message": str(e)}
 
-@router.post("/get-analysis")
-async def get_analysis(post_link: str, model: str,platform: str,auth_token: str = Cookie(None)):
-    uuid = get_uuid_from_token(auth_token)
     try:
-        log.info(f"[ SERVER API ][ Received analysis request: uuid={uuid}, link={post_link}, model={model}, platform={platform} ]")
-
-        post = posts_collection.find_one({"uuid": uuid, "post_link": post_link})
-        if not post:
-            log.info(f"[ SERVER API ][ Post with uuid={uuid} and link={post_link} not found in database ]")
-            payload = {
-            "type": "metadata",
+        query = {
             "uuid": uuid,
-            "post_link": post_link,
-            "platform": platform,
-            "model" : model
-            }
-            send_to_scraper(payload,uuid)
-            return {"status": "success", "message": "Payload sent to Scraping Service."}
-
-        for analysis in post.get("analyses", []):
-            if analysis["model"] == model:
-                log.info(f"[ SERVER API ][ Post {post_link} already analyzed with model: {model} ]")
-                return {"status": "exists", "message": "Post already analyzed with this model"}
-
-        log.info(f"[ SERVER API ][ Post found, returning data for model: {model} ]")
-
-        payload = {
-            "type": "metadata",
-            "uuid": post["uuid"],
-            "post_link": post["post_link"],
-            "model" : model
+            "post_name": post_name,
+            "analysis_date": analysis_date
         }
 
-        log.info(f"[ SERVER API ][ Returning Payload: {payload} ]")
-        send_to_preprocessor(payload, key=post["uuid"])
+        post = posts_collection.find_one(query)
 
-        comments_list = [c["comment"] for c in post.get("comments", []) if "comment" in c and c["comment"].strip()]
-        batch_size = 500
+        if not post:
+            log.warning(f"[ SERVER API ][ Post not found: {uuid}, {post_name}, {analysis_date} ]")
+            raise HTTPException(status_code=404, detail="Post not found")
 
-        for i in range(0, len(comments_list), batch_size):
-            batch = {
-                "type":"comments_batch",
-                "comments": comments_list[i:i + batch_size]
+        posts_collection.delete_one({"_id": post["_id"]})
+        log.info(f"[ SERVER API ][ Post deleted: {post['_id']} ]")
+
+        return {"status": "success", "message": "Post deleted"}
+
+    except Exception as e:
+        log.error(f"[ SERVER API ][ Error deleting post: {str(e)} ]")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.post("/get-analysis")
+async def get_analysis(post_link: str, platform: str, auth_token: str = Cookie(None)):
+    uuid = get_uuid_from_token(auth_token)
+    try:
+        log.info(f"[ SERVER API ][ Received analysis request: uuid={uuid}, link={post_link}, platform={platform} ]")
+
+        post = posts_collection.find_one({"uuid": uuid, "post_link": post_link})
+
+        if not post:
+            log.info(f"[ SERVER API ][ Post with uuid={uuid} and link={post_link} not found in database ]")
+
+            payload = {
+                "type": "metadata",
+                "uuid": uuid,
+                "post_link": post_link,
+                "platform": platform,
             }
-            log.info(f"[ SERVER API ][ Sending comment batch {i // batch_size + 1} with {len(batch['comments'])} comments ]")
-            send_to_preprocessor(batch, key=post["uuid"])
-
-        send_to_preprocessor({"type": "end", "uuid": uuid}, key=post["uuid"])
-        return {"status": "success", "message": "Payload sent to Preprocessing Service."}
+            send_to_scraper(payload, uuid)
+            return {"status": "success", "message": "Payload sent to Scraping Service."}
+        else:
+            log.info(f"[ SERVER API ][ Post {post_link} already analyzed. ]")
+            return {"status": "exists", "message": "Post already analyzed."}
 
     except Exception as e:
         log.error(f"Error in get-analysis: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
+
 @router.get("/analysis-status")
-async def analysis_status(post_link: str, model: str, auth_token: str = Cookie(None)):
+async def analysis_status(post_link: str, auth_token: str = Cookie(None)):
     uuid = get_uuid_from_token(auth_token)
     post = posts_collection.find_one({"uuid": uuid, "post_link": post_link})
     if not post:
         return {"status": "not_found"}
 
-    for analysis in post.get("analyses", []):
-        if analysis["model"] == model:
-            return {"status": "done"}
+    analysis = post.get("analyses", [])
+    if analysis:
+        return {
+            "status": "done",
+            "analysis": analysis
+        }
 
     return {"status": "processing"}
 
+class EditNameRequest(BaseModel):
+    old_post_name: str
+    analysis_date: str
+    new_post_name: str
+
+@router.put("/edit-name")
+async def edit_post_name(payload: EditNameRequest, auth_token: str = Cookie(None)):
+    uuid = get_uuid_from_token(auth_token)
+
+    try:
+        # Verifică dacă noul nume e deja folosit
+        existing_name = posts_collection.find_one({
+            "uuid": uuid,
+            "post_name": payload.new_post_name
+        })
+
+        if existing_name:
+            log.warning(f"[ SERVER API ][ Post name '{payload.new_post_name}' already exists for uuid {uuid} ]")
+            raise HTTPException(status_code=409, detail="Post name already exists")
+
+        # Caută postarea care trebuie modificată
+        query = {
+            "uuid": uuid,
+            "post_name": payload.old_post_name,
+            "analysis_date": payload.analysis_date
+        }
+
+        post = posts_collection.find_one(query)
+
+        if not post:
+            log.warning(f"[ SERVER API ][ Post not found for edit: {query} ]")
+            raise HTTPException(status_code=404, detail="Post not found")
+
+        # Actualizează post_name
+        posts_collection.update_one(
+            {"_id": post["_id"]},
+            {"$set": {"post_name": payload.new_post_name}}
+        )
+
+        log.info(f"[ SERVER API ][ Updated post_name for post {post['_id']} to '{payload.new_post_name}' ]")
+        return {"status": "success", "message": "Post name updated"}
+
+    except Exception as e:
+        log.error(f"[ SERVER API ][ Error editing post name: {str(e)} ]")
+        raise HTTPException(status_code=500, detail="Internal Server Error")

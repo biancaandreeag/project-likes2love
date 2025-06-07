@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, useParams } from "react-router-dom"
-import React, { useEffect } from "react"
+import { BrowserRouter as Router, Routes, Route, useParams, Navigate } from "react-router-dom"
+import { useEffect } from "react"
 import Home from "./pages/Home"
 import FindMore from "./pages/FindMore"
 import AIAnalysis from "./pages/AIAnalysis"
@@ -13,19 +13,32 @@ function AIAnalysisWithParams() {
 
 function App() {
   useEffect(() => {
-  fetch("http://localhost:8000/auth/init", {
-    method: "GET",
-    credentials: "include",
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error("Cookie init failed");
-      console.log("Cookie successful set.");
-    })
-    .catch((err) => {
-      console.error("Cookie error:", err);
-    });
-}, []);
+    const refreshOrInit = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/auth/refresh", {
+          method: "GET",
+          credentials: "include",
+        })
+        if (!res.ok) throw new Error("Token refresh failed")
+        console.log("Token refreshed")
+      } catch (err) {
+        console.warn("⚠Refresh failed, falling back to init...")
 
+        try {
+          const initRes = await fetch("http://localhost:8000/auth/init", {
+            method: "GET",
+            credentials: "include",
+          })
+          if (!initRes.ok) throw new Error("Init failed")
+          console.log("Token initialized")
+        } catch (initErr) {
+          console.error("Init error:", initErr)
+        }
+      }
+    }
+
+    refreshOrInit()
+  }, [])
 
   return (
     <Router>
@@ -34,7 +47,9 @@ function App() {
         <Route path="/find-more" element={<FindMore />} />
         <Route path="/ai-analysis" element={<AIAnalysis />} />
         <Route path="/about" element={<About />} />
+        <Route path="/analysis/:combinedSlug" element={<AIAnalysis />} />
         <Route path="/ai-analysis/:postUrl" element={<AIAnalysisWithParams />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   )
