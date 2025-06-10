@@ -225,7 +225,6 @@ class TiktokScraper:
             if not comment_blocks:
                 log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ No comments found on this post. ]")
 
-            batch = 0
             for block in comment_blocks:
                 try:
                     comment_text_elem = block.find_elements(By.CSS_SELECTOR, 'span[data-e2e="comment-level-1"] p')

@@ -54,12 +54,12 @@ class KafkaConsumerClient:
         #log.info(f"| Value: {message.value}")
         data=message.value
 
-        if data.get("type") == "general_analysis":
+        if data.get("type") in ("general_analysis", "general_hate"):
             uuid = message.key
             result_data = {k: v for k, v in data.items() if k not in ("type", "post_link")}
 
             analysis_entry = {
-                "type": "general_analysis",
+                "type": data.get("type"),
                 "result": result_data
             }
 
@@ -76,6 +76,7 @@ class KafkaConsumerClient:
 
             except Exception as e:
                 log.error(f"[ DATABASE ][ Error updating post with UUID {uuid}: {str(e)} ]")
+
 
         elif isinstance(data, dict):
             try:

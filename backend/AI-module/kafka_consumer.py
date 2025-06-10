@@ -1,6 +1,7 @@
 from kafka import KafkaConsumer
 from shared_utils.kafka_producer import send_to_server
 from GeneralSentiment.generalAnalysis import GeneralSentimentAnalyzer
+from GeneralSentiment.generalHate import GeneralHateAnalyzer
 import json
 import os
 import time
@@ -18,6 +19,7 @@ class KafkaConsumerClient:
         self.post_link = None
         self.platform = None
         self.sentiment_analyzer = GeneralSentimentAnalyzer()
+        self.hate_analyzer=GeneralHateAnalyzer()
 
     def init_consumer(self):
         retries = 5
@@ -74,11 +76,20 @@ class KafkaConsumerClient:
 
             if flat_comments:
                 general_results = self.sentiment_analyzer.analyze_batch(flat_comments)
+                hate_results=self.hate_analyzer.batch_summary(flat_comments)
+
                 general_results.update({
                     "type": "general_analysis",
                     "post_link": self.post_link,
                 })
                 log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ General Results: {general_results} ]")
 
+                hate_results.update({
+                    "type": "general_hate",
+                    "post_link": self.post_link,
+                })
+                log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ General Hate Results: {hate_results} ]")
+
                 send_to_server(general_results, message.key)
+                send_to_server(hate_results, message.key)
 

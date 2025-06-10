@@ -136,8 +136,8 @@ class PreprocessData:
             df_comments['text']=df_comments['text'].str.replace(r'@[A-Za-z0-9_.]+', 'USER', regex=True) #remove user mentions
             df_comments['text']=df_comments['text'].str.replace(r'#+(\S+)', r'\1', regex=True) #remove hashtags
             df_comments['text']=df_comments['text'].str.replace(r'\s+', ' ', regex=True) #remove spaces
-            df_comments['text']=df_comments['text'].str.replace(r'\d+', '', regex=True) #remove digits
             df_comments['text'] = df_comments['text'].apply(lambda x: self.convert_emojis_and_slang(x))
+            df_comments['text'] = df_comments['text'].apply(lambda x: re.sub(r'[^a-zA-Z0-9\s.,!?;:]', '', x))
 
         df_comments = df_comments[df_comments['text'].notna() & (df_comments['text'].str.strip() != "")]
         preprocessed_comments = df_comments['text'].tolist()

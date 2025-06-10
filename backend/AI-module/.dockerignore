@@ -3,4 +3,9 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-Notebook/
+*.pth
+*.pkl
+*.csv
+*.tsv
+.ipynb_checkpoints/*
+Notebooks/*

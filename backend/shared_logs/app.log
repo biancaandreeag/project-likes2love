@@ -1494,3 +1494,358 @@ Stacktrace:
 [ 2025-06-05 18:16:54,240 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Listening on topic 'to_server'... ]
 [ 2025-06-05 18:16:57,696 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
 [ 2025-06-05 18:18:41,014 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Listening on topic 'to_analysis'... ]
+[ 2025-06-08 23:12:36,653 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-08 23:12:36,674 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-08 23:12:37,474 ][ INFO ][ KAFKA CONSUMER 'to_preprocessing' ][ Connected on topic 'to_preprocessing'... ]
+[ 2025-06-08 23:12:37,489 ][ INFO ][ TRANSLATE ][ DEEPL_API_KEY loaded successfully! ]
+[ 2025-06-08 23:12:37,771 ][ INFO ][ SERVER API ][ Connecting to database and starting API...]
+[ 2025-06-08 23:12:37,806 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Connected on topic 'to_server'... ]
+[ 2025-06-08 23:12:37,807 ][ INFO ][ SERVER API ][ Kafka Consumer started successfully in background thread. ]
+[ 2025-06-08 23:12:37,828 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Listening on topic 'to_server'... ]
+[ 2025-06-08 23:12:37,920 ][ INFO ][ KAFKA CONSUMER ][ Listening on topic 'to_preprocessing'... ]
+[ 2025-06-08 23:12:42,794 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
+[ 2025-06-09 18:37:21,627 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Listening on topic 'to_analysis'... ]
+[ 2025-06-09 18:41:52,553 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-09 18:41:52,566 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-09 18:41:53,374 ][ INFO ][ SERVER API ][ Connecting to database and starting API...]
+[ 2025-06-09 18:41:53,390 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Connected on topic 'to_server'... ]
+[ 2025-06-09 18:41:53,390 ][ INFO ][ SERVER API ][ Kafka Consumer started successfully in background thread. ]
+[ 2025-06-09 18:41:53,408 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Listening on topic 'to_server'... ]
+[ 2025-06-09 18:41:54,373 ][ INFO ][ KAFKA CONSUMER 'to_preprocessing' ][ Connected on topic 'to_preprocessing'... ]
+[ 2025-06-09 18:41:54,389 ][ INFO ][ TRANSLATE ][ DEEPL_API_KEY loaded successfully! ]
+[ 2025-06-09 18:41:54,890 ][ INFO ][ KAFKA CONSUMER ][ Listening on topic 'to_preprocessing'... ]
+[ 2025-06-09 18:42:00,029 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
+[ 2025-06-09 18:49:23,575 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Listening on topic 'to_analysis'... ]
+[ 2025-06-09 19:49:05,537 ][ INFO ][ SERVER API ][ Fetching post history for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-09 19:49:05,627 ][ INFO ][ SERVER API ][ Found 0 posts for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-09 19:49:17,748 ][ INFO ][ SERVER API ][ Received analysis request: uuid=1e8f59e8-7d03-42a1-bca6-e7162058a2a8, link=https://www.tiktok.com/@mia.ceci/video/7508701662924524822, platform=tiktok ]
+[ 2025-06-09 19:49:17,753 ][ INFO ][ SERVER API ][ Post with uuid=1e8f59e8-7d03-42a1-bca6-e7162058a2a8 and link=https://www.tiktok.com/@mia.ceci/video/7508701662924524822 not found in database ]
+[ 2025-06-09 19:49:18,137 ][ INFO ][ KAFKA PRODUCER - to_scraper ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-09 19:49:18,205 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-09 19:49:18,624 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-09 19:49:18,635 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-09 19:49:18,927 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-09 19:49:18,949 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-09 19:49:18,964 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-09 19:49:28,821 ][ INFO ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Driver set up successfully. ]
+[ 2025-06-09 19:49:41,276 ][ INFO ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Loaded 34 cookies. ]
+[ 2025-06-09 19:49:41,896 ][ INFO ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Cookies loaded successfully! ]
+[ 2025-06-09 19:49:47,437 ][ INFO ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Cookies loaded. No need to accept again. ]
+[ 2025-06-09 19:50:18,769 ][ INFO ][ TIKTOK SCRAPER ][ Navigated to https://www.tiktok.com/@mia.ceci/video/7508701662924524822. ]
+[ 2025-06-09 19:50:25,250 ][ INFO ][ TIKTOK SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Comment button clicked successfully. ]
+[ 2025-06-09 19:50:28,314 ][ INFO ][ TIKTOK SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Comments count: 275. ]
+[ 2025-06-09 19:51:18,014 ][ INFO ][ TIKTOK SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ All visible comments scrolled through successfully ]
+[ 2025-06-09 19:51:55,965 ][ INFO ][ TIKTOK SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ All replies and 'View more', 'View replies', 'View reply' buttons clicked. ]
+[ 2025-06-09 19:52:07,252 ][ INFO ][ TIKTOK SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ No more 'View more' buttons found. ]
+[ 2025-06-09 19:52:07,252 ][ INFO ][ TIKTOK SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ All 'View more' buttons were expanded. ]
+[ 2025-06-09 19:52:18,724 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-09 19:52:18,726 ][ INFO ][ SCRAPING ][ Sending comment batch 252 comments ]
+[ 2025-06-09 19:52:18,736 ][ INFO ][KAFKA CONSUMER] [ New batch of comments received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-09 19:52:18,738 ][ INFO ][ TRANSLATE - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Starting translation process.. ]
+[ 2025-06-09 19:52:18,842 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-09 19:52:18,962 ][ INFO ][ KAFKA PRODUCER - to_server ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-09 19:52:18,964 ][ INFO ][ TIKTOK-MAIN ] [ Duration: 151.52 seconds ]
+[ 2025-06-09 19:52:18,965 ][ INFO ][ TIKTOK-MAIN ] [ Closing the application. ]
+[ 2025-06-09 19:52:18,983 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-09 19:52:19,078 ][ INFO ][ DATABASE ][ Inserted post with ID: 68473b7243db4eba645e1f6f ]
+[ 2025-06-09 19:52:19,199 ][ INFO ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Browser closed successfully. ]
+[ 2025-06-09 19:56:15,526 ][ INFO ][ TRANSLATE - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Batch size: 252. Translation completed in 236.79 seconds. ]
+[ 2025-06-09 19:56:15,673 ][ INFO ][ PREPROCESS - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Starting preprocess for transformer model... ]
+[ 2025-06-09 19:56:36,450 ][ INFO ][ PREPROCESS - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Preprocessing completed in 20.78 seconds. ]
+[ 2025-06-09 19:56:36,575 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-09 19:56:39,750 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-09 19:56:39,753 ][ INFO ][ KAKFA CONSUMER - 'to_preprocessing' ][ Recieved all batches with key:  1e8f59e8-7d03-42a1-bca6-e7162058a2a8. ]
+[ 2025-06-09 19:56:39,752 ][ INFO ][ KAFKA CONSUMER - 'to_analysis'  ][ Data with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 is ready for analysis. ]
+[ 2025-06-09 19:56:39,760 ][ INFO ][ AI MODULE - GENERAL ANALYSIS ][ Starting analysis... ]
+[ 2025-06-09 19:57:44,817 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ General Results: {'percent_counts': {'negative': 5.2, 'neutral': 34.9, 'positive': 59.9}, 'average_scores': {'negative': 10.3, 'neutral': 34.8, 'positive': 54.9}, 'type': 'general_analysis', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822'} ]
+[ 2025-06-09 19:57:44,818 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ General Hate Results: {'summary': {'OFFENSIVE': 5.158730158730158, 'NOT_OFFENSIVE': 94.84126984126983}, 'type': 'general_hate', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822'} ]
+[ 2025-06-09 19:57:44,988 ][ INFO ][ KAFKA PRODUCER - to_server ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-09 19:57:44,988 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-09 19:57:45,002 ][ INFO ][ DATABASE ][ Analysis added to post 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-09 19:57:45,109 ][ INFO ][ KAFKA PRODUCER - to_server ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-09 19:57:45,110 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-09 19:57:45,113 ][ INFO ][ DATABASE ][ Inserted post with ID: 68473cb943db4eba645e1f70 ]
+[ 2025-06-09 20:01:34,618 ][ INFO ][ SERVER API ][ Fetching post history for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-09 20:01:34,630 ][ INFO ][ SERVER API ][ Found 1 posts for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-10 01:30:06,784 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-10 01:30:06,796 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-10 01:30:07,228 ][ INFO ][ KAFKA CONSUMER 'to_preprocessing' ][ Connected on topic 'to_preprocessing'... ]
+[ 2025-06-10 01:30:07,237 ][ INFO ][ TRANSLATE ][ DEEPL_API_KEY loaded successfully! ]
+[ 2025-06-10 01:30:07,394 ][ INFO ][ KAFKA CONSUMER ][ Listening on topic 'to_preprocessing'... ]
+[ 2025-06-10 01:30:08,048 ][ INFO ][ SERVER API ][ Connecting to database and starting API...]
+[ 2025-06-10 01:30:08,053 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Connected on topic 'to_server'... ]
+[ 2025-06-10 01:30:08,053 ][ INFO ][ SERVER API ][ Kafka Consumer started successfully in background thread. ]
+[ 2025-06-10 01:30:08,063 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Listening on topic 'to_server'... ]
+[ 2025-06-10 01:30:11,122 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
+[ 2025-06-10 01:33:11,388 ][ INFO ][ SERVER API ][ Fetching post history for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-10 01:33:11,401 ][ INFO ][ SERVER API ][ Found 1 posts for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-10 01:33:48,665 ][ INFO ][ SERVER API ][ Fetching post history for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-10 01:33:48,683 ][ INFO ][ SERVER API ][ Found 0 posts for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-10 01:33:51,805 ][ INFO ][ SERVER API ][ Received analysis request: uuid=1e8f59e8-7d03-42a1-bca6-e7162058a2a8, link=https://www.tiktok.com/@mia.ceci/video/7508701662924524822, platform=tiktok ]
+[ 2025-06-10 01:33:51,807 ][ INFO ][ SERVER API ][ Post with uuid=1e8f59e8-7d03-42a1-bca6-e7162058a2a8 and link=https://www.tiktok.com/@mia.ceci/video/7508701662924524822 not found in database ]
+[ 2025-06-10 01:33:51,956 ][ INFO ][ KAFKA PRODUCER - to_scraper ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:33:51,959 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:33:52,082 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:33:52,084 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-10 01:33:52,310 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:33:52,312 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:35:01,292 ][ ERROR ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Error during Chrome setup: Message: session not created: cannot connect to chrome at 127.0.0.1:57401
+from chrome not reachable
+Stacktrace:
+#0 0x56300d3df71a <unknown>
+#1 0x56300ce81ef3 <unknown>
+#2 0x56300ce6d8d3 <unknown>
+#3 0x56300cec172c <unknown>
+#4 0x56300ceb7373 <unknown>
+#5 0x56300cf07d75 <unknown>
+#6 0x56300cf07296 <unknown>
+#7 0x56300cef9173 <unknown>
+#8 0x56300cec5d4b <unknown>
+#9 0x56300cec69b1 <unknown>
+#10 0x56300d3a48cb <unknown>
+#11 0x56300d3a87ca <unknown>
+#12 0x56300d38c622 <unknown>
+#13 0x56300d3a9354 <unknown>
+#14 0x56300d37145f <unknown>
+#15 0x56300d3cd4f8 <unknown>
+#16 0x56300d3cd6d6 <unknown>
+#17 0x56300d3de586 <unknown>
+#18 0x7faf09e1d1f5 <unknown>
+ ]
+[ 2025-06-10 01:35:05,431 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-10 01:35:05,444 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-10 01:35:08,696 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:35:08,823 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:35:08,825 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-10 01:35:08,949 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:35:08,951 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:36:21,414 ][ ERROR ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Error during Chrome setup: Message: session not created: cannot connect to chrome at 127.0.0.1:52169
+from chrome not reachable
+Stacktrace:
+#0 0x55f13bd3271a <unknown>
+#1 0x55f13b7d4ef3 <unknown>
+#2 0x55f13b7c08d3 <unknown>
+#3 0x55f13b81472c <unknown>
+#4 0x55f13b80a373 <unknown>
+#5 0x55f13b85ad75 <unknown>
+#6 0x55f13b85a296 <unknown>
+#7 0x55f13b84c173 <unknown>
+#8 0x55f13b818d4b <unknown>
+#9 0x55f13b8199b1 <unknown>
+#10 0x55f13bcf78cb <unknown>
+#11 0x55f13bcfb7ca <unknown>
+#12 0x55f13bcdf622 <unknown>
+#13 0x55f13bcfc354 <unknown>
+#14 0x55f13bcc445f <unknown>
+#15 0x55f13bd204f8 <unknown>
+#16 0x55f13bd206d6 <unknown>
+#17 0x55f13bd31586 <unknown>
+#18 0x7fc5cd00a1f5 <unknown>
+ ]
+[ 2025-06-10 01:36:25,443 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-10 01:36:25,455 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-10 01:36:26,552 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Listening on topic 'to_analysis'... ]
+[ 2025-06-10 01:36:28,682 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:36:28,804 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:36:28,806 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-10 01:36:28,920 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:36:28,921 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:36:29,781 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:36:29,782 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:36:29,782 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:41:01,566 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-10 01:41:01,584 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-10 01:41:03,863 ][ INFO ][ KAFKA CONSUMER 'to_preprocessing' ][ Connected on topic 'to_preprocessing'... ]
+[ 2025-06-10 01:41:03,908 ][ INFO ][ TRANSLATE ][ DEEPL_API_KEY loaded successfully! ]
+[ 2025-06-10 01:41:04,100 ][ INFO ][ SERVER API ][ Connecting to database and starting API...]
+[ 2025-06-10 01:41:04,113 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Connected on topic 'to_server'... ]
+[ 2025-06-10 01:41:04,113 ][ INFO ][ SERVER API ][ Kafka Consumer started successfully in background thread. ]
+[ 2025-06-10 01:41:04,124 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Listening on topic 'to_server'... ]
+[ 2025-06-10 01:41:04,212 ][ INFO ][ KAFKA CONSUMER ][ Listening on topic 'to_preprocessing'... ]
+[ 2025-06-10 01:41:09,670 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
+[ 2025-06-10 01:41:26,334 ][ INFO ][ SERVER API ][ Fetching post history for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-10 01:41:26,347 ][ INFO ][ SERVER API ][ Found 0 posts for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-10 01:41:40,286 ][ INFO ][ SERVER API ][ Received analysis request: uuid=1e8f59e8-7d03-42a1-bca6-e7162058a2a8, link=https://www.tiktok.com/@mia.ceci/video/7508701662924524822, platform=tiktok ]
+[ 2025-06-10 01:41:40,288 ][ INFO ][ SERVER API ][ Post with uuid=1e8f59e8-7d03-42a1-bca6-e7162058a2a8 and link=https://www.tiktok.com/@mia.ceci/video/7508701662924524822 not found in database ]
+[ 2025-06-10 01:41:40,423 ][ INFO ][ KAFKA PRODUCER - to_scraper ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:41:40,426 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:41:40,546 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:41:40,548 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-10 01:41:40,772 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:41:40,775 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:42:51,265 ][ ERROR ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Error during Chrome setup: Message: session not created: cannot connect to chrome at 127.0.0.1:33919
+from chrome not reachable
+Stacktrace:
+#0 0x559e28cb471a <unknown>
+#1 0x559e28756ef3 <unknown>
+#2 0x559e287428d3 <unknown>
+#3 0x559e2879672c <unknown>
+#4 0x559e2878c373 <unknown>
+#5 0x559e287dcd75 <unknown>
+#6 0x559e287dc296 <unknown>
+#7 0x559e287ce173 <unknown>
+#8 0x559e2879ad4b <unknown>
+#9 0x559e2879b9b1 <unknown>
+#10 0x559e28c798cb <unknown>
+#11 0x559e28c7d7ca <unknown>
+#12 0x559e28c61622 <unknown>
+#13 0x559e28c7e354 <unknown>
+#14 0x559e28c4645f <unknown>
+#15 0x559e28ca24f8 <unknown>
+#16 0x559e28ca26d6 <unknown>
+#17 0x559e28cb3586 <unknown>
+#18 0x7fdf018621f5 <unknown>
+ ]
+[ 2025-06-10 01:42:54,556 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-10 01:42:54,570 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-10 01:42:57,803 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 01:42:57,930 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:42:57,932 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-10 01:42:58,048 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 01:42:58,050 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:20:37,414 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-10 02:20:37,438 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-10 02:20:38,588 ][ INFO ][ KAFKA CONSUMER 'to_preprocessing' ][ Connected on topic 'to_preprocessing'... ]
+[ 2025-06-10 02:20:38,609 ][ INFO ][ TRANSLATE ][ DEEPL_API_KEY loaded successfully! ]
+[ 2025-06-10 02:20:39,188 ][ INFO ][ KAFKA CONSUMER ][ Listening on topic 'to_preprocessing'... ]
+[ 2025-06-10 02:20:40,114 ][ INFO ][ SERVER API ][ Connecting to database and starting API...]
+[ 2025-06-10 02:20:40,129 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Connected on topic 'to_server'... ]
+[ 2025-06-10 02:20:40,130 ][ INFO ][ SERVER API ][ Kafka Consumer started successfully in background thread. ]
+[ 2025-06-10 02:20:40,147 ][ INFO ][ KAFKA CONSUMER - 'to_server' ][ Listening on topic 'to_server'... ]
+[ 2025-06-10 02:20:42,549 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Connected on topic 'to_analysis'... ]
+[ 2025-06-10 02:20:58,193 ][ INFO ][ SERVER API ][ Fetching post history for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-10 02:20:58,205 ][ INFO ][ SERVER API ][ Found 0 posts for uuid: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ]
+[ 2025-06-10 02:21:01,138 ][ INFO ][ SERVER API ][ Received analysis request: uuid=1e8f59e8-7d03-42a1-bca6-e7162058a2a8, link=https://www.tiktok.com/@mia.ceci/video/7508701662924524822, platform=tiktok ]
+[ 2025-06-10 02:21:01,141 ][ INFO ][ SERVER API ][ Post with uuid=1e8f59e8-7d03-42a1-bca6-e7162058a2a8 and link=https://www.tiktok.com/@mia.ceci/video/7508701662924524822 not found in database ]
+[ 2025-06-10 02:21:01,291 ][ INFO ][ KAFKA PRODUCER - to_scraper ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:21:01,296 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:21:01,423 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:21:01,425 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-10 02:21:01,651 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:21:01,654 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:22:12,339 ][ ERROR ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Error during Chrome setup: Message: session not created: cannot connect to chrome at 127.0.0.1:36405
+from chrome not reachable
+Stacktrace:
+#0 0x55c65945971a <unknown>
+#1 0x55c658efbef3 <unknown>
+#2 0x55c658ee78d3 <unknown>
+#3 0x55c658f3b72c <unknown>
+#4 0x55c658f31373 <unknown>
+#5 0x55c658f81d75 <unknown>
+#6 0x55c658f81296 <unknown>
+#7 0x55c658f73173 <unknown>
+#8 0x55c658f3fd4b <unknown>
+#9 0x55c658f409b1 <unknown>
+#10 0x55c65941e8cb <unknown>
+#11 0x55c6594227ca <unknown>
+#12 0x55c659406622 <unknown>
+#13 0x55c659423354 <unknown>
+#14 0x55c6593eb45f <unknown>
+#15 0x55c6594474f8 <unknown>
+#16 0x55c6594476d6 <unknown>
+#17 0x55c659458586 <unknown>
+#18 0x7f214fe781f5 <unknown>
+ ]
+[ 2025-06-10 02:22:37,484 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-10 02:22:37,496 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-10 02:22:40,728 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:22:40,857 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:22:40,859 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-10 02:22:40,973 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:22:40,975 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:23:49,670 ][ ERROR ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Error during Chrome setup: Message: session not created: cannot connect to chrome at 127.0.0.1:49919
+from chrome not reachable
+Stacktrace:
+#0 0x55b5ac2d271a <unknown>
+#1 0x55b5abd74ef3 <unknown>
+#2 0x55b5abd608d3 <unknown>
+#3 0x55b5abdb472c <unknown>
+#4 0x55b5abdaa373 <unknown>
+#5 0x55b5abdfad75 <unknown>
+#6 0x55b5abdfa296 <unknown>
+#7 0x55b5abdec173 <unknown>
+#8 0x55b5abdb8d4b <unknown>
+#9 0x55b5abdb99b1 <unknown>
+#10 0x55b5ac2978cb <unknown>
+#11 0x55b5ac29b7ca <unknown>
+#12 0x55b5ac27f622 <unknown>
+#13 0x55b5ac29c354 <unknown>
+#14 0x55b5ac26445f <unknown>
+#15 0x55b5ac2c04f8 <unknown>
+#16 0x55b5ac2c06d6 <unknown>
+#17 0x55b5ac2d1586 <unknown>
+#18 0x7fc25a4961f5 <unknown>
+ ]
+[ 2025-06-10 02:23:56,785 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-10 02:23:56,798 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-10 02:24:00,020 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:24:00,133 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:24:00,135 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-10 02:24:00,902 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:24:00,904 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:25:11,669 ][ ERROR ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Error during Chrome setup: Message: session not created: cannot connect to chrome at 127.0.0.1:49411
+from chrome not reachable
+Stacktrace:
+#0 0x55605c61e71a <unknown>
+#1 0x55605c0c0ef3 <unknown>
+#2 0x55605c0ac8d3 <unknown>
+#3 0x55605c10072c <unknown>
+#4 0x55605c0f6373 <unknown>
+#5 0x55605c146d75 <unknown>
+#6 0x55605c146296 <unknown>
+#7 0x55605c138173 <unknown>
+#8 0x55605c104d4b <unknown>
+#9 0x55605c1059b1 <unknown>
+#10 0x55605c5e38cb <unknown>
+#11 0x55605c5e77ca <unknown>
+#12 0x55605c5cb622 <unknown>
+#13 0x55605c5e8354 <unknown>
+#14 0x55605c5b045f <unknown>
+#15 0x55605c60c4f8 <unknown>
+#16 0x55605c60c6d6 <unknown>
+#17 0x55605c61d586 <unknown>
+#18 0x7fa045a461f5 <unknown>
+ ]
+[ 2025-06-10 02:25:14,327 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-10 02:25:14,342 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-10 02:25:17,582 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:25:17,706 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:25:17,707 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-10 02:25:17,824 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:25:17,826 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:26:27,481 ][ ERROR ][ TIKTOK SESSION - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Error during Chrome setup: Message: session not created: cannot connect to chrome at 127.0.0.1:56677
+from chrome not reachable
+Stacktrace:
+#0 0x55e7de56571a <unknown>
+#1 0x55e7de007ef3 <unknown>
+#2 0x55e7ddff38d3 <unknown>
+#3 0x55e7de04772c <unknown>
+#4 0x55e7de03d373 <unknown>
+#5 0x55e7de08dd75 <unknown>
+#6 0x55e7de08d296 <unknown>
+#7 0x55e7de07f173 <unknown>
+#8 0x55e7de04bd4b <unknown>
+#9 0x55e7de04c9b1 <unknown>
+#10 0x55e7de52a8cb <unknown>
+#11 0x55e7de52e7ca <unknown>
+#12 0x55e7de512622 <unknown>
+#13 0x55e7de52f354 <unknown>
+#14 0x55e7de4f745f <unknown>
+#15 0x55e7de5534f8 <unknown>
+#16 0x55e7de5536d6 <unknown>
+#17 0x55e7de564586 <unknown>
+#18 0x7ffa9d3941f5 <unknown>
+ ]
+[ 2025-06-10 02:26:30,806 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Connected on topic 'to_scraper'... ]
+[ 2025-06-10 02:26:30,835 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ Listening on topic 'to_scraper'... ]
+[ 2025-06-10 02:26:33,668 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ Listening on topic 'to_analysis'... ]
+[ 2025-06-10 02:26:34,070 ][ INFO ][ KAFKA CONSUMER - 'to_scraper' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:26:34,183 ][ INFO ][ KAFKA PRODUCER - to_preprocessing ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:26:34,185 ][ INFO ][ SCRAPER - 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 ][ Beginning scraping on Tiktok social-media platform... ]
+[ 2025-06-10 02:26:34,298 ][ INFO ][ KAFKA PRODUCER - to_analysis ][ Message with key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 sent to topic. ]
+[ 2025-06-10 02:26:34,299 ][ INFO ][KAFKA CONSUMER] [ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:26:36,903 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:26:36,904 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:26:36,904 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:26:36,905 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
+[ 2025-06-10 02:26:36,905 ][ INFO ][ KAFKA CONSUMER - 'to_analysis' ][ New message received. Key: 1e8f59e8-7d03-42a1-bca6-e7162058a2a8 | Value: {'type': 'metadata', 'uuid': '1e8f59e8-7d03-42a1-bca6-e7162058a2a8', 'post_link': 'https://www.tiktok.com/@mia.ceci/video/7508701662924524822', 'platform': 'tiktok'} ]
