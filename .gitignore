@@ -6,4 +6,6 @@ __pycache__/
 *.pth
 *.csv
 *.tsv
+*.xlsx
+*.pkl
 .ipynb_checkpoints/*
