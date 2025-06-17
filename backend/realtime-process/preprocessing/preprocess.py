@@ -20,7 +20,7 @@ seqReplacePattern = r"\1\1"
 class PreprocessData:    
     def __init__(self):
         self.post_id = None
-        self.post_model = None
+        self.post_model = "transformers"
         self.lemmatizer = None
         self.stop_words = None
         self.spell = SpellChecker()
@@ -69,6 +69,16 @@ class PreprocessData:
             if emoji_char not in self.UNICODE_EMO:
                 text = text.replace(emoji_char, '')  
         return text
+
+    def normalize_text(self, text):
+        patterns = [
+            r'\bnigg(a|ah|as|az|ers)?\b',  # nigga, niggas, etc.
+            r'\bg[iy]ps(y|ie|ies|i)?\b',  # gipsy, gypsy, gypsies, etc.
+            r'\bcrows?\b',  # crow, crows
+        ]
+        for pattern in patterns:
+            text = re.sub(pattern, 'nigger', text, flags=re.IGNORECASE)
+        return text
     
     def convert_emojis_and_slang(self, text):
         text = self.convert_emoticons(text)
@@ -114,7 +124,6 @@ class PreprocessData:
         
         if self.post_model == "classifier":
             log.info(f"[ PREPROCESS - {self.post_id} ][ Starting preprocess for classifier model... ]")
-            start_time = time.time()
             df_comments['text']=df_comments['text'].str.replace(r"http\S+", "", regex=True) #remove URLs
             df_comments['text']=df_comments['text'].str.replace(r'@[A-Za-z0-9_.-]+', '', regex=True) #remove user mentions
             df_comments['text']=df_comments['text'].str.replace(r'#+(\S+)', r'\1', regex=True) #remove hashtags
@@ -131,13 +140,13 @@ class PreprocessData:
         
         if self.post_model == "transformers":
             log.info(f"[ PREPROCESS - {self.post_id} ][ Starting preprocess for transformer model... ]")
-            start_time = time.time()
             df_comments['text']=df_comments['text'].str.replace(r"http\S+", "URL", regex=True)
             df_comments['text']=df_comments['text'].str.replace(r'@[A-Za-z0-9_.]+', 'USER', regex=True) #remove user mentions
             df_comments['text']=df_comments['text'].str.replace(r'#+(\S+)', r'\1', regex=True) #remove hashtags
             df_comments['text']=df_comments['text'].str.replace(r'\s+', ' ', regex=True) #remove spaces
             df_comments['text'] = df_comments['text'].apply(lambda x: self.convert_emojis_and_slang(x))
             df_comments['text'] = df_comments['text'].apply(lambda x: re.sub(r'[^a-zA-Z0-9\s.,!?;:]', '', x))
+            df_comments['text'] = df_comments['text'].apply(self.normalize_text)
 
         df_comments = df_comments[df_comments['text'].notna() & (df_comments['text'].str.strip() != "")]
         preprocessed_comments = df_comments['text'].tolist()

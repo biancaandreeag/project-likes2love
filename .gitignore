@@ -1,12 +1,9 @@
 venv/
 __pycache__/
 *.pyc
-.env
-*.env
 .vscode/
 .idea/
 *.pth
-*.pkl
 *.csv
 *.tsv
 .ipynb_checkpoints/*

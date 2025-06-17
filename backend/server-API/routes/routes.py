@@ -91,50 +91,77 @@ async def delete_post(post_name: str, analysis_date: str, auth_token: str = Cook
         log.error(f"[ SERVER API ][ Error deleting post: {str(e)} ]")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-
 @router.post("/get-analysis")
-async def get_analysis(post_link: str, platform: str, auth_token: str = Cookie(None)):
+async def get_analysis(post_link: str, platform: str, analysis_date: str, auth_token: str = Cookie(None)):
+
     uuid = get_uuid_from_token(auth_token)
     try:
         log.info(f"[ SERVER API ][ Received analysis request: uuid={uuid}, link={post_link}, platform={platform} ]")
 
-        post = posts_collection.find_one({"uuid": uuid, "post_link": post_link})
+        payload = {
+            "type": "metadata",
+            "uuid": uuid,
+            "post_link": post_link,
+            "platform": platform,
+            "analysis_date": analysis_date
+        }
 
-        if not post:
-            log.info(f"[ SERVER API ][ Post with uuid={uuid} and link={post_link} not found in database ]")
-
-            payload = {
-                "type": "metadata",
-                "uuid": uuid,
-                "post_link": post_link,
-                "platform": platform,
-            }
-            send_to_scraper(payload, uuid)
-            return {"status": "success", "message": "Payload sent to Scraping Service."}
-        else:
-            log.info(f"[ SERVER API ][ Post {post_link} already analyzed. ]")
-            return {"status": "exists", "message": "Post already analyzed."}
-
+        send_to_scraper(payload, uuid)
+        return {"status": "success", "message": "Payload sent to Scraping Service."}
     except Exception as e:
         log.error(f"Error in get-analysis: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-
-@router.get("/analysis-status")
-async def analysis_status(post_link: str, auth_token: str = Cookie(None)):
+@router.get("/post-info")
+async def get_post_info(post_link: str, analysis_date: str = None, auth_token: str = Cookie(None)):
     uuid = get_uuid_from_token(auth_token)
-    post = posts_collection.find_one({"uuid": uuid, "post_link": post_link})
+
+    query = {"uuid": uuid, "post_link": post_link}
+    if analysis_date:
+        query["analysis_date"] = analysis_date
+
+    post = posts_collection.find_one(query)
+
     if not post:
         return {"status": "not_found"}
 
-    analysis = post.get("analyses", [])
-    if analysis:
-        return {
-            "status": "done",
-            "analysis": analysis
-        }
+    post_info = {
+        "post_likes": post.get("post_likes"),
+        "post_no_comments": post.get("post_no_comments"),
+        "post_saved": post.get("post_saved"),
+        "post_distribution": post.get("post_distribution"),
+    }
 
-    return {"status": "processing"}
+    analysis_list = post.get("analyses", [])
+
+    return {"status": "found","analysis": analysis_list, "post_info": post_info}
+
+
+@router.get("/analysis-status")
+async def analysis_status(post_link: str, analysis_date: str = None, auth_token: str = Cookie(None)):
+    uuid = get_uuid_from_token(auth_token)
+
+    query = {"uuid": uuid, "post_link": post_link}
+
+    if analysis_date:
+        query["analysis_date"] = analysis_date
+
+    post = posts_collection.find_one(query)
+
+    if not post:
+        return {"status": "not_found"}
+
+    analysis_list = post.get("analyses", [])
+
+    post_info = {
+        "post_likes": post.get("post_likes"),
+        "post_no_comments": post.get("post_no_comments"),
+        "post_saved": post.get("post_saved"),
+        "post_distribution": post.get("post_distribution"),
+    }
+
+    return {"status": "done", "analysis": analysis_list, "post_info":post_info } if analysis_list else {"status": "processing"}
+
 
 class EditNameRequest(BaseModel):
     old_post_name: str
@@ -146,7 +173,6 @@ async def edit_post_name(payload: EditNameRequest, auth_token: str = Cookie(None
     uuid = get_uuid_from_token(auth_token)
 
     try:
-        # Verifică dacă noul nume e deja folosit
         existing_name = posts_collection.find_one({
             "uuid": uuid,
             "post_name": payload.new_post_name
@@ -156,7 +182,6 @@ async def edit_post_name(payload: EditNameRequest, auth_token: str = Cookie(None
             log.warning(f"[ SERVER API ][ Post name '{payload.new_post_name}' already exists for uuid {uuid} ]")
             raise HTTPException(status_code=409, detail="Post name already exists")
 
-        # Caută postarea care trebuie modificată
         query = {
             "uuid": uuid,
             "post_name": payload.old_post_name,
@@ -169,7 +194,6 @@ async def edit_post_name(payload: EditNameRequest, auth_token: str = Cookie(None
             log.warning(f"[ SERVER API ][ Post not found for edit: {query} ]")
             raise HTTPException(status_code=404, detail="Post not found")
 
-        # Actualizează post_name
         posts_collection.update_one(
             {"_id": post["_id"]},
             {"$set": {"post_name": payload.new_post_name}}

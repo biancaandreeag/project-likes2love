@@ -9,16 +9,16 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   z-index: 5;
   animation: slideInFromBottom 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  /* Adăugăm proprietăți pentru a asigura culoarea exactă */
+  /* AdÄƒugÄƒm proprietÄƒÈ›i pentru a asigura culoarea exactÄƒ */
   opacity: 1;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  overflow-y: auto; /* Adăugăm scroll pe containerul principal */
-  scrollbar-width: none; /* Ascundem scrollbar-ul în Firefox */
-  -ms-overflow-style: none; /* Ascundem scrollbar-ul în IE și Edge */
+  overflow-y: auto; /* AdÄƒugÄƒm scroll pe containerul principal */
+  scrollbar-width: none; /* Ascundem scrollbar-ul Ã®n Firefox */
+  -ms-overflow-style: none; /* Ascundem scrollbar-ul Ã®n IE È™i Edge */
 }
 
-/* Ascundem scrollbar-ul în Chrome, Safari și Opera */
+/* Ascundem scrollbar-ul Ã®n Chrome, Safari È™i Opera */
 .dashboard-container::-webkit-scrollbar {
   display: none;
 }
@@ -34,7 +34,7 @@
   }
 }
 
-/* Stiluri pentru butonul de New Analysis - mutat în dreapta */
+/* Stiluri pentru butonul de New Analysis - mutat Ã®n dreapta */
 .new-analysis-button-container {
   position: absolute;
   top: 15px;
@@ -138,17 +138,17 @@
   background-color: #ddd;
 }
 
-/* Eliminăm scroll-ul de pe dashboard-content */
+/* EliminÄƒm scroll-ul de pe dashboard-content */
 .dashboard-content {
   flex: 1;
-  overflow-y: visible; /* Schimbăm din auto în visible */
+  overflow-y: visible; /* SchimbÄƒm din auto Ã®n visible */
   padding-right: 10px;
   padding-top: 0;
   width: 100%;
 }
 
 .dashboard-content .current-analysis {
-  margin-top: 0; /* Elimină marginea de sus pentru containerul din dashboard-content */
+  margin-top: 0; /* EliminÄƒ marginea de sus pentru containerul din dashboard-content */
 }
 
 /* Responsive styles */
@@ -222,7 +222,7 @@
   flex-direction: column;
   gap: 15px;
   position: relative;
-  margin-bottom: 15px; /* Adăugăm spațiu între containere */
+  margin-bottom: 15px; /* AdÄƒugÄƒm spaÈ›iu Ã®ntre containere */
 }
 
 .tiktok-post-info {
@@ -236,7 +236,7 @@
   align-items: center;
   gap: 8px;
   font-weight: 700;
-  font-size: 1.2rem; /* Mărit de la 0.95rem */
+  font-size: 1.2rem; /* MÄƒrit de la 0.95rem */
   margin-bottom: 5px;
 }
 
@@ -248,13 +248,13 @@
 }
 
 .tiktok-logo-icon {
-  width: 20px; /* Mărit de la 16px */
-  height: 20px; /* Mărit de la 16px */
+  width: 20px; /* MÄƒrit de la 16px */
+  height: 20px; /* MÄƒrit de la 16px */
 }
 
 .url-display {
   font-family: monospace;
-  background: linear-gradient(to right, rgba(63, 94, 251, 0.05), rgba(252, 70, 107, 0.05)); /* Același background ca la engagement metrics */
+  background: linear-gradient(to right, rgba(63, 94, 251, 0.05), rgba(252, 70, 107, 0.05)); /* AcelaÈ™i background ca la engagement metrics */
   padding: 12px;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -263,10 +263,10 @@
   margin: 0;
   border: 1px solid rgba(63, 94, 251, 0.1);
   position: relative;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); /* Același shadow ca la engagement metrics */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); /* AcelaÈ™i shadow ca la engagement metrics */
 }
 
-/* Engagement Metrics Container - Redesigned și mai mic */
+/* Engagement Metrics Container - Redesigned È™i mai mic */
 .engagement-metrics-container {
   position: relative;
   background: linear-gradient(to right, rgba(63, 94, 251, 0.05), rgba(252, 70, 107, 0.05));
@@ -301,7 +301,7 @@
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
 }
 
-/* Toate iconițele folosesc acum gradientul */
+/* Toate iconiÈ›ele folosesc acum gradientul */
 .gradient-icon {
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
@@ -376,7 +376,7 @@
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Adăugăm o tranziție mai smooth pentru schimbarea conținutului */
+/* AdÄƒugÄƒm o tranziÈ›ie mai smooth pentru schimbarea conÈ›inutului */
 .dashboard-container * {
   transition: opacity 0.3s ease;
 }
@@ -407,7 +407,7 @@
   }
 }
 
-/* Stiluri pentru barchart și average scores */
+/* Stiluri pentru barchart È™i average scores */
 .analysis-title {
   font-size: 1.2rem;
   font-weight: 600;
@@ -421,6 +421,7 @@
 .sentiment-analysis-container {
   display: flex;
   gap: 20px;
+  margin-top:30px;
   margin-bottom: 20px;
 }
 
@@ -445,7 +446,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
-/* Stiluri pentru titlul cu iconița (COMMENTS DISTRIBUTION) */
+/* Stiluri pentru titlul cu iconiÈ›a (COMMENTS DISTRIBUTION) */
 .section-title-container {
   display: flex;
   align-items: center;
@@ -592,7 +593,7 @@
   transition: all 0.3s ease;
 }
 
-/* Responsive pentru barchart și average scores */
+/* Responsive pentru barchart È™i average scores */
 @media (max-width: 768px) {
   .sentiment-analysis-container {
     flex-direction: column;

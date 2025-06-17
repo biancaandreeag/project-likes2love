@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import "../styles/AnalysisContainer.css"
 import "../styles/DashboardContainer.css"
@@ -26,8 +24,8 @@ function AnalysisContainer({ onShowDashboard, onMount }) {
     setShowGuide(!showGuide)
   }
 
-  const waitForAnalysis = async (post_link, model) => {
-    const params = new URLSearchParams({ post_link, model })
+  const waitForAnalysis = async (post_link, model, analysis_date) => {
+    const params = new URLSearchParams({ post_link, model, analysis_date })
 
     while (true) {
       try {
@@ -42,11 +40,14 @@ function AnalysisContainer({ onShowDashboard, onMount }) {
         const data = await response.json()
 
         if (data.status === "done") {
-          return data.analysis
+          return {
+            analysis: data.analysis,
+            postInfo: data.post_info || {}
+          }
         }
 
         if (data.status === "processing" || data.status === "not_found") {
-          await new Promise((resolve) => setTimeout(resolve, 10000))
+          await new Promise((resolve) => setTimeout(resolve, 60000))
           continue
         }
 
@@ -62,11 +63,14 @@ function AnalysisContainer({ onShowDashboard, onMount }) {
     if (!inputValue.trim()) return
     setIsLoading(true)
 
+    const analysisDate = new Date().toISOString()
+
     try {
       const params = new URLSearchParams({
         post_link: inputValue,
-        model: "default", // Using a default model since dropdown is removed
+        model: "default",
         platform: selectedPlatform,
+        analysis_date: analysisDate
       })
 
       const response = await fetch(`http://localhost:8000/get-analysis?${params.toString()}`, {
@@ -80,11 +84,19 @@ function AnalysisContainer({ onShowDashboard, onMount }) {
       }
 
       const data = await response.json()
-      console.log("Start analysis response:", data)
 
       if (data.status === "success" || data.status === "exists") {
-        const analysis = await waitForAnalysis(inputValue, "default")
-        onShowDashboard && onShowDashboard(inputValue, analysis)
+        const { analysis, postInfo } = await waitForAnalysis(inputValue, "default", analysisDate)
+
+        // ✅ Normalizează pentru DashboardContainer
+        const engagementInfo = {
+          likes: postInfo?.post_likes ?? "-",
+          comments: postInfo?.post_no_comments ?? "-",
+          saves: postInfo?.post_saved ?? "-",
+          shares: postInfo?.post_distribution ?? "-"
+        }
+
+        onShowDashboard && onShowDashboard(inputValue, analysis, engagementInfo)
       } else {
         alert("Something went wrong: " + data.message)
       }

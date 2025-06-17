@@ -1,7 +1,8 @@
 from kafka import KafkaConsumer
 from shared_utils.kafka_producer import send_to_server
-from GeneralSentiment.generalAnalysis import GeneralSentimentAnalyzer
-from GeneralSentiment.generalHate import GeneralHateAnalyzer
+from Models.generalAnalysis import GeneralSentimentAnalyzer
+from Models.generalHate import GeneralHateAnalyzer
+from Models.cyberbullyingAnalysis import CyberbullyingClassifier
 import json
 import os
 import time
@@ -18,8 +19,10 @@ class KafkaConsumerClient:
         self.all_data = []
         self.post_link = None
         self.platform = None
+        self.analysis_date = None
         self.sentiment_analyzer = GeneralSentimentAnalyzer()
         self.hate_analyzer=GeneralHateAnalyzer()
+        self.cyberbullying_analyzer = CyberbullyingClassifier()
 
     def init_consumer(self):
         retries = 5
@@ -62,6 +65,7 @@ class KafkaConsumerClient:
         if message_type == "metadata":
             self.post_link = data.get("post_link")
             self.platform = data.get("platform")
+            self.analysis_date=data.get("analysis_date")
             log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
 
         if message_type == "comments_batch":
@@ -75,21 +79,41 @@ class KafkaConsumerClient:
             self.all_data = []
 
             if flat_comments:
-                general_results = self.sentiment_analyzer.analyze_batch(flat_comments)
-                hate_results=self.hate_analyzer.batch_summary(flat_comments)
+                results = self.sentiment_analyzer.analyze_batch(flat_comments)
+
+                general_results = results["summary"]
+                labeled_comments = results["comments"]
+                log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ Results: {labeled_comments} ]")
+
+                hate_results, offensive_comments=self.hate_analyzer.batch_summary(flat_comments)
 
                 general_results.update({
                     "type": "general_analysis",
                     "post_link": self.post_link,
+                    "analysis_date": self.analysis_date
                 })
                 log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ General Results: {general_results} ]")
 
                 hate_results.update({
                     "type": "general_hate",
                     "post_link": self.post_link,
+                    "analysis_date": self.analysis_date
                 })
                 log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ General Hate Results: {hate_results} ]")
+                #log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ General Hate Comments: {offensive_comments} ]")
+
+                results = self.cyberbullying_analyzer.classify_comments(offensive_comments)
+                cyberbullying_results=self.cyberbullying_analyzer.summarize_results(results)
+
+                cyberbullying_results.update({
+                    "type": "cyberbullying",
+                    "post_link": self.post_link,
+                    "analysis_date": self.analysis_date
+                })
+
+                log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ Cyberbullying Results: {cyberbullying_results} ]")
 
                 send_to_server(general_results, message.key)
                 send_to_server(hate_results, message.key)
+                send_to_server(cyberbullying_results, message.key)
 

@@ -159,6 +159,17 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   margin: 30px 0;
 }
+.model-link {
+  color: #F6F6F6F6;
+  text-decoration: none;
+ }
+
+.model-link:hover {
+  text-decoration: underline; /* optional: underline on hover */
+  cursor: pointer;
+    color: #66666666;
+}
+
 
 .diagram-header {
   background: linear-gradient(135deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
@@ -295,8 +306,9 @@
   color: #555;
 }
 
-/* CONTACT SECTION - NEW */
+
 .contact-section {
+  margin-top:80px;
   margin-bottom: 50px;
 }
 

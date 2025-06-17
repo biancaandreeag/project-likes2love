@@ -6,10 +6,6 @@ import AIAnalysis from "./pages/AIAnalysis"
 import About from "./pages/About"
 import "./App.css"
 
-function AIAnalysisWithParams() {
-  const { postUrl } = useParams()
-  return <AIAnalysis initialPostUrl={postUrl} />
-}
 
 function App() {
   useEffect(() => {
@@ -48,7 +44,6 @@ function App() {
         <Route path="/ai-analysis" element={<AIAnalysis />} />
         <Route path="/about" element={<About />} />
         <Route path="/analysis/:combinedSlug" element={<AIAnalysis />} />
-        <Route path="/ai-analysis/:postUrl" element={<AIAnalysisWithParams />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

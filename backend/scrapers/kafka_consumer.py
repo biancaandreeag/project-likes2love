@@ -58,7 +58,8 @@ class KafkaConsumerClient:
             log.info(f"[ KAFKA CONSUMER - '{self.topic}' ][ New message received. Key: {message.key} | Value: {message.value} ]")
             post_link=data.get("post_link")
             platform = data.get("platform")
+            analysis_date = data.get("analysis_date")
             send_to_preprocessor(message.value, message.key)
-            go_to_scraper(post_link,uuid,platform)
+            go_to_scraper(post_link,uuid,platform,analysis_date)
             
         

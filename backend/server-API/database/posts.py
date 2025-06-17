@@ -16,10 +16,10 @@ class Post(BaseModel):
     post_link: str
     platform: Optional[str] = None
     post_name: Optional[str] = None
-    post_no_comments: Optional[int] = None
-    post_likes: Optional[int] = None
-    post_saved: Optional[int] = None
-    post_distribution: Optional[int] = None
+    post_no_comments: Optional[str] = None
+    post_likes: Optional[str] = None
+    post_saved: Optional[str] = None
+    post_distribution: Optional[str] = None
     post_comments: Optional[List[Comment]] = None
     post_date: Optional[datetime.datetime] = None
     analysis_date: Optional[datetime.datetime] = None

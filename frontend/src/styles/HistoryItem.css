@@ -234,7 +234,7 @@
   position: relative;
   margin-left: auto;
   flex-shrink: 0; /* Opțiunile nu se micșorează */
-  margin-right: -4px; /* Mută butonul mai în dreapta */
+  margin-right: -30px; /* Mută butonul mai în dreapta */
 }
 
 .options-button {

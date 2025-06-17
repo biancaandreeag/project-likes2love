@@ -1,41 +1,60 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import "../styles/DashboardContainer.css"
 import "../styles/pdfExport.css"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Cell, LabelList } from "recharts"
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+  Cell,
+  LabelList,
+  PieChart,
+  Pie,
+  Tooltip,
+} from "recharts"
 import { exportDashboardToPDF, exportAnalysisDataToPDF } from "../utils/pdfExport"
 
-const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
+const DashboardContainer = ({ analysis, postLink, onBackToAnalysis, postInfo }) => {
   const [showTooltip, setShowTooltip] = useState(false)
+  const [showExportTooltip, setShowExportTooltip] = useState(false)
   const [generalAnalysis, setGeneralAnalysis] = useState(null)
+  const [hateAnalysis, setHateAnalysis] = useState(null)
+  const [cyberbullyingAnalysis, setCyberbullyingAnalysis] = useState(null)
   const [showExportMenu, setShowExportMenu] = useState(false)
 
-  // Adaugă debugging pentru a vedea ce primește componenta
-  console.log("🔍 DashboardContainer props:", { analysis, postLink })
-  console.log("📊 Analysis data structure:", analysis)
-
-  // Extrage analiza de tip general_analysis din array
   useEffect(() => {
     if (analysis) {
-      // Dacă analysis este array, caută general_analysis
       if (Array.isArray(analysis)) {
-        const foundAnalysis = analysis.find((item) => item.type === "general_analysis")
-        console.log("🔍 Found general_analysis in array:", foundAnalysis)
-        setGeneralAnalysis(foundAnalysis)
-      }
-      // Dacă analysis este direct obiectul cu type general_analysis
-      else if (analysis.type === "general_analysis") {
-        console.log("🔍 Analysis is already general_analysis object")
+        const foundGeneralAnalysis = analysis.find((item) => item.type === "general_analysis")
+        const foundHateAnalysis = analysis.find((item) => item.type === "general_hate")
+        const foundCyberbullyingAnalysis = analysis.find((item) => item.type === "cyberbullying")
+
+        setGeneralAnalysis(foundGeneralAnalysis)
+        setHateAnalysis(foundHateAnalysis)
+        setCyberbullyingAnalysis(foundCyberbullyingAnalysis)
+      } else if (analysis.type === "general_analysis") {
         setGeneralAnalysis(analysis)
-      }
-      // Altfel, nu avem analiza potrivită
-      else {
-        console.log("❌ No general_analysis found in data")
+      } else if (analysis.type === "cyberbullying") {
+        setCyberbullyingAnalysis(analysis)
+      } else {
         setGeneralAnalysis(null)
+        setCyberbullyingAnalysis(null)
       }
     }
   }, [analysis])
+
+  useEffect(() => {
+    console.log("[DEBUG] postInfo received in DashboardContainer:", postInfo)
+  }, [postInfo])
+
+  const engagementMetrics = {
+    likes: postInfo?.likes ?? "-",
+    comments: postInfo?.comments ?? "-",
+    shares: postInfo?.shares ?? "-",
+    saves: postInfo?.saves ?? "-",
+  }
 
   const handleNewAnalysis = () => {
     if (onBackToAnalysis) {
@@ -46,7 +65,6 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
   const handleExportPDF = async (type = "full") => {
     setShowExportMenu(false)
 
-    // Extrage informații pentru export
     const postTitle = extractTikTokInfo(postLink).username
       ? `@${extractTikTokInfo(postLink).username}'s TikTok Post`
       : "Social Media Analysis"
@@ -62,7 +80,6 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
 
     try {
       if (type === "full") {
-        // Export complet cu screenshot
         await exportDashboardToPDF({
           filename,
           postTitle,
@@ -71,7 +88,6 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
           analysisData: generalAnalysis,
         })
       } else if (type === "data") {
-        // Export doar cu datele
         await exportAnalysisDataToPDF(generalAnalysis, {
           title: postTitle,
           platform,
@@ -83,15 +99,6 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
     }
   }
 
-  // Placeholder data pentru engagement metrics - momentan toate sunt "-"
-  const engagementMetrics = {
-    likes: "-",
-    comments: "-",
-    shares: "-",
-    saves: "-",
-  }
-
-  // Extrage username și video ID din URL-ul TikTok
   const extractTikTokInfo = (url) => {
     try {
       if (url && url.includes("tiktok.com")) {
@@ -119,17 +126,18 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
     generalAnalysis.result.percent_counts &&
     generalAnalysis.result.average_scores
 
-  console.log("✅ hasAnalysisData:", hasAnalysisData)
+  const hasHateAnalysisData =
+    hateAnalysis && hateAnalysis.result && hateAnalysis.result.counts && hateAnalysis.result.summary
 
-  if (hasAnalysisData) {
-    console.log("📈 Percent counts:", generalAnalysis.result.percent_counts)
-    console.log("📊 Average scores:", generalAnalysis.result.average_scores)
-  }
+  const hasCyberbullyingData =
+    cyberbullyingAnalysis &&
+    cyberbullyingAnalysis.result &&
+    cyberbullyingAnalysis.result.average_probabilities &&
+    cyberbullyingAnalysis.result.label_counts
 
   // Pregătim datele pentru barchart - REORDONAT: Positive, Neutral, Negative
   const prepareChartData = () => {
     if (!hasAnalysisData) {
-      console.log("❌ No analysis data available for chart")
       return []
     }
 
@@ -140,7 +148,7 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
         name: "Positive",
         value: percent_counts.positive || 0,
         averageScore: average_scores.positive || 0,
-        color: "#59CD90",
+        color: "#59CD90", // Înapoi la verde pentru positive
         emoji: "😊",
         icon: (
           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -183,19 +191,241 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
       },
     ]
 
-    console.log("📊 Chart data prepared:", chartData)
     return chartData
   }
 
+  // Pregătim datele pentru cyberbullying chart
+  const prepareCyberbullyingData = () => {
+    if (!hasCyberbullyingData) {
+      return []
+    }
+
+    const { average_probabilities, label_counts } = cyberbullyingAnalysis.result
+
+    // Convertim probabilitățile în procente și le ordonăm descrescător
+    const cyberbullyingData = [
+      {
+        name: "Other",
+        value: average_probabilities.other_cyberbullying * 100 || 0,
+        count: label_counts.other_cyberbullying || 0,
+        color: "#FF6B6B",
+        icon: "🌐",
+      },
+      {
+        name: "Gender",
+        value: average_probabilities.gender * 100 || 0,
+        count: label_counts.gender || 0,
+        color: "#9B59B6",
+        icon: "👥",
+      },
+      {
+        name: "Age",
+        value: average_probabilities.age * 100 || 0,
+        count: label_counts.age || 0,
+        color: "#3498DB",
+        icon: "🎂",
+      },
+      {
+        name: "Religion",
+        value: average_probabilities.religion * 100 || 0,
+        count: label_counts.religion || 0,
+        color: "#E67E22",
+        icon: "⛪️️",
+      },
+      {
+        name: "Ethnicity",
+        value: average_probabilities.ethnicity * 100 || 0,
+        count: label_counts.ethnicity || 0,
+        color: "#1ABC9C",
+        icon: "‍🌍‍",
+      },
+    ].sort((a, b) => b.value - a.value) // Sortăm descrescător după valoare
+
+    // Adăugăm valoarea maximă pentru fiecare element
+    const maxCount = Math.max(...cyberbullyingData.map((d) => d.count)) || 10
+
+    return cyberbullyingData.map((item) => ({
+      ...item,
+      maxCount: maxCount,
+    }))
+  }
+
+  // Pregătim datele pentru pie chart (offensive comments)
+  const preparePieData = () => {
+    if (!hasHateAnalysisData) {
+      return []
+    }
+
+    const { summary, counts } = hateAnalysis.result
+
+    const { OFFENSIVE: offensivePct, NOT_OFFENSIVE: notOffensivePct } = summary
+    const { OFFENSIVE: offensiveCount, NOT_OFFENSIVE: notOffensiveCount } = counts
+
+    const total = offensiveCount + notOffensiveCount
+    if (total === 0) return []
+
+    return [
+      {
+        name: "Safe Comments",
+        value: notOffensivePct,
+        value2: notOffensiveCount,
+        percentage: notOffensivePct,
+        color: "#5B9BD5",
+        icon: "🛡️",
+      },
+      {
+        name: "Offensive Comments",
+        value: offensivePct,
+        value2: offensiveCount,
+        percentage: offensivePct,
+        color: "#EF4444",
+        icon: "⚠️",
+      },
+    ]
+  }
+
   const chartData = prepareChartData()
+  const cyberbullyingData = prepareCyberbullyingData()
+  const pieData = preparePieData()
+
+  // Custom Tooltip pentru pie chart
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload
+      // Folosim culori mai plăcute
+      const colors = ["#5B9BD5", "#FF6B6B"]
+      const color = colors[pieData.findIndex((item) => item.name === data.name) % colors.length]
+
+      return (
+        <div
+          style={{
+            background: "white",
+            padding: "12px 16px",
+            borderRadius: "10px",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
+            border: `2px solid ${color}`,
+            fontSize: "14px",
+            minWidth: "140px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              justifyContent: "center",
+            }}
+          >
+            <span style={{ fontSize: "24px" }}>{data.icon}</span>
+            <span style={{ fontWeight: "bold", color: color, fontSize: "16px" }}>{data.name}</span>
+          </div>
+        </div>
+      )
+    }
+    return null
+  }
+
+  // Custom Tooltip pentru cyberbullying chart
+  const CyberbullyingTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload
+      return (
+        <div
+          style={{
+            background: "white",
+            padding: "12px 16px",
+            borderRadius: "10px",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
+            border: `2px solid ${data.color}`,
+            fontSize: "14px",
+            minWidth: "160px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              marginBottom: "8px",
+            }}
+          >
+            <span style={{ fontSize: "20px" }}>{data.icon}</span>
+            <span style={{ fontWeight: "bold", color: data.color, fontSize: "14px" }}>{data.name}</span>
+          </div>
+          <div style={{ fontSize: "12px", color: "rgba(0,0,0,0.7)" }}>
+            <div>
+              Comments: <strong>{data.count}</strong>
+            </div>
+            <div>
+              Probability: <strong>{data.value.toFixed(1)}%</strong>
+            </div>
+          </div>
+        </div>
+      )
+    }
+    return null
+  }
+
+  // Custom Label pentru pie chart - fără cerc, doar text alb
+  const CustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+    const RADIAN = Math.PI / 180
+    const radius = outerRadius + 30
+    const x = cx + radius * Math.cos(-midAngle * RADIAN)
+    const y = cy + radius * Math.sin(-midAngle * RADIAN)
+
+    // Linia de la pie la label
+    const lineRadius = outerRadius + 10
+    const lineX = cx + lineRadius * Math.cos(-midAngle * RADIAN)
+    const lineY = cy + lineRadius * Math.sin(-midAngle * RADIAN)
+
+    return (
+      <g>
+        {/* Linia de conectare */}
+        <line
+          x1={cx + outerRadius * Math.cos(-midAngle * RADIAN)}
+          y1={cy + outerRadius * Math.sin(-midAngle * RADIAN)}
+          x2={lineX}
+          y2={lineY}
+          stroke="rgba(0,0,0,0.3)"
+          strokeWidth="1"
+        />
+        <line
+          x1={lineX}
+          y1={lineY}
+          x2={x > cx ? lineX + 10 : lineX - 10}
+          y2={lineY}
+          stroke="rgba(0,0,0,0.3)"
+          strokeWidth="1"
+        />
+
+        {/* Textul cu procentul */}
+        <text
+          x={x > cx ? x + 5 : x - 5}
+          y={y}
+          fill="rgba(0,0,0,0.8)"
+          textAnchor={x > cx ? "start" : "end"}
+          dominantBaseline="central"
+          fontSize="16"
+          fontWeight="600"
+        >
+          {`${(percent * 100).toFixed(0)}%`}
+        </text>
+      </g>
+    )
+  }
 
   return (
     <div className="dashboard-container">
-      {/* Butonul New Analysis în dreapta sus */}
-      <div className="new-analysis-button-container">
+      {/* Butoanele Export PDF și New Analysis pe aceeași linie */}
+      <div className="new-analysis-button-container" style={{ display: "flex", alignItems: "center" }}>
         {/* Buton Export PDF */}
         <div style={{ position: "relative", marginRight: "10px" }}>
-          <button className="new-analysis-button" onClick={() => setShowExportMenu(!showExportMenu)} title="Export PDF">
+          <button
+            className="new-analysis-button"
+            onClick={() => setShowExportMenu(!showExportMenu)}
+            onMouseEnter={() => setShowExportTooltip(true)}
+            onMouseLeave={() => setShowExportTooltip(false)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -211,9 +441,10 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
+            {showExportTooltip && <span className="tooltip">Export PDF</span>}
           </button>
 
-          {/* Export Menu */}
+          {/* Export Menu cu text negru-gri */}
           {showExportMenu && (
             <div
               style={{
@@ -242,6 +473,14 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
                   display: "flex",
                   alignItems: "center",
                   gap: "10px",
+                  color: "rgba(0, 0, 0, 0.8)",
+                  transition: "background-color 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "rgba(0, 0, 0, 0.05)"
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "transparent"
                 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -264,6 +503,14 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
                   display: "flex",
                   alignItems: "center",
                   gap: "10px",
+                  color: "rgba(0, 0, 0, 0.8)",
+                  transition: "background-color 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "rgba(0, 0, 0, 0.05)"
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "transparent"
                 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -279,6 +526,7 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
           )}
         </div>
 
+        {/* Buton New Analysis */}
         <button
           className="new-analysis-button"
           onMouseEnter={() => setShowTooltip(true)}
@@ -302,7 +550,6 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
           {showTooltip && <span className="tooltip">New analysis</span>}
         </button>
       </div>
-
       {/* Dashboard header */}
       <div className="dashboard-header">
         <div className="dashboard-title-wrapper">
@@ -497,6 +744,270 @@ const DashboardContainer = ({ analysis, postLink, onBackToAnalysis }) => {
                 ))}
               </div>
             </div>
+
+            {/* Pie Chart pentru comentariile offensive */}
+            {hasHateAnalysisData && pieData.length > 0 && (
+              <div className="chart-container" style={{ marginTop: "30px", padding: "25px" }}>
+                <div className="section-title-container">
+                  <div className="section-title-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="url(#shield-gradient)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <defs>
+                        <linearGradient id="shield-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="rgba(63, 94, 251, 1)" />
+                          <stop offset="100%" stopColor="rgba(252, 70, 107, 1)" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                  </div>
+                  <h4 className="section-title">CONTENT SAFETY</h4>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "40px", marginTop: "20px" }}>
+                  {/* Pie Chart - mai mare */}
+                  <div style={{ flex: 1, maxWidth: "50%" }}>
+                    <ResponsiveContainer width="100%" height={320}>
+                      <PieChart>
+                        <Pie
+                          data={pieData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={CustomLabel}
+                          outerRadius={100}
+                          innerRadius={50}
+                          fill="#8884d8"
+                          dataKey="value"
+                          strokeWidth={3}
+                          stroke="#fff"
+                          paddingAngle={2}
+                        >
+                          {pieData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip content={<CustomTooltip />} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  {/* Legend cu statistici - redesigned */}
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "16px" }}>
+                    {pieData.map((item, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "16px",
+                          padding: "16px",
+                          borderRadius: "12px",
+                          background: index === 0 ? "rgba(91, 155, 213, 0.08)" : "rgba(255, 107, 107, 0.08)",
+                          border: `1px solid ${item.color}30`,
+                          boxShadow: "0 2px 10px rgba(0,0,0,0.03)",
+                          transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = "translateY(-2px)"
+                          e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)"
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = "translateY(0)"
+                          e.currentTarget.style.boxShadow = "0 2px 10px rgba(0,0,0,0.03)"
+                        }}
+                      >
+                        {/* Emoji mare fără cerc colorat */}
+                        <span style={{ fontSize: "28px", marginLeft: "8px" }}>{item.icon}</span>
+                        <div style={{ flex: 1 }}>
+                          <div
+                            style={{
+                              fontWeight: "600",
+                              color: item.color,
+                              fontSize: "16px",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            {item.name}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "14px",
+                              color: "rgba(0,0,0,0.7)",
+                            }}
+                          >
+                            <strong>{item.value2}</strong> comments ({item.percentage}%)
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Cyberbullying Analysis Chart */}
+            {hasCyberbullyingData && cyberbullyingData.length > 0 && (
+
+                <div className="sentiment-analysis-container">
+                  <div className="chart-container">
+                    <div className="section-title-container">
+                      <div className="section-title-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="url(#cyberbullying-gradient)"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <defs>
+                            <linearGradient id="cyberbullying-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="rgba(63, 94, 251, 1)" />
+                              <stop offset="100%" stopColor="rgba(252, 70, 107, 1)" />
+                            </linearGradient>
+                          </defs>
+                          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
+                      </div>
+                      <h4 className="section-title">CYBERBULLYING DISTRIBUTION</h4>
+                    </div>
+                    <ResponsiveContainer width="100%" height={400}>
+                      <BarChart
+                        data={cyberbullyingData}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 80 }}
+                        barCategoryGap={15}
+                      >
+                        <XAxis
+                          dataKey="name"
+                          angle={-45}
+                          textAnchor="end"
+                          height={80}
+                          fontSize={12}
+                          axisLine={false}
+                          tickLine={false}
+                        />
+                        <YAxis hide />
+                        <Tooltip content={<CyberbullyingTooltip />} />
+
+                        {/* Single Bar with custom fill that creates the container + fill effect */}
+                        <Bar dataKey="maxCount" radius={[6, 6, 0, 0]}>
+                          {cyberbullyingData.map((entry, index) => {
+                            const maxValue = Math.max(...cyberbullyingData.map((d) => d.count)) || 10
+                            const fillPercentage = (entry.count / maxValue) * 100
+
+                            return <Cell key={`cell-${index}`} fill={`url(#containerGradient-${index})`} />
+                          })}
+                          <LabelList
+                            dataKey="count"
+                            position="top"
+                            formatter={(value) => value}
+                            fontSize={16}
+                            fontWeight="bold"
+                            fill="rgba(0,0,0,0.8)"
+                            offset={8}
+                          />
+                        </Bar>
+
+                        <defs>
+                          {cyberbullyingData.map((entry, index) => {
+                            const maxValue = Math.max(...cyberbullyingData.map((d) => d.count)) || 10
+                            const fillPercentage = (entry.count / maxValue) * 100
+
+                            return (
+                              <linearGradient
+                                key={`containerGradient-${index}`}
+                                id={`containerGradient-${index}`}
+                                x1="0"
+                                y1="1"
+                                x2="0"
+                                y2="0"
+                              >
+                                {/* Colored fill from bottom */}
+                                <stop offset="0%" stopColor={entry.color} stopOpacity="1" />
+                                <stop offset={`${fillPercentage}%`} stopColor={entry.color} stopOpacity="1" />
+                                {/* Gray container from fill point to top */}
+                                <stop
+                                  offset={`${fillPercentage}%`}
+                                  stopColor="rgba(200, 200, 200, 0.4)"
+                                  stopOpacity="1"
+                                />
+                                <stop offset="100%" stopColor="rgba(200, 200, 200, 0.4)" stopOpacity="1" />
+                              </linearGradient>
+                            )
+                          })}
+                        </defs>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="average-scores-container">
+                    <div className="section-title-container-simple">
+                      <h4 className="section-title-simple">CYBERBULLYING STRENGTH</h4>
+                    </div>
+                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "12px" }}>
+                    {cyberbullyingData.map((item, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "12px",
+                          padding: "12px",
+                          borderRadius: "8px",
+                          background: `${item.color}08`,
+                          border: `1px solid ${item.color}30`,
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
+                          transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = "translateY(-1px)"
+                          e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)"
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = "translateY(0)"
+                          e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.03)"
+                        }}
+                      >
+                        <span style={{ fontSize: "20px" }}>{item.icon}</span>
+                        <div style={{ flex: 1 }}>
+                          <div
+                            style={{
+                              fontWeight: "600",
+                              color: item.color,
+                              fontSize: "13px",
+                              marginBottom: "2px",
+                            }}
+                          >
+                            {item.name}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "11px",
+                              color: "rgba(0,0,0,0.6)",
+                            }}
+                          >
+                            <strong>{item.value.toFixed(1)}%</strong> probability
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  </div>
+                </div>
+            )}
           </div>
         ) : (
           <div className="current-analysis">

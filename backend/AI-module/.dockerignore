@@ -1,11 +1,4 @@
 venv/
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.pth
-*.pkl
-*.csv
-*.tsv
 .ipynb_checkpoints/*
 Notebooks/*

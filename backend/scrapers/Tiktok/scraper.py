@@ -7,12 +7,14 @@ from shared_utils.logger_config import log
 import time
 
 class TiktokScraper:
-    def __init__(self, driver, uuid):
+    def __init__(self, driver, uuid,analysis_date):
         self.driver = driver
         self.post_url = None 
         self.ID = uuid
         self.platform = "TikTok"
+        self.analysis_date= analysis_date
         self.no_comments = None
+        self.post_info = None
 
     def navigate(self, video_url):
         try:
@@ -46,6 +48,22 @@ class TiktokScraper:
     def click_comment_button(self):
         try:
             self.wait_for_captcha()
+            comment_count_element = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, 'strong[data-e2e="comment-count"]'))
+            )
+
+            like_count_element = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, 'strong[data-e2e="like-count"]'))
+            )
+
+            shared_count_element = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, 'strong[data-e2e="share-count"]'))
+            )
+
+            saved_count_element = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, 'strong[data-e2e="undefined-count"]'))
+            )
+
             close_button = WebDriverWait(self.driver, 10).until(
                 EC.element_to_be_clickable((By.CLASS_NAME, "css-1o0yumu-DivXMarkWrapper"))
             )
@@ -59,12 +77,23 @@ class TiktokScraper:
             log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ Comment button clicked successfully. ]")
             time.sleep(3)
 
-            comment_count_element = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, 'strong[data-e2e="comment-count"]'))
-            )
 
+            shared_count = shared_count_element.text
+            saved_count =saved_count_element.text
+            like_count = like_count_element.text
             comment_count = comment_count_element.text
-            log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ Comments count: {comment_count}. ]")
+            self.post_info = {
+                "type":"post_info",
+                "uuid": self.ID,
+                "post_link": self.post_url,
+                "platform": self.platform,
+                "analysis_date": self.analysis_date,
+                "post_likes":like_count,
+                "post_comments":comment_count,
+                "post_saved":saved_count,
+                "post_distribution":shared_count
+            }
+            log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ Post info: {comment_count}, {like_count}, {shared_count}, {saved_count}  ]. ]")
             self.scroll_comment()
         
         except Exception as e:
@@ -88,7 +117,7 @@ class TiktokScraper:
                 if current_count == last_count:
                     unchanged_scrolls += 1
                     if unchanged_scrolls >= max_attempts_without_new_comments:
-                        break  # Nu se mai încarcă comentarii noi
+                        break
                 else:
                     unchanged_scrolls = 0  # resetăm dacă am văzut progres
 
@@ -100,11 +129,11 @@ class TiktokScraper:
                         self.driver.execute_script(
                             "arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", last_comment
                         )
-                        time.sleep(2.5)  # Așteaptă puțin mai mult pentru ca DOM-ul să se actualizeze
+                        time.sleep(2.5)
                     except Exception as e:
                         log.warning(f"[ TIKTOK SCRAPER - {self.ID} ][ Scroll failed for last comment: {e} ]")
                 else:
-                    break  # Nu avem comentarii vizibile deloc
+                    break
 
             log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ All visible comments scrolled through successfully ]")
             self.expand_all_replies()
@@ -272,7 +301,7 @@ class TiktokScraper:
                     "comments": comments_batch
                 }
                 send_to_preprocessor(batch,key=self.ID)
-                log.info(f"[ SCRAPING ][ Sending comment batch {len(batch['comments'])} comments ]")
+                log.info(f"[ TIKTOK SCRAPER ][ Sending comment batch {len(batch['comments'])} comments ]")
 
             send_to_preprocessor({"type": "end", "uuid": self.ID}, key=self.ID)
 
@@ -281,10 +310,12 @@ class TiktokScraper:
                     "uuid":self.ID,
                     "post_link":self.post_url,
                     "platform":self.platform,
+                    "analysis_date":self.analysis_date,
                     'comments': comments_database
                 }
                 self.no_comments=len(comments_database)
                 send_to_server(data_to_save,key=self.ID)
+                send_to_server(self.post_info,key=self.ID)
                 #log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ {len(comments_database)} comments: {data_to_save}]")
             else:
                 log.info(f"[ TIKTOK SCRAPER - {self.ID} ][ No comments to save. ]")
