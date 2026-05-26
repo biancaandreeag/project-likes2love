@@ -166,3 +166,5 @@ DEEPL_API_KEY = ...
 ```
 
 ## Documentation
+
+https://github.com/biancaandreeag/project-likes2love/blob/main/Documentatie.pdf
